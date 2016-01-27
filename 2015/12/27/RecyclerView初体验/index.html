@@ -9,8 +9,7 @@
     
     <meta name="author" content="JrDong">
     
-    <meta name="description" content="####RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进RecyclerView的世界。
-">
+    <meta name="description" content="####RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进RecyclerView的世界。 ">
     
     
     
@@ -68,7 +67,7 @@
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2015/12/27/Android-RecyclerView详解/" title="RecyclerView初体验(一)" itemprop="url">RecyclerView初体验(一)</a>
+      <a href="/2015/12/27/RecyclerView初体验/" title="RecyclerView初体验(一)" itemprop="url">RecyclerView初体验(一)</a>
   </h1>
   <p class="article-author">By
     
@@ -76,7 +75,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-12-27T11:36:58.000Z" itemprop="datePublished">2015-12-27</time>
-    更新日期:<time datetime="2016-01-25T14:53:40.000Z" itemprop="dateModified">2016-01-25</time>
+    更新日期:<time datetime="2016-01-27T13:53:33.000Z" itemprop="dateModified">2016-01-27</time>
     
   </p>
 </header>
@@ -88,10 +87,19 @@
 		
 		</div>
 		
-		<p>####RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进RecyclerView的世界。</p>
-<p>##基本用法</p>
-<p>####使用RecyclerView必须导入support－v7包，首先看类似listview列表的实现。<br><img src="/Users/Jolly/Document/source/Image/RecyclerView1.jpeg" alt=""></p>
-  
+		<p>####RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进RecyclerView的世界。  </p>
+<p>##基本用法  </p>
+<p>####使用RecyclerView必须导入support－v7包，首先看类似listview列表的实现。  </p>
+<pre><code>recyclerView = (RecyclerView) findViewById(R.id.recyclerView);  
+//设置布局管理器LayoutManager()  
+recyclerView.setLayoutManager(new LinearLayoutManager(this));
+//添加分割线
+recyclerView.addItemDecoration(new DividerItemDecoration(this,DividerItemDecoration.VERTICAL_LIST));
+//设置adapter
+recyclerView.setAdapter(adapter);
+//设置item添加删除动画
+recyclerView.setItemAnimator(new DefaultItemAnimator());
+</code></pre>  
 	</div>
 		<footer class="article-footer clearfix">
 
@@ -110,7 +118,7 @@
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ibat.xyz/2015/12/27/Android-RecyclerView详解/" data-title="RecyclerView初体验(一) | JrDong的博客" data-tsina="null" class="share clearfix">
+  <div data-url="http://ibat.xyz/2015/12/27/RecyclerView初体验/" data-title="RecyclerView初体验(一) | JrDong的博客" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
