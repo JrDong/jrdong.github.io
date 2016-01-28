@@ -81,7 +81,7 @@ text区块引用1.可以在每一行都加上引用，也可以只在段落之�
     </p>
   <p class="article-time">
     <time datetime="2016-01-27T14:14:00.000Z" itemprop="datePublished">2016-01-27</time>
-    更新日期:<time datetime="2016-01-28T06:30:53.000Z" itemprop="dateModified">2016-01-28</time>
+    更新日期:<time datetime="2016-01-28T06:32:17.000Z" itemprop="dateModified">2016-01-28</time>
     
   </p>
 </header>
@@ -211,11 +211,8 @@ iPad     | $1
 </tbody>
 </table>
 <h3 id="u4EE3_u7801_u5757"><a href="#u4EE3_u7801_u5757" class="headerlink" title="代码块"></a>代码块</h3><p><strong>代码块语法遵循标准markdown代码，例如：</strong></p>
-<ul>
-<li><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">*  &#20195;&#30721;&#22359;    &#10;*   ```  &#10;&#10;&#10;``` python&#10;@requires_authorization&#10;def somefunc(param1=&#39;&#39;, param2=0):&#10;    &#39;&#39;&#39;A docstring&#39;&#39;&#39;&#10;    if param1 &#62; param2: # interesting&#10;        print &#39;Greater&#39;&#10;    return (param2 - param1 + 1) or None&#10;class SomeClass:&#10;    pass&#10;&#62;&#62;&#62; message = &#39;&#39;&#39;interpreter&#10;... prompt&#39;&#39;&#39;</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p><strong>简单的四个空格或者一个制表符生成代码块</strong>  </p>
+<pre><code>* <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#9;*  &#20195;&#30721;&#22359;    &#10;&#9;*   ```  &#10;&#10;&#10;``` python&#10;@requires_authorization&#10;def somefunc(param1=&#39;&#39;, param2=0):&#10;    &#39;&#39;&#39;A docstring&#39;&#39;&#39;&#10;    if param1 &#62; param2: # interesting&#10;        print &#39;Greater&#39;&#10;    return (param2 - param1 + 1) or None&#10;class SomeClass:&#10;    pass&#10;&#62;&#62;&#62; message = &#39;&#39;&#39;interpreter&#10;... prompt&#39;&#39;&#39;</span><br></pre></td></tr></table></figure>
+</code></pre><p><strong>简单的四个空格或者一个制表符生成代码块</strong>  </p>
 <pre><code>这里放代码区块
 </code></pre><h3 id="u56FE_u7247"><a href="#u56FE_u7247" class="headerlink" title="图片"></a>图片</h3><p>很明显地，要在纯文字应用中设计一个「自然」的语法来插入图片是有一定难度的。</p>
 <p>Markdown 使用一种和链接很相似的语法来标记图片，同样也允许两种样式： 行内式和参考式。</p>
