@@ -81,7 +81,7 @@ text区块引用1.可以在每一行都加上引用，也可以只在段落之�
     </p>
   <p class="article-time">
     <time datetime="2016-01-27T14:14:00.000Z" itemprop="datePublished">2016-01-27</time>
-    更新日期:<time datetime="2016-01-28T06:20:08.000Z" itemprop="dateModified">2016-01-28</time>
+    更新日期:<time datetime="2016-01-28T06:25:04.000Z" itemprop="dateModified">2016-01-28</time>
     
   </p>
 </header>
@@ -137,8 +137,8 @@ text区块引用1.可以在每一行都加上引用，也可以只在段落之�
 <li>强制换行，在语句后面加上两个空格</li>
 <li>用markdown语法时，在关键字符后面尽量加上空格，不然可能语句会不生效，例如 # text</li>
 </ul>
-<h2 id="Markdown_u53CA_u6269_u5C55"><a href="#Markdown_u53CA_u6269_u5C55" class="headerlink" title="Markdown及扩展"></a>Markdown及扩展</h2><p>===</p>
-<h3 id="u6807_u8BB0_u8BED_u8A00"><a href="#u6807_u8BB0_u8BED_u8A00" class="headerlink" title="标记语言"></a>标记语言</h3><pre><code>&gt; Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。    —— &lt;a href=&quot;https://zh.wikipedia.org/wiki/Markdown&quot; target=&quot;_blank&quot;&gt; [ 维基百科 ]
+<h2 id="Markdown_u53CA_u6269_u5C55"><a href="#Markdown_u53CA_u6269_u5C55" class="headerlink" title="Markdown及扩展"></a>Markdown及扩展</h2><h3 id="u6807_u8BB0_u8BED_u8A00"><a href="#u6807_u8BB0_u8BED_u8A00" class="headerlink" title="标记语言"></a>标记语言</h3><pre><code>&gt; Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。      
+—— &lt;a href=&quot;https://zh.wikipedia.org/wiki/Markdown&quot; target=&quot;_blank&quot;&gt; [ 维基百科 ]
 </code></pre><blockquote>
 <p>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。    —— <a href="https://zh.wikipedia.org/wiki/Markdown" target="_blank"> [ 维基百科 ]    </a></p>
 </blockquote>
@@ -211,8 +211,10 @@ iPad     | $1
 </tbody>
 </table>
 <h3 id="u4EE3_u7801_u5757"><a href="#u4EE3_u7801_u5757" class="headerlink" title="代码块"></a>代码块</h3><p><strong>代码块语法遵循标准markdown代码，例如：</strong>  </p>
-<pre><code><figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#20195;&#30721;&#22359;</span><br></pre></td></tr></table></figure>
-</code></pre><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="decorator">@requires_authorization</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">somefunc</span><span class="params">(param1=<span class="string">''</span>, param2=<span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="string">'''A docstring'''</span></span><br><span class="line">    <span class="keyword">if</span> param1 &gt; param2: <span class="comment"># interesting</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'Greater'</span></span><br><span class="line">    <span class="keyword">return</span> (param2 - param1 + <span class="number">1</span>) <span class="keyword">or</span> <span class="keyword">None</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>message = <span class="string">'''interpreter</span><br><span class="line"><span class="prompt">... </span>prompt'''</span></span><br></pre></td></tr></table></figure>
+<blockquote>
+  <figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">&#20195;&#30721;&#22359;</span><br></pre></td></tr></table></figure>
+</blockquote>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="decorator">@requires_authorization</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">somefunc</span><span class="params">(param1=<span class="string">''</span>, param2=<span class="number">0</span>)</span>:</span></span><br><span class="line">    <span class="string">'''A docstring'''</span></span><br><span class="line">    <span class="keyword">if</span> param1 &gt; param2: <span class="comment"># interesting</span></span><br><span class="line">        <span class="keyword">print</span> <span class="string">'Greater'</span></span><br><span class="line">    <span class="keyword">return</span> (param2 - param1 + <span class="number">1</span>) <span class="keyword">or</span> <span class="keyword">None</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>:</span></span><br><span class="line">    <span class="keyword">pass</span></span><br><span class="line"><span class="prompt">&gt;&gt;&gt; </span>message = <span class="string">'''interpreter</span><br><span class="line"><span class="prompt">... </span>prompt'''</span></span><br></pre></td></tr></table></figure>
 <p><strong>简单的四个空格或者一个制表符生成代码块</strong>  </p>
 <pre><code>这里放代码区块
 </code></pre><h3 id="u56FE_u7247"><a href="#u56FE_u7247" class="headerlink" title="图片"></a>图片</h3><p>很明显地，要在纯文字应用中设计一个「自然」的语法来插入图片是有一定难度的。</p>
