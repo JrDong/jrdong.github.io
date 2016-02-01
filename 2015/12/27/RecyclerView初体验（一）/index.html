@@ -76,7 +76,7 @@
     </p>
   <p class="article-time">
     <time datetime="2015-12-27T11:36:58.000Z" itemprop="datePublished">2015-12-27</time>
-    更新日期:<time datetime="2016-02-01T14:22:49.000Z" itemprop="dateModified">2016-02-01</time>
+    更新日期:<time datetime="2016-02-01T14:23:43.000Z" itemprop="dateModified">2016-02-01</time>
     
   </p>
 </header>
@@ -85,7 +85,7 @@
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">基本用法</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GirdView_u7684_u5B9E_u73B0"><span class="toc-number">1.1.</span> <span class="toc-text">GirdView的实现</span></a></li></ol></li></ol>
 		</div>
 		
 		<p>RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进RecyclerView的世界。    </p>
@@ -95,7 +95,8 @@
 <p><strong>xml文件</strong></p>
 <figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="title">LinearLayout</span> <span class="attribute">xmlns:android</span>=<span class="value">"http://schemas.android.com/apk/res/android"</span></span><br><span class="line">   <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">   <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span></span><br><span class="line">   <span class="attribute">android:orientation</span>=<span class="value">"vertical"</span></span><br><span class="line">   <span class="attribute">xmlns:app</span>=<span class="value">"http://schemas.android.com/apk/res-auto"</span>&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">android.support.v7.widget.Toolbar</span></span><br><span class="line">       <span class="attribute">android:id</span>=<span class="value">"@+id/my_toolbar"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"?attr/actionBarSize"</span></span><br><span class="line">       <span class="attribute">android:background</span>=<span class="value">"@color/colorPrimary"</span></span><br><span class="line">       <span class="attribute">app:theme</span>=<span class="value">"@style/AppTheme.Base"</span></span><br><span class="line">       <span class="attribute">app:popupTheme</span>=<span class="value">"@style/ToolBarPopupTheme"</span>/&gt;</span></span><br><span class="line">   <span class="tag">&lt;<span class="title">android.support.v7.widget.RecyclerView</span></span><br><span class="line">       <span class="attribute">android:id</span>=<span class="value">"@+id/recyclerView"</span></span><br><span class="line">       <span class="attribute">android:layout_width</span>=<span class="value">"match_parent"</span></span><br><span class="line">       <span class="attribute">android:layout_height</span>=<span class="value">"match_parent"</span></span><br><span class="line">       /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="title">LinearLayout</span>&gt;</span></span><br></pre></td></tr></table></figure>
 <p>可以看出来RecyclerView更标准化了ViewHolder,Adapter面向的也是ViewHolder，而不是view。复用的逻辑进行了封装。使用的时候可以更加的灵活。</p>
-<p>####GirdView的实现<br>    recyclerView.setLayoutManager(new GridLayoutManager(this, 4));<br>this代表context，4表示spanCount列数，只需要将上面的LayoutManager改为上面的代码，是不是很方便呢。    </p>
+<h4 id="GirdView_u7684_u5B9E_u73B0"><a href="#GirdView_u7684_u5B9E_u73B0" class="headerlink" title="GirdView的实现"></a>GirdView的实现</h4><pre><code>recyclerView.setLayoutManager(new GridLayoutManager(this, 4));  
+</code></pre><p>this代表context，4表示spanCount列数，只需要将上面的LayoutManager改为上面的代码，是不是很方便呢。    </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -136,7 +137,7 @@
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">基本用法</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#u57FA_u672C_u7528_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">基本用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#GirdView_u7684_u5B9E_u73B0"><span class="toc-number">1.1.</span> <span class="toc-text">GirdView的实现</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
