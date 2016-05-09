@@ -4,45 +4,18 @@
 
     
   <url>
-    <loc>http://ibat.xyz/2016/05/09/Material%20Design%E4%BB%8B%E7%BB%8D/</loc>
-    <lastmod>2016-05-09T12:32:14.000Z</lastmod>
+    <loc>http://ibat.xyz/2016/01/27/markdown%E8%AF%AD%E6%B3%95/</loc>
+    <lastmod>2016-05-09T12:59:41.000Z</lastmod>
     <data>
         <display>
-        <title></title>
-        <pubTime>2016-05-09T12:33:21.000Z</pubTime>
+        <title>markdown语法</title>
+        <pubTime>2016-01-27T14:14:00.000Z</pubTime>
         
          
            
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/05/09/OAuth2.0%E5%8D%8F%E8%AE%AE&%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/</loc>
-    <lastmod>2016-05-09T12:32:14.000Z</lastmod>
-    <data>
-        <display>
-        <title></title>
-        <pubTime>2016-05-09T12:33:21.000Z</pubTime>
-        
-         
-           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/05/09/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%B8%80)/</loc>
-    <lastmod>2016-05-09T12:32:14.000Z</lastmod>
-    <data>
-        <display>
-        <title></title>
-        <pubTime>2016-05-09T12:33:21.000Z</pubTime>
-        
-         
-           
+             
+              <breadCrumb title="markdown" url="http://ibat.xyz/categories/markdown/"/>
+          
         </display>
     </data>
     </url>
@@ -78,24 +51,6 @@
            
              
               <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/01/27/markdown%E8%AF%AD%E6%B3%95/</loc>
-    <lastmod>2016-01-31T13:12:21.000Z</lastmod>
-    <data>
-        <display>
-        <title>markdown语法</title>
-        <pubTime>2016-01-27T14:14:00.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="markdown" url="http://ibat.xyz/categories/markdown/"/>
           
         </display>
     </data>
