@@ -4,26 +4,8 @@
 
     
   <url>
-    <loc>http://ibat.xyz/2016/05/09/OAuth2.0%E5%8D%8F%E8%AE%AE&%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/</loc>
-    <lastmod>2016-05-09T13:14:10.000Z</lastmod>
-    <data>
-        <display>
-        <title>OAuth2.0协议&第三方登录（微信，QQ，微博）</title>
-        <pubTime>2016-05-09T13:12:05.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
     <loc>http://ibat.xyz/2016/05/09/Material%20Design%E4%BB%8B%E7%BB%8D/</loc>
-    <lastmod>2016-05-09T13:13:58.000Z</lastmod>
+    <lastmod>2016-05-09T13:42:01.000Z</lastmod>
     <data>
         <display>
         <title>Material Design介绍</title>
@@ -40,8 +22,26 @@
 
     
   <url>
+    <loc>http://ibat.xyz/2016/05/09/OAuth2.0%E5%8D%8F%E8%AE%AE&%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/</loc>
+    <lastmod>2016-05-09T13:40:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>OAuth2.0协议&第三方登录（微信，QQ，微博）</title>
+        <pubTime>2016-05-09T13:12:05.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://ibat.xyz/2016/05/09/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%B8%80)/</loc>
-    <lastmod>2016-05-09T13:13:49.000Z</lastmod>
+    <lastmod>2016-05-09T13:36:26.000Z</lastmod>
     <data>
         <display>
         <title>Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</title>
@@ -52,21 +52,6 @@
              
               <breadCrumb title="Android--Material Design" url="http://ibat.xyz/categories/Android-Material-Design/"/>
           
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/05/09/about/</loc>
-    <lastmod>2016-05-09T13:12:05.000Z</lastmod>
-    <data>
-        <display>
-        <title>about</title>
-        <pubTime>2016-05-09T13:12:05.000Z</pubTime>
-        
-         
-           
         </display>
     </data>
     </url>
