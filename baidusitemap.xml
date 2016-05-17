@@ -4,6 +4,42 @@
 
     
   <url>
+    <loc>http://ibat.xyz/2016/05/17/ViewDragHelper%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2016-05-17T15:58:04.000Z</lastmod>
+    <data>
+        <display>
+        <title>ViewDragHelper——打造你的专属ViewGroup</title>
+        <pubTime>2016-05-17T14:53:10.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://ibat.xyz/2016/04/09/Material%20Design%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2016-05-12T14:53:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>Material Design介绍</title>
+        <pubTime>2016-04-09T14:33:06.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android--Material Design" url="http://ibat.xyz/categories/Android-Material-Design/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://ibat.xyz/2016/05/11/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%BA%8C)/</loc>
     <lastmod>2016-05-12T14:12:50.000Z</lastmod>
     <data>
@@ -28,24 +64,6 @@
         <display>
         <title>Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</title>
         <pubTime>2016-04-19T13:46:05.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Android--Material Design" url="http://ibat.xyz/categories/Android-Material-Design/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/04/09/Material%20Design%E4%BB%8B%E7%BB%8D/</loc>
-    <lastmod>2016-05-11T13:19:46.000Z</lastmod>
-    <data>
-        <display>
-        <title>Material Design介绍</title>
-        <pubTime>2016-04-09T14:33:06.000Z</pubTime>
         
          
            
