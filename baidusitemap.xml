@@ -4,6 +4,78 @@
 
     
   <url>
+    <loc>http://ibat.xyz/2016/06/28/Android-%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
+    <lastmod>2016-06-28T13:51:35.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android--资料</title>
+        <pubTime>2016-06-28T13:29:49.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android资源整理" url="http://ibat.xyz/categories/Android%E8%B5%84%E6%BA%90%E6%95%B4%E7%90%86/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://ibat.xyz/2016/05/11/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%BA%8C)/</loc>
+    <lastmod>2016-06-28T13:27:54.000Z</lastmod>
+    <data>
+        <display>
+        <title>Material Design控件介绍（二）——TabLayout</title>
+        <pubTime>2016-05-11T13:18:37.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://ibat.xyz/2016/04/09/Material%20Design%E4%BB%8B%E7%BB%8D/</loc>
+    <lastmod>2016-06-28T13:27:45.000Z</lastmod>
+    <data>
+        <display>
+        <title>Material Design介绍</title>
+        <pubTime>2016-04-09T14:33:06.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://ibat.xyz/2016/04/19/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%B8%80)/</loc>
+    <lastmod>2016-06-28T13:27:33.000Z</lastmod>
+    <data>
+        <display>
+        <title>Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</title>
+        <pubTime>2016-04-19T13:46:05.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://ibat.xyz/2016/05/17/ViewDragHelper%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D/</loc>
     <lastmod>2016-05-17T15:58:04.000Z</lastmod>
     <data>
@@ -22,53 +94,17 @@
 
     
   <url>
-    <loc>http://ibat.xyz/2016/04/09/Material%20Design%E4%BB%8B%E7%BB%8D/</loc>
-    <lastmod>2016-05-12T14:53:35.000Z</lastmod>
+    <loc>http://ibat.xyz/2015/12/27/RecyclerView%E5%88%9D%E4%BD%93%E9%AA%8C--%E5%88%97%E8%A1%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/</loc>
+    <lastmod>2016-05-17T15:42:55.000Z</lastmod>
     <data>
         <display>
-        <title>Material Design介绍</title>
-        <pubTime>2016-04-09T14:33:06.000Z</pubTime>
+        <title>RecyclerView初体验--列表的实现</title>
+        <pubTime>2015-12-27T11:36:58.000Z</pubTime>
         
          
            
              
-              <breadCrumb title="Android--Material Design" url="http://ibat.xyz/categories/Android-Material-Design/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/05/11/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%BA%8C)/</loc>
-    <lastmod>2016-05-12T14:12:50.000Z</lastmod>
-    <data>
-        <display>
-        <title>Material Design控件介绍（二）——TabLayout</title>
-        <pubTime>2016-05-11T13:18:37.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Android--Material Design" url="http://ibat.xyz/categories/Android-Material-Design/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/04/19/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%B8%80)/</loc>
-    <lastmod>2016-05-11T13:20:04.000Z</lastmod>
-    <data>
-        <display>
-        <title>Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</title>
-        <pubTime>2016-04-19T13:46:05.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Android--Material Design" url="http://ibat.xyz/categories/Android-Material-Design/"/>
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
           
         </display>
     </data>
@@ -119,24 +155,6 @@
         <display>
         <title>Android--ToolBar的使用</title>
         <pubTime>2016-02-05T08:14:00.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2015/12/27/RecyclerView%E5%88%9D%E4%BD%93%E9%AA%8C--%E5%88%97%E8%A1%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/</loc>
-    <lastmod>2016-02-18T14:19:57.000Z</lastmod>
-    <data>
-        <display>
-        <title>RecyclerView初体验--列表的实现</title>
-        <pubTime>2015-12-27T11:36:58.000Z</pubTime>
         
          
            
