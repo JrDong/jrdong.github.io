@@ -4,6 +4,24 @@
 
     
   <url>
+    <loc>http://ibat.xyz/2017/02/06/TextView%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95/</loc>
+    <lastmod>2017-02-06T15:30:31.000Z</lastmod>
+    <data>
+        <display>
+        <title>TextView进阶用法</title>
+        <pubTime>2017-02-06T15:30:15.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://ibat.xyz/2016/06/28/Android-%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/</loc>
     <lastmod>2016-11-21T14:33:36.000Z</lastmod>
     <data>
@@ -178,24 +196,6 @@
            
              
               <breadCrumb title="markdown" url="http://ibat.xyz/categories/markdown/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/02/05/Android-ToolBa%E7%9A%84%E4%BD%BF%E7%94%A8/</loc>
-    <lastmod>2016-02-18T14:21:15.000Z</lastmod>
-    <data>
-        <display>
-        <title>Android--ToolBar的使用</title>
-        <pubTime>2016-02-05T08:14:00.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
           
         </display>
     </data>

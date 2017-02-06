@@ -4,13 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Android--参考资料 | JrDong’s Blog</title>
+    <title>TextView进阶用法 | JrDong’s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="JrDong">
     
-    <meta name="description" content="博客推荐:这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  
-Hongyang:http://zhanghongyang.com郭霖：http://guolin.techstormzhang:http://stormzhang.com/任玉刚:http://">
+    <meta name="description" content="TextView进阶用法在Android中TextView是我们最熟悉不过的控件了，但是它的进阶用法你知道多少呢？下面就来聊一聊TextView的进阶用法。
+1.显示多种颜色在做项目中经常会遇到一行字显示多种颜色的需求。用两个或多个TextView也可以实现，但这样比较费事，而且可能还要多一级布局嵌">
     
     
     
@@ -79,15 +79,15 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/06/28/Android-资料整理/" title="Android--参考资料" itemprop="url">Android--参考资料</a>
+      <a href="/2017/02/06/TextView进阶用法/" title="TextView进阶用法" itemprop="url">TextView进阶用法</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ibat.xyz" title="JrDong">JrDong</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-06-28T13:29:49.000Z" itemprop="datePublished">2016-06-28</time>
-    更新日期:<time datetime="2016-11-21T14:33:36.000Z" itemprop="dateModified">2016-11-21</time>
+    <time datetime="2017-02-06T15:30:15.000Z" itemprop="datePublished">2017-02-06</time>
+    更新日期:<time datetime="2017-02-06T15:30:31.000Z" itemprop="dateModified">2017-02-06</time>
     
   </p>
 </header>
@@ -96,12 +96,26 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#u535A_u5BA2_u63A8_u8350_3A"><span class="toc-number">1.</span> <span class="toc-text">博客推荐:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#u77E5_u8BC6_u70B9_u5907_u5FD8"><span class="toc-number">2.</span> <span class="toc-text">知识点备忘</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TextView_u8FDB_u9636_u7528_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">TextView进阶用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-_u663E_u793A_u591A_u79CD_u989C_u8272"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.显示多种颜色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-_u663E_u793A_u4E0D_u540C_u5927_u5C0F"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.显示不同大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-_u5220_u9664_u7EBF_uFF08StrikethroughSpan_uFF09"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.删除线（StrikethroughSpan）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-_u4E0B_u5212_u7EBF_uFF08UnderlineSpan_uFF09"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.下划线（UnderlineSpan）</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
-		<h1 id="u535A_u5BA2_u63A8_u8350_3A"><a href="#u535A_u5BA2_u63A8_u8350_3A" class="headerlink" title="博客推荐:"></a>博客推荐:</h1><p>这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  </p>
-<p>Hongyang:<a><a href="http://zhanghongyang.com" target="_blank" rel="external">http://zhanghongyang.com</a></a><br>郭霖：<a><a href="http://guolin.tech" target="_blank" rel="external">http://guolin.tech</a></a><br>stormzhang:<a><a href="http://stormzhang.com/" target="_blank" rel="external">http://stormzhang.com/</a></a><br>任玉刚:<a><a href="http://blog.csdn.net/singwhatiwanna" target="_blank" rel="external">http://blog.csdn.net/singwhatiwanna</a></a><br>阮一峰:<a><a href="http://ruanyifeng.com" target="_blank" rel="external">http://ruanyifeng.com</a></a><br>codeKK(力推，各种源码解析，开源项目汇总。):<a><a href="http://codekk.com" target="_blank" rel="external">http://codekk.com</a></a><br>Trinea():<a><a href="http://www.trinea.cn/" target="_blank" rel="external">http://www.trinea.cn/</a></a><br>泡在网上的日子:<a><a href="http://www.jcodecraeer.com/" target="_blank" rel="external">http://www.jcodecraeer.com/</a></a>  </p>
-<h1 id="u77E5_u8BC6_u70B9_u5907_u5FD8"><a href="#u77E5_u8BC6_u70B9_u5907_u5FD8" class="headerlink" title="知识点备忘"></a>知识点备忘</h1><p>遗传算法在自动组卷中的应用：<a href="http://www.jianshu.com/p/7fe9d3bb00ac" target="_blank" rel="external">http://www.jianshu.com/p/7fe9d3bb00ac</a></p>
+		<h1 id="TextView_u8FDB_u9636_u7528_u6CD5"><a href="#TextView_u8FDB_u9636_u7528_u6CD5" class="headerlink" title="TextView进阶用法"></a>TextView进阶用法</h1><p>在Android中TextView是我们最熟悉不过的控件了，但是它的进阶用法你知道多少呢？下面就来聊一聊TextView的进阶用法。</p>
+<h3 id="1-_u663E_u793A_u591A_u79CD_u989C_u8272"><a href="#1-_u663E_u793A_u591A_u79CD_u989C_u8272" class="headerlink" title="1.显示多种颜色"></a>1.显示多种颜色</h3><p>在做项目中经常会遇到一行字显示多种颜色的需求。用两个或多个TextView也可以实现，但这样比较费事，而且可能还要多一级布局嵌套。接下来我们需要用到SpannableStringBuilder这个类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">TextView textView = (TextView) findViewById(R.id.textview);</span><br><span class="line"></span><br><span class="line">String text = <span class="string">"TextView进阶用法"</span>;</span><br><span class="line"></span><br><span class="line">SpannableStringBuilder ssb = <span class="keyword">new</span> SpannableStringBuilder(text);</span><br><span class="line">ssb.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.RED),<span class="number">0</span>,<span class="number">8</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</span><br><span class="line">ssb.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.GREEN),<span class="number">8</span>,text.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</span><br><span class="line"></span><br><span class="line">textView.setText(ssb);</span><br></pre></td></tr></table></figure>
+<p>效果如下:<br><img src="/img/TextView进阶用法-1.png" alt="textview多种颜色"><br>SpannableStringBuilder类实现了CharSequence接口，所以可以直接通过setText()设置值，它更像一个StringBuilder，同时也有append()方法。这样的话无论要指定多少颜色，都可以通过setSpan()来根据字符串的索引长度来解决。<br>注意：   </p>
+<pre><code>1.参数start为闭区间，end为开区间。即本例中的0，8实际代表从0～7的长度。  
+2.int flags：取值有如下四个  
+  Spannable.SPAN_EXCLUSIVE_EXCLUSIVE：前后都不包括，即在指定范围的前面和后面插入新字符都不会应用新样式   
+  Spannable.SPAN_EXCLUSIVE_INCLUSIVE：前面不包括，后面包括。即仅在范围字符的后面插入新字符时会应用新样式  
+  Spannable.SPAN_INCLUSIVE_EXCLUSIVE：前面包括，后面不包括。  
+  Spannable.SPAN_INCLUSIVE_INCLUSIVE：前后都包括。 
+
+大家可以自己试下取不同flags时的效果，可以用EditText试验。  
+</code></pre><h3 id="2-_u663E_u793A_u4E0D_u540C_u5927_u5C0F"><a href="#2-_u663E_u793A_u4E0D_u540C_u5927_u5C0F" class="headerlink" title="2.显示不同大小"></a>2.显示不同大小</h3><p>将ForegroundColorSpan改为AbsoluteSizeSpan。  </p>
+<pre><code>ssb.setSpan(new AbsoluteSizeSpan(20),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="3-_u5220_u9664_u7EBF_uFF08StrikethroughSpan_uFF09"><a href="#3-_u5220_u9664_u7EBF_uFF08StrikethroughSpan_uFF09" class="headerlink" title="3.删除线（StrikethroughSpan）"></a>3.删除线（StrikethroughSpan）</h3><pre><code>ssb.setSpan(new StrikethroughSpan(),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="4-_u4E0B_u5212_u7EBF_uFF08UnderlineSpan_uFF09"><a href="#4-_u4E0B_u5212_u7EBF_uFF08UnderlineSpan_uFF09" class="headerlink" title="4.下划线（UnderlineSpan）"></a>4.下划线（UnderlineSpan）</h3><pre><code>ssb.setSpan(new UnderlineSpan(),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><p>最终效果如下：<br><img src="/img/TextView进阶用法-2.png" alt="textview多种颜色"> </p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -109,14 +123,14 @@ var _hmt = _hmt || [];
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Android资源整理/">Android资源整理</a>
+  <a class="article-category-link" href="/categories/Android/">Android</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ibat.xyz/2016/06/28/Android-资料整理/" data-title="Android--参考资料 | JrDong’s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://ibat.xyz/2017/02/06/TextView进阶用法/" data-title="TextView进阶用法 | JrDong’s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -125,19 +139,11 @@ var _hmt = _hmt || [];
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/07/16/使用productFlavors配置项目移植/" title="使用productFlavors配置项目移植">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  使用productFlavors配置项目移植</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/05/17/ViewDragHelper用法介绍/"  title="ViewDragHelper——打造你的专属ViewGroup">
+<a href="/2016/08/23/理解RSA算法/"  title="理解RSA算法">
  <strong>NEXT:</strong><br/> 
- <span>ViewDragHelper——打造你的专属ViewGroup
+ <span>理解RSA算法
 </span>
 </a>
 </div>
@@ -147,7 +153,7 @@ var _hmt = _hmt || [];
  	 
 <section class="comment">
 <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key=”2016/06/28/Android-资料整理/” data-title=”Android--参考资料”  data-url="http://ibat.xyz/http://ibat.xyz/2016/06/28/Android-资料整理/"></div>
+	<div class="ds-thread" data-thread-key=”2017/02/06/TextView进阶用法/” data-title=”TextView进阶用法”  data-url="http://ibat.xyz/http://ibat.xyz/2017/02/06/TextView进阶用法/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -171,7 +177,7 @@ var duoshuoQuery = {short_name:"ibat"};
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#u535A_u5BA2_u63A8_u8350_3A"><span class="toc-number">1.</span> <span class="toc-text">博客推荐:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#u77E5_u8BC6_u70B9_u5907_u5FD8"><span class="toc-number">2.</span> <span class="toc-text">知识点备忘</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TextView_u8FDB_u9636_u7528_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">TextView进阶用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-_u663E_u793A_u591A_u79CD_u989C_u8272"><span class="toc-number">1.0.1.</span> <span class="toc-text">1.显示多种颜色</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-_u663E_u793A_u4E0D_u540C_u5927_u5C0F"><span class="toc-number">1.0.2.</span> <span class="toc-text">2.显示不同大小</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-_u5220_u9664_u7EBF_uFF08StrikethroughSpan_uFF09"><span class="toc-number">1.0.3.</span> <span class="toc-text">3.删除线（StrikethroughSpan）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-_u4E0B_u5212_u7EBF_uFF08UnderlineSpan_uFF09"><span class="toc-number">1.0.4.</span> <span class="toc-text">4.下划线（UnderlineSpan）</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
