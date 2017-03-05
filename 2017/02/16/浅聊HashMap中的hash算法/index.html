@@ -4,13 +4,12 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>Android--参考资料 | JrDong’s Blog</title>
+    <title>浅谈HashMap中的hash算法 | JrDong’s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="JrDong">
     
-    <meta name="description" content="博客推荐:这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  
-Hongyang:http://zhanghongyang.com郭霖：http://guolin.techstormzhang:http://stormzhang.com/任玉刚:http://">
+    <meta name="description" content="浅谈HashMap中的hash算法HashMap是我们常见的一种数据结构，实现Map接口，用来存储键值对,允许null键/值、非同步、不保证有序(比如插入的顺序)。那HashMap中最核心的部分就是哈希函数，又称散列函数。也就是说，哈希函数是通过把key的hash值映射到数组中的一个位置来进行访问。">
     
     
     
@@ -79,15 +78,15 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2016/06/28/Android-资料整理/" title="Android--参考资料" itemprop="url">Android--参考资料</a>
+      <a href="/2017/02/16/浅聊HashMap中的hash算法/" title="浅谈HashMap中的hash算法" itemprop="url">浅谈HashMap中的hash算法</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ibat.xyz" title="JrDong">JrDong</a>
     </p>
   <p class="article-time">
-    <time datetime="2016-06-28T13:29:49.000Z" itemprop="datePublished">2016-06-28</time>
-    更新日期:<time datetime="2016-11-21T14:33:36.000Z" itemprop="dateModified">2016-11-21</time>
+    <time datetime="2017-02-16T14:19:15.000Z" itemprop="datePublished">2017-02-16</time>
+    更新日期:<time datetime="2017-03-05T08:40:31.000Z" itemprop="dateModified">2017-03-05</time>
     
   </p>
 </header>
@@ -96,12 +95,27 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目录</strong>
-		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#u535A_u5BA2_u63A8_u8350_3A"><span class="toc-number">1.</span> <span class="toc-text">博客推荐:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#u77E5_u8BC6_u70B9_u5907_u5FD8"><span class="toc-number">2.</span> <span class="toc-text">知识点备忘</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">浅谈HashMap中的hash算法</span></a></li></ol>
 		</div>
 		
-		<h1 id="u535A_u5BA2_u63A8_u8350_3A"><a href="#u535A_u5BA2_u63A8_u8350_3A" class="headerlink" title="博客推荐:"></a>博客推荐:</h1><p>这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  </p>
-<p>Hongyang:<a><a href="http://zhanghongyang.com" target="_blank" rel="external">http://zhanghongyang.com</a></a><br>郭霖：<a><a href="http://guolin.tech" target="_blank" rel="external">http://guolin.tech</a></a><br>stormzhang:<a><a href="http://stormzhang.com/" target="_blank" rel="external">http://stormzhang.com/</a></a><br>任玉刚:<a><a href="http://blog.csdn.net/singwhatiwanna" target="_blank" rel="external">http://blog.csdn.net/singwhatiwanna</a></a><br>阮一峰:<a><a href="http://ruanyifeng.com" target="_blank" rel="external">http://ruanyifeng.com</a></a><br>codeKK(力推，各种源码解析，开源项目汇总。):<a><a href="http://codekk.com" target="_blank" rel="external">http://codekk.com</a></a><br>Trinea():<a><a href="http://www.trinea.cn/" target="_blank" rel="external">http://www.trinea.cn/</a></a><br>泡在网上的日子:<a><a href="http://www.jcodecraeer.com/" target="_blank" rel="external">http://www.jcodecraeer.com/</a></a>  </p>
-<h1 id="u77E5_u8BC6_u70B9_u5907_u5FD8"><a href="#u77E5_u8BC6_u70B9_u5907_u5FD8" class="headerlink" title="知识点备忘"></a>知识点备忘</h1><p>遗传算法在自动组卷中的应用：<a href="http://www.jianshu.com/p/7fe9d3bb00ac" target="_blank" rel="external">http://www.jianshu.com/p/7fe9d3bb00ac</a></p>
+		<h2 id="u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5"><a href="#u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5" class="headerlink" title="浅谈HashMap中的hash算法"></a>浅谈HashMap中的hash算法</h2><p>HashMap是我们常见的一种数据结构，实现Map接口，用来存储键值对,允许null键/值、非同步、不保证有序(比如插入的顺序)。那HashMap中最核心的部分就是哈希函数，又称散列函数。也就是说，哈希函数是通过把key的hash值映射到数组中的一个位置来进行访问。比如：  </p>
+<pre><code>存在一组哈希值 10，13，7，5，4，20
+存在一个长度为10的数组 arrays
+定义一个hash函数 int index = h % arrays.length; 
+
+10 % 10 = 0 那么 哈希值为10的对象放在数组索引为0的位置上；
+13 % 10 = 3 那么 哈希值为13的对象放在数组索引为3的位置上；
+......
+20 % 10 = 0 那么 哈希值为13的对象放在数组索引为0的位置上；
+</code></pre><p>这时候大家看出了一个问题，哈希值为10的对象和哈希值为20的对象，放在了一个索引上。发生了碰撞，那么怎么解决这样碰撞呢，有很多种方式，这里不展开叙述。HashMap中维护了一个链表组成的数组。如果冲突的话就添加到链表中，下面来看下hashmap中的hash算法，以Java8源码为例。</p>
+<pre><code>static final int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+    }
+</code></pre><p>其中，key.hashCode（）是Key自带的hashCode()方法，返回一个int类型的散列值。我们大家知道，32位带符号的int表值范围从-2147483648到2147483648。这样只要hash函数松散的话，一般是很难发生碰撞的，因为HashMap的初始容量只有16。但是这样的散列值我们是不能直接拿来用的。用之前需要对数组的长度取模运算。得到余数才是索引值。我们来看下HashMap中怎么实现的。  </p>
+<pre><code>int index = hash &amp; (arrays.length-1);
+</code></pre><p>那么这也就明白了为什么HashMap的数组长度是2的整数幂。比如以初始长度为16为例，16-1 = 15，15的二进制数位00000000 00000000 00001111。可以看出一个基数二进制最后一位必然位1，当与一个hash值进行与运算时，最后一位可能是0也可能是1。但偶数与一个hash值进行与运算最后一位必然为0，造成有些位置永远映射不上值。<br>但是这时，又出现了一个问题，即使散列函数很松散，但只取最后几位碰撞也会很严重。这时候hash算法的价值就体现出来了，<br><img src="/img/hash算法1.png" alt="扰动函数"><br>hashCode右移16位，正好是32bit的一半。与自己本身做异或操作（相同为0，不同为1）。就是为了混合哈希值的高位和地位，增加低位的随机性。并且混合后的值也变相保持了高位的特征。</p>
+<p>HashMap中用到的编码思想确实很值得我们学习。HashMap在Java1.8后又进行了优化，比如引入红黑树的数据结构和扩容的优化等。有机会我们再结合Java1.8聊聊，HashMap get()和put（）实现原理，装载因子，resize()方法还有红黑树等。</p>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -109,14 +123,14 @@ var _hmt = _hmt || [];
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Android资源整理/">Android资源整理</a>
+  <a class="article-category-link" href="/categories/Android/">Android</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ibat.xyz/2016/06/28/Android-资料整理/" data-title="Android--参考资料 | JrDong’s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://ibat.xyz/2017/02/16/浅聊HashMap中的hash算法/" data-title="浅谈HashMap中的hash算法 | JrDong’s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -125,19 +139,11 @@ var _hmt = _hmt || [];
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2016/07/16/使用productFlavors配置项目移植/" title="使用productFlavors配置项目移植">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  使用productFlavors配置项目移植</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2016/05/17/ViewDragHelper用法介绍/"  title="ViewDragHelper——打造你的专属ViewGroup">
+<a href="/2017/02/06/TextView进阶用法/"  title="TextView进阶用法">
  <strong>NEXT:</strong><br/> 
- <span>ViewDragHelper——打造你的专属ViewGroup
+ <span>TextView进阶用法
 </span>
 </a>
 </div>
@@ -147,7 +153,7 @@ var _hmt = _hmt || [];
  	 
 <section class="comment">
 <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key=”2016/06/28/Android-资料整理/” data-title=”Android--参考资料”  data-url="http://ibat.xyz/http://ibat.xyz/2016/06/28/Android-资料整理/"></div>
+	<div class="ds-thread" data-thread-key=”2017/02/16/浅聊HashMap中的hash算法/” data-title=”浅谈HashMap中的hash算法”  data-url="http://ibat.xyz/http://ibat.xyz/2017/02/16/浅聊HashMap中的hash算法/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -171,7 +177,7 @@ var duoshuoQuery = {short_name:"ibat"};
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目录</strong>
-  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#u535A_u5BA2_u63A8_u8350_3A"><span class="toc-number">1.</span> <span class="toc-text">博客推荐:</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#u77E5_u8BC6_u70B9_u5907_u5FD8"><span class="toc-number">2.</span> <span class="toc-text">知识点备忘</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">浅谈HashMap中的hash算法</span></a></li></ol>
   </div>
 
 <div id="asidepart">
