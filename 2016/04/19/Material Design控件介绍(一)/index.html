@@ -48,7 +48,7 @@ var _hmt = _hmt || [];
 				<h1 class="site-name"><a href="/" title="JrDong’s Blog">JrDong’s Blog</a></h1>
 				<h2 class="blog-motto"></h2>
 			</div>
-			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜单">
+			<div class="navbar"><a class="navbutton navmobile" href="#" title="菜單">
 			</a></div>
 			<nav class="animated">
 				<ul>
@@ -95,7 +95,7 @@ var _hmt = _hmt || [];
 		
 		
 		<div id="toc" class="toc-article">
-			<strong class="toc-title">文章目录</strong>
+			<strong class="toc-title">文章目錄</strong>
 		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Material_Design_u63A7_u4EF6_u4ECB_u7ECD_uFF08_u4E00_uFF09_u2014_u2014_u2014Toolbar_2CDrawerLayout_2CNavigationView"><span class="toc-number">1.</span> <span class="toc-text">Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#u6982_u8FF0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#u4ECB_u7ECD_u7684_u63A7_u4EF6_u6709_uFF1A"><span class="toc-number">1.1.1.</span> <span class="toc-text">介绍的控件有：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Toolbar_u7684_u7528_u6CD5"><span class="toc-number">1.2.</span> <span class="toc-text">Toolbar的用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-_u9996_u5148_u6211_u4EEC_u6765_u770B_u4E0B_u5E03_u5C40_u6587_u4EF6"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.首先我们来看下布局文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-_u5E03_u5C40_u4E86_u89E3_28_u56FE_u7247_u6765_u6E90_u4E8E_u7F51_u7EDC_29"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.布局了解(图片来源于网络)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-_u4EE3_u7801_u5B9E_u73B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-_u83DC_u5355_u680F_u7528_u6CD5"><span class="toc-number">1.2.4.</span> <span class="toc-text">4.菜单栏用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5728res/menu/menu_main-xml_u4E2D_u5B9A_u4E49"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">在res/menu/menu_main.xml中定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u8BBE_u7F6E_u70B9_u51FB_u4E8B_u4EF6"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">设置点击事件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DrawerLayout_uFF0CNavigationView_u7684_u7528_u6CD5"><span class="toc-number">1.3.</span> <span class="toc-text">DrawerLayout，NavigationView的用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#u9996_u5148_u6211_u4EEC_u6765_u770B_u4E0B_u5E03_u5C40_u6587_u4EF6_uFF1A"><span class="toc-number">1.3.1.</span> <span class="toc-text">首先我们来看下布局文件：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-headerLayout"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">1.headerLayout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-menu"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">2.menu</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4EE3_u7801_u5B9E_u73B0_uFF1A"><span class="toc-number">1.3.2.</span> <span class="toc-text">代码实现：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8BBE_u7F6E_u83DC_u5355_u680F_u76D1_u542C_u3002"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">设置菜单栏监听。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E0B_u9762_u6765_u8BB2_u89E3_u8BBE_u7F6EToolbar_u548CDrawerLayout_u7684_u76D1_u542C_u3002"><span class="toc-number">1.3.3.</span> <span class="toc-text">下面来讲解设置Toolbar和DrawerLayout的监听。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#https_3A//github-com/JrDong/Android-Sloth"><span class="toc-number">1.3.4.</span> <span class="toc-text">https://github.com/JrDong/Android-Sloth</span></a></li></ol></li></ol></li></ol>
 		</div>
 		
@@ -315,23 +315,23 @@ var duoshuoQuery = {short_name:"ibat"};
 
 
 </div>  
-      <div class="openaside"><a class="navbutton" href="#" title="显示侧边栏"></a></div>
+      <div class="openaside"><a class="navbutton" href="#" title="顯示側邊欄"></a></div>
 
   <div id="toc" class="toc-aside">
-  <strong class="toc-title">文章目录</strong>
+  <strong class="toc-title">文章目錄</strong>
   <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Material_Design_u63A7_u4EF6_u4ECB_u7ECD_uFF08_u4E00_uFF09_u2014_u2014_u2014Toolbar_2CDrawerLayout_2CNavigationView"><span class="toc-number">1.</span> <span class="toc-text">Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#u6982_u8FF0"><span class="toc-number">1.1.</span> <span class="toc-text">概述</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#u4ECB_u7ECD_u7684_u63A7_u4EF6_u6709_uFF1A"><span class="toc-number">1.1.1.</span> <span class="toc-text">介绍的控件有：</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#Toolbar_u7684_u7528_u6CD5"><span class="toc-number">1.2.</span> <span class="toc-text">Toolbar的用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#1-_u9996_u5148_u6211_u4EEC_u6765_u770B_u4E0B_u5E03_u5C40_u6587_u4EF6"><span class="toc-number">1.2.1.</span> <span class="toc-text">1.首先我们来看下布局文件</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#2-_u5E03_u5C40_u4E86_u89E3_28_u56FE_u7247_u6765_u6E90_u4E8E_u7F51_u7EDC_29"><span class="toc-number">1.2.2.</span> <span class="toc-text">2.布局了解(图片来源于网络)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#3-_u4EE3_u7801_u5B9E_u73B0"><span class="toc-number">1.2.3.</span> <span class="toc-text">3.代码实现</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#4-_u83DC_u5355_u680F_u7528_u6CD5"><span class="toc-number">1.2.4.</span> <span class="toc-text">4.菜单栏用法</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u5728res/menu/menu_main-xml_u4E2D_u5B9A_u4E49"><span class="toc-number">1.2.4.1.</span> <span class="toc-text">在res/menu/menu_main.xml中定义</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#u8BBE_u7F6E_u70B9_u51FB_u4E8B_u4EF6"><span class="toc-number">1.2.4.2.</span> <span class="toc-text">设置点击事件</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#DrawerLayout_uFF0CNavigationView_u7684_u7528_u6CD5"><span class="toc-number">1.3.</span> <span class="toc-text">DrawerLayout，NavigationView的用法</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#u9996_u5148_u6211_u4EEC_u6765_u770B_u4E0B_u5E03_u5C40_u6587_u4EF6_uFF1A"><span class="toc-number">1.3.1.</span> <span class="toc-text">首先我们来看下布局文件：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-headerLayout"><span class="toc-number">1.3.1.1.</span> <span class="toc-text">1.headerLayout</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-menu"><span class="toc-number">1.3.1.2.</span> <span class="toc-text">2.menu</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4EE3_u7801_u5B9E_u73B0_uFF1A"><span class="toc-number">1.3.2.</span> <span class="toc-text">代码实现：</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#u8BBE_u7F6E_u83DC_u5355_u680F_u76D1_u542C_u3002"><span class="toc-number">1.3.2.1.</span> <span class="toc-text">设置菜单栏监听。</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#u4E0B_u9762_u6765_u8BB2_u89E3_u8BBE_u7F6EToolbar_u548CDrawerLayout_u7684_u76D1_u542C_u3002"><span class="toc-number">1.3.3.</span> <span class="toc-text">下面来讲解设置Toolbar和DrawerLayout的监听。</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#https_3A//github-com/JrDong/Android-Sloth"><span class="toc-number">1.3.4.</span> <span class="toc-text">https://github.com/JrDong/Android-Sloth</span></a></li></ol></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
-<div class="closeaside"><a class="closebutton" href="#" title="隐藏侧边栏"></a></div>
+<div class="closeaside"><a class="closebutton" href="#" title="隱藏側邊欄"></a></div>
 <aside class="clearfix">
 
   
 <div class="categorieslist">
-	<p class="asidetitle">分类</p>
+	<p class="asidetitle">分類</p>
 		<ul>
 		
-			<li><a href="/categories/Android/" title="Android">Android<sup>9</sup></a></li>
+			<li><a href="/categories/Android/" title="Android">Android<sup>10</sup></a></li>
 		
 			<li><a href="/categories/Android资源整理/" title="Android资源整理">Android资源整理<sup>1</sup></a></li>
 		
@@ -346,7 +346,7 @@ var duoshuoQuery = {short_name:"ibat"};
   
 
   <div class="rsspart">
-	<a href="null" target="_blank" title="rss">RSS 订阅</a>
+	<a href="null" target="_blank" title="rss">RSS 訂閱</a>
 </div>
 
 </aside>
