@@ -4,12 +4,13 @@
 <head>
   <meta charset="UTF-8">
   
-    <title>浅谈HashMap中的hash算法 | JrDong’s Blog</title>
+    <title>分治法——快速排序，归并排序 | JrDong’s Blog</title>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=3, minimum-scale=1">
     
     <meta name="author" content="JrDong">
     
-    <meta name="description" content="浅谈HashMap中的hash算法HashMap是我们常见的一种数据结构，实现Map接口，用来存储键值对,允许null键/值、非同步、不保证有序(比如插入的顺序)。那HashMap中最核心的部分就是哈希函数，又称散列函数。也就是说，哈希函数是通过把key的hash值映射到数组中的一个位置来进行访问。">
+    <meta name="description" content="分治法——快速排序，归并排序快速排序(使用快速排序法对一列数字进行排序的过程——维基百科)  
+快速排序（Quicksort），是一种排序算法，最坏情况复杂度：Ο(n2)，最优时间复杂度：Ο(n log n)，平均时间复杂度：Ο(n log n)。快速排序的基本思想也是用了分治法的思想：找出一个元素">
     
     
     
@@ -78,15 +79,15 @@ var _hmt = _hmt || [];
 		<header class="article-info clearfix">
   <h1 itemprop="name">
     
-      <a href="/2017/02/16/浅聊HashMap中的hash算法/" title="浅谈HashMap中的hash算法" itemprop="url">浅谈HashMap中的hash算法</a>
+      <a href="/2017/03/12/分治法——快速排序，归并排序/" title="分治法——快速排序，归并排序" itemprop="url">分治法——快速排序，归并排序</a>
   </h1>
   <p class="article-author">By
     
       <a href="http://ibat.xyz" title="JrDong">JrDong</a>
     </p>
   <p class="article-time">
-    <time datetime="2017-02-16T14:19:15.000Z" itemprop="datePublished">2017-02-16</time>
-    更新日期:<time datetime="2017-03-05T08:40:39.000Z" itemprop="dateModified">2017-03-05</time>
+    <time datetime="2017-03-12T01:32:21.000Z" itemprop="datePublished">2017-03-12</time>
+    更新日期:<time datetime="2017-03-12T03:27:37.000Z" itemprop="dateModified">2017-03-12</time>
     
   </p>
 </header>
@@ -95,27 +96,23 @@ var _hmt = _hmt || [];
 		
 		<div id="toc" class="toc-article">
 			<strong class="toc-title">文章目錄</strong>
-		<ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">浅谈HashMap中的hash算法</span></a></li></ol>
+		<ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#u5206_u6CBB_u6CD5_u2014_u2014_u5FEB_u901F_u6392_u5E8F_uFF0C_u5F52_u5E76_u6392_u5E8F"><span class="toc-number">1.</span> <span class="toc-text">分治法——快速排序，归并排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#u5FEB_u901F_u6392_u5E8F"><span class="toc-number">1.1.</span> <span class="toc-text">快速排序</span></a></li></ol></li></ol>
 		</div>
 		
-		<h2 id="u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5"><a href="#u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5" class="headerlink" title="浅谈HashMap中的hash算法"></a>浅谈HashMap中的hash算法</h2><p>HashMap是我们常见的一种数据结构，实现Map接口，用来存储键值对,允许null键/值、非同步、不保证有序(比如插入的顺序)。那HashMap中最核心的部分就是哈希函数，又称散列函数。也就是说，哈希函数是通过把key的hash值映射到数组中的一个位置来进行访问。比如：  </p>
-<pre><code>存在一组哈希值 10，13，7，5，4，20
-存在一个长度为10的数组 arrays
-定义一个hash函数 int index = h % arrays.length; 
-
-10 % 10 = 0 那么 哈希值为10的对象放在数组索引为0的位置上；
-13 % 10 = 3 那么 哈希值为13的对象放在数组索引为3的位置上；
-......
-20 % 10 = 0 那么 哈希值为13的对象放在数组索引为0的位置上；
-</code></pre><p>这时候大家看出了一个问题，哈希值为10的对象和哈希值为20的对象，放在了一个索引上。发生了碰撞，那么怎么解决这样碰撞呢，有很多种方式，这里不展开叙述。HashMap中维护了一个链表组成的数组。如果冲突的话就添加到链表中，下面来看下hashmap中的hash算法，以Java8源码为例。</p>
-<pre><code>static final int hash(Object key) {
-        int h;
-        return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
-    }
-</code></pre><p>其中，key.hashCode（）是Key自带的hashCode()方法，返回一个int类型的散列值。我们大家知道，32位带符号的int表值范围从-2147483648到2147483648。这样只要hash函数松散的话，一般是很难发生碰撞的，因为HashMap的初始容量只有16。但是这样的散列值我们是不能直接拿来用的。用之前需要对数组的长度取模运算。得到余数才是索引值。我们来看下HashMap中怎么实现的。  </p>
-<pre><code>int index = hash &amp; (arrays.length-1);
-</code></pre><p>那么这也就明白了为什么HashMap的数组长度是2的整数幂。比如以初始长度为16为例，16-1 = 15，15的二进制数位00000000 00000000 00001111。可以看出一个基数二进制最后一位必然位1，当与一个hash值进行与运算时，最后一位可能是0也可能是1。但偶数与一个hash值进行与运算最后一位必然为0，造成有些位置永远映射不上值。<br>但是这时，又出现了一个问题，即使散列函数很松散，但只取最后几位碰撞也会很严重。这时候hash算法的价值就体现出来了，<br><img src="/img/hash算法1.png" alt="扰动函数"><br>hashCode右移16位，正好是32bit的一半。与自己本身做异或操作（相同为0，不同为1）。就是为了混合哈希值的高位和地位，增加低位的随机性。并且混合后的值也变相保持了高位的特征。</p>
-<p>HashMap中用到的编码思想确实很值得我们学习。HashMap在Java1.8后又进行了优化，比如引入红黑树的数据结构和扩容的优化等。有机会我们再结合Java1.8聊聊，HashMap get()和put（）实现原理，装载因子，resize()方法还有红黑树等。</p>
+		<h1 id="u5206_u6CBB_u6CD5_u2014_u2014_u5FEB_u901F_u6392_u5E8F_uFF0C_u5F52_u5E76_u6392_u5E8F"><a href="#u5206_u6CBB_u6CD5_u2014_u2014_u5FEB_u901F_u6392_u5E8F_uFF0C_u5F52_u5E76_u6392_u5E8F" class="headerlink" title="分治法——快速排序，归并排序"></a>分治法——快速排序，归并排序</h1><h2 id="u5FEB_u901F_u6392_u5E8F"><a href="#u5FEB_u901F_u6392_u5E8F" class="headerlink" title="快速排序"></a>快速排序</h2><p><img src="/img/Sorting_quicksort_anim.gif" alt="quickSort"><br>(使用快速排序法对一列数字进行排序的过程——维基百科)  </p>
+<p><strong>快速排序</strong>（Quicksort），是一种排序算法，最坏情况复杂度：Ο(n2)，最优时间复杂度：Ο(n log n)，平均时间复杂度：Ο(n log n)。快速排序的基本思想也是用了分治法的思想：找出一个元素X，在一趟排序中，使X左边的数都比X小，X右边的数都比X要大。然后再分别对X左边的数组和X右边的数组进行排序，直到数组不能分割为止。   </p>
+<p>ok,我们来看一下具体操作：  </p>
+<p>1.设置一个长度为n的数组A,定义两个变量i = 0,j = n - 1;<br>2.从数组中挑选出一个元素作为基准元素，复制给key；<br>3.从j开始从后向前搜索，j–,找到比key小的值，将A[j]与A[i]互换；<br>4.从i 开始向后搜索，i++,找到比key大的值，将A[i]与A[j]互换；<br>5.递归的，重复2，3，4步，直到i == j ;  </p>
+<p>举个栗子：  </p>
+<ul>
+<li>存在一个数组A：6 2 7 3 8 9  ,创建i = 0 ; j = 5,选择一个基准元素 k = 6  </li>
+<li>j 从右向左查找比k小的元素，发现，当 j = 3 时，发现元素3比k小，则另A[i] 与 A[j]交换，得到3 2 7 6 8 9;  </li>
+<li>i 从左向右进行查找，当 i = 2时，发现元素 7 比k大，则另A[i] 与A[j]进行交换，得到 3 2 6 7 8 9;  </li>
+<li>接着，再减小j，重复上面的循环。  </li>
+<li>但是我们发现，在本例中，一次循环后j与i就相等了，他们的下标同时指向了2.这时候，我们就进行分组，将3 2分为一组，7 8 9分为一组继续上述的比较，最终得到排序好的数组。</li>
+</ul>
+<p>Java代码实现  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (start &gt;= end)</span><br><span class="line">            <span class="keyword">return</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">int</span> mid = arr[end];</span><br><span class="line">        <span class="keyword">int</span> left = start;</span><br><span class="line">        <span class="keyword">int</span> right = end - <span class="number">1</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</span><br><span class="line">            <span class="keyword">while</span> (arr[left] &lt;= mid &amp;&amp; left &lt; right) &#123;</span><br><span class="line">                left++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">while</span> (arr[right] &gt;= mid &amp;&amp; left &lt; right) &#123;</span><br><span class="line">                right--;</span><br><span class="line">            &#125;</span><br><span class="line">            swap(arr, left, right);</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (arr[left] &gt;= arr[end]) &#123;</span><br><span class="line">            swap(arr, left, end);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            left++;</span><br><span class="line">        &#125;</span><br><span class="line">        quickSort(arr, start, left - <span class="number">1</span>);</span><br><span class="line">        quickSort(arr, left + <span class="number">1</span>, end);</span><br><span class="line"></span><br><span class="line">        print(arr);</span><br><span class="line">    &#125;</span><br><span class="line">    </span><br><span class="line">    </span><br><span class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">int</span> temp = arr[x];</span><br><span class="line">        arr[x] = arr[y];</span><br><span class="line">        arr[y] = temp;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
   
 	</div>
 		<footer class="article-footer clearfix">
@@ -123,14 +120,14 @@ var _hmt = _hmt || [];
 
 <div class="article-categories">
   <span></span>
-  <a class="article-category-link" href="/categories/Android/">Android</a>
+  <a class="article-category-link" href="/categories/算法/">算法</a>
 </div>
 
 
 
 <div class="article-share" id="share">
 
-  <div data-url="http://ibat.xyz/2017/02/16/浅聊HashMap中的hash算法/" data-title="浅谈HashMap中的hash算法 | JrDong’s Blog" data-tsina="null" class="share clearfix">
+  <div data-url="http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/" data-title="分治法——快速排序，归并排序 | JrDong’s Blog" data-tsina="null" class="share clearfix">
   </div>
 
 </div>
@@ -139,19 +136,11 @@ var _hmt = _hmt || [];
 	
 <nav class="article-nav clearfix">
  
- <div class="prev" >
- <a href="/2017/03/10/单例模式--双重检验锁真的线程安全吗/" title="单例模式--双重检验锁真的线程安全吗">
-  <strong>PREVIOUS:</strong><br/>
-  <span>
-  单例模式--双重检验锁真的线程安全吗</span>
-</a>
-</div>
-
 
 <div class="next">
-<a href="/2017/02/06/TextView进阶用法/"  title="TextView进阶用法">
+<a href="/2017/03/10/单例模式--双重检验锁真的线程安全吗/"  title="单例模式--双重检验锁真的线程安全吗">
  <strong>NEXT:</strong><br/> 
- <span>TextView进阶用法
+ <span>单例模式--双重检验锁真的线程安全吗
 </span>
 </a>
 </div>
@@ -161,7 +150,7 @@ var _hmt = _hmt || [];
  	 
 <section class="comment">
 <!-- 多说评论框 start -->
-	<div class="ds-thread" data-thread-key=”2017/02/16/浅聊HashMap中的hash算法/” data-title=”浅谈HashMap中的hash算法”  data-url="http://ibat.xyz/http://ibat.xyz/2017/02/16/浅聊HashMap中的hash算法/"></div>
+	<div class="ds-thread" data-thread-key=”2017/03/12/分治法——快速排序，归并排序/” data-title=”分治法——快速排序，归并排序”  data-url="http://ibat.xyz/http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/"></div>
 <!-- 多说评论框 end -->
 <!-- 多说公共JS代码 start (一个网页只需插入一次) -->
 <script type="text/javascript">
@@ -185,7 +174,7 @@ var duoshuoQuery = {short_name:"ibat"};
 
   <div id="toc" class="toc-aside">
   <strong class="toc-title">文章目錄</strong>
-  <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#u6D45_u8C08HashMap_u4E2D_u7684hash_u7B97_u6CD5"><span class="toc-number">1.</span> <span class="toc-text">浅谈HashMap中的hash算法</span></a></li></ol>
+  <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#u5206_u6CBB_u6CD5_u2014_u2014_u5FEB_u901F_u6392_u5E8F_uFF0C_u5F52_u5E76_u6392_u5E8F"><span class="toc-number">1.</span> <span class="toc-text">分治法——快速排序，归并排序</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#u5FEB_u901F_u6392_u5E8F"><span class="toc-number">1.1.</span> <span class="toc-text">快速排序</span></a></li></ol></li></ol>
   </div>
 
 <div id="asidepart">
