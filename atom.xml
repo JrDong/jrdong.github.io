@@ -1,0 +1,1040 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>JrDong’s Blog</title>
+  
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://ibat.xyz/"/>
+  <updated>2017-03-12T09:08:28.000Z</updated>
+  <id>http://ibat.xyz/</id>
+  
+  <author>
+    <name>JrDong</name>
+    
+  </author>
+  
+  <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>分治法——快速排序，归并排序</title>
+    <link href="http://ibat.xyz/2017/03/12/%E5%88%86%E6%B2%BB%E6%B3%95%E2%80%94%E2%80%94%E5%BF%AB%E9%80%9F%E6%8E%92%E5%BA%8F%EF%BC%8C%E5%BD%92%E5%B9%B6%E6%8E%92%E5%BA%8F/"/>
+    <id>http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/</id>
+    <published>2017-03-12T01:32:21.000Z</published>
+    <updated>2017-03-12T09:08:28.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h1><blockquote>
+<p>分治法是一种很重要的算法，也就是“分而治之”的意思，就是把一个复杂的问题分解成两个或者多个相似的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。</p>
+</blockquote>
+<p>比如二分搜索算法，排序算法中的快速排序和归并排序都属于分治法的一种。下面我们来看看归并排序和快速排序算法的实现。</p>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/Merge-sort-anim2.gif" alt="MergeSort2" title="">
+                </div>
+                <div class="image-caption">MergeSort2</div>
+            </figure>  
+<p>(维基百科)<br><strong>归并排序</strong>（Merge sort）,是创建在归并操作上的一种有效的排序算法，效率为O(n log n)。最优时间复杂度，O(n),平均时间复杂度为O(n log n)。由上图我们可以了解到归并排序的过程。  </p>
+<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><p>以数组6 5 3 1 8 7 2 4为例。首先递归的将数组一分为2，并对子数组排序  </p>
+<pre><code>[6, 5, 3, 1]  [8, 7, 2, 4]
+
+[6, 5]  [3, 1]  [8, 7]  [2, 4]
+
+[6], [5]  [4], [3]  [7], [8]  [2], [4]
+</code></pre><p>然后向上回溯，将两个数组合并成有序数组</p>
+<pre><code>[6], [5]  [4], [3]  [7], [8]  [2], [4]
+
+[5, 6]  [3, 4]  [7, 8]  [2, 4]
+
+[3, 4, 5, 6] [2, 4, 7, 8]           
+
+[1, 2, 3, 4, 5, 6, 7, 8]
+</code></pre><p>动图如下所示<br><img src="/img/Merge-sort-anim.gif" alt="MergeSort"><br>(维基百科)</p>
+<h2 id="两个有序数组排序"><a href="#两个有序数组排序" class="headerlink" title="两个有序数组排序"></a>两个有序数组排序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    *</div><div class="line">    * <span class="doctag">@param</span> a 有序数组a</div><div class="line">    * <span class="doctag">@param</span> b 有序数组b</div><div class="line">    * <span class="doctag">@param</span> result 结果数组</div><div class="line">    */</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge2</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> [] b, <span class="keyword">int</span>[] result)</span></span>&#123;</div><div class="line"></div><div class="line">       <span class="keyword">int</span> i = <span class="number">0</span> , j = <span class="number">0</span> , k = <span class="number">0</span> ;</div><div class="line">       <span class="keyword">while</span> (i &lt; a.length &amp;&amp; j &lt; b.length)&#123;</div><div class="line">           <span class="keyword">if</span> (a[i] &lt; b[j])&#123;</div><div class="line">               result[k++] = a[i++];</div><div class="line">           &#125;<span class="keyword">else</span> &#123;</div><div class="line">               result[k++] = b[j++];</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">while</span> (i &lt; a.length)&#123;</div><div class="line">           result[k++] = a[i++];</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">while</span> (j &lt; b.length)&#123;</div><div class="line">           result[k++] = b[j++];</div><div class="line">       &#125;</div><div class="line">       print(result);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>看会了两个有序数组的排序,则知道了如何实现归并排序</p>
+<h2 id="Java代码实现"><a href="#Java代码实现" class="headerlink" title="Java代码实现"></a>Java代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span>[] result, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> center = (start + end) / <span class="number">2</span>;</div><div class="line">        <span class="keyword">int</span> start1 = start, end1 = center;</div><div class="line">        <span class="keyword">int</span> start2 = center + <span class="number">1</span>, end2 = end;</div><div class="line">        merge(arr, result, start1, end1);</div><div class="line">        merge(arr, result, start2, end2);</div><div class="line">        <span class="keyword">int</span> k = start1;</div><div class="line">        <span class="keyword">while</span> (start1 &lt;= end1 &amp;&amp; start2 &lt;= end2) &#123;</div><div class="line">            <span class="keyword">if</span> (arr[start1] &lt; arr[start2]) &#123;</div><div class="line">                result[k++] = arr[start1++];</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                result[k++] = arr[start2++];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">while</span> (start1 &lt;= end1) &#123;</div><div class="line">            result[k++] = arr[start1++];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (start2 &lt;= end2) &#123;</div><div class="line">            result[k++] = arr[start2++];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (k = start; k &lt;= end; k++) &#123;</div><div class="line">            arr[k] = result[k];</div><div class="line">        &#125;</div><div class="line">        print(arr);</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><h2 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/Sorting_quicksort_anim.gif" alt="quickSort" title="">
+                </div>
+                <div class="image-caption">quickSort</div>
+            </figure>  
+<p>(使用快速排序法对一列数字进行排序的过程——维基百科)  </p>
+<p><strong>快速排序</strong>（Quicksort），是一种排序算法，最坏情况复杂度：Ο(n2)，最优时间复杂度：Ο(n log n)，平均时间复杂度：Ο(n log n)。快速排序的基本思想也是用了分治法的思想：找出一个元素X，在一趟排序中，使X左边的数都比X小，X右边的数都比X要大。然后再分别对X左边的数组和X右边的数组进行排序，直到数组不能分割为止。   </p>
+<h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><p>ok,我们来看一下具体操作：  </p>
+<p>1.设置一个长度为n的数组A,定义两个变量i = 0,j = n - 1;<br>2.从数组中挑选出一个元素作为基准元素，复制给key；<br>3.从j开始从后向前搜索，j–,找到比key小的值，将A[j]与A[i]互换；<br>4.从i 开始向后搜索，i++,找到比key大的值，将A[i]与A[j]互换；<br>5.递归的，重复2，3，4步，直到i == j ;  </p>
+<p>举个栗子：  </p>
+<ul>
+<li>存在一个数组A：6 2 7 3 8 9  ,创建i = 0 ; j = 5,选择一个基准元素 k = 6  </li>
+<li>j 从右向左查找比k小的元素，发现，当 j = 3 时，发现元素3比k小，则另A[i] 与 A[j]交换，得到3 2 7 6 8 9;  </li>
+<li>i 从左向右进行查找，当 i = 2时，发现元素 7 比k大，则另A[i] 与A[j]进行交换，得到 3 2 6 7 8 9;  </li>
+<li>接着，再减小j，重复上面的循环。  </li>
+<li>但是我们发现，在本例中，一次循环后j与i就相等了，他们的下标同时指向了2.这时候，我们就进行分组，将3 2分为一组，7 8 9分为一组继续上述的比较，最终得到排序好的数组。</li>
+</ul>
+<h2 id="Java代码实现-1"><a href="#Java代码实现-1" class="headerlink" title="Java代码实现"></a>Java代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (start &gt;= end)</div><div class="line">            <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> mid = arr[end];</div><div class="line">        <span class="keyword">int</span> left = start;</div><div class="line">        <span class="keyword">int</span> right = end - <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</div><div class="line">            <span class="keyword">while</span> (arr[left] &lt;= mid &amp;&amp; left &lt; right) &#123;</div><div class="line">                left++;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">while</span> (arr[right] &gt;= mid &amp;&amp; left &lt; right) &#123;</div><div class="line">                right--;</div><div class="line">            &#125;</div><div class="line">            swap(arr, left, right);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (arr[left] &gt;= arr[end]) &#123;</div><div class="line">            swap(arr, left, end);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            left++;</div><div class="line">        &#125;</div><div class="line">        quickSort(arr, start, left - <span class="number">1</span>);</div><div class="line">        quickSort(arr, left + <span class="number">1</span>, end);</div><div class="line"></div><div class="line">        print(arr);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> temp = arr[x];</div><div class="line">        arr[x] = arr[y];</div><div class="line">        arr[y] = temp;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>可以看出分治法的策略还是递归的去解决问题，基本分为三个步骤：  </p>
+<p>分解：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题；  </p>
+<p>解决：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题；  </p>
+<p>合并：将各个子问题的解合并为原问题的解。  </p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;分治法&quot;&gt;&lt;a href=&quot;#分治法&quot; class=&quot;headerlink&quot; title=&quot;分治法&quot;&gt;&lt;/a&gt;分治法&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;分治法是一种很重要的算法，也就是“分而治之”的意思，就是把一个复杂的问题分解成两个或者多个相似的子问题，直
+    
+    </summary>
+    
+      <category term="算法" scheme="http://ibat.xyz/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>单例模式--双重检验锁真的线程安全吗</title>
+    <link href="http://ibat.xyz/2017/03/10/%E5%8D%95%E4%BE%8B%E6%A8%A1%E5%BC%8F--%E5%8F%8C%E9%87%8D%E6%A3%80%E9%AA%8C%E9%94%81%E7%9C%9F%E7%9A%84%E7%BA%BF%E7%A8%8B%E5%AE%89%E5%85%A8%E5%90%97/"/>
+    <id>http://ibat.xyz/2017/03/10/单例模式--双重检验锁真的线程安全吗/</id>
+    <published>2017-03-10T14:56:48.000Z</published>
+    <updated>2017-03-10T17:19:57.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="单例模式–双重检验锁真的线程安全吗"><a href="#单例模式–双重检验锁真的线程安全吗" class="headerlink" title="单例模式–双重检验锁真的线程安全吗"></a>单例模式–双重检验锁真的线程安全吗</h1><p>单例模式是我们最熟悉不过的一种设计模式，用来保证内存中只有一个对象的实例。虽然容易，但里面的坑也有很多，比如双重检验锁模式(double checked locking pattern)真的是线程安全的吗？ </p>
+<h2 id="起因"><a href="#起因" class="headerlink" title="起因"></a>起因</h2><p>在对项目进行PMD静态代码检测时，遇到了这样一个问题  </p>
+<blockquote>
+<p>Partially created objects can be returned by the Double Checked Locking pattern when used in Java. An optimizing JRE may assign a reference to the baz variable before it calls the constructor of the object the reference points to.  </p>
+<p>Note: With Java 5, you can make Double checked locking work, if you declare the variable to be volatile.</p>
+</blockquote>
+<p>大概意思是，使用双重检验锁模式，可能会返回一个部分初始化的对象。可能大家有些疑虑，什么是部分初始化的对象，我们下面继续分析  </p>
+<h2 id="什么是双重检验锁模式"><a href="#什么是双重检验锁模式" class="headerlink" title="什么是双重检验锁模式"></a>什么是双重检验锁模式</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;                        </div><div class="line">        <span class="keyword">synchronized</span> (Singleton.class) &#123;</div><div class="line">            <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;                 </div><div class="line">                instance = <span class="keyword">new</span> Singleton();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> instance ;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>我们看到，在同步代码块的内部和外部都判断了instance == null，这时因为，可能会有多个线程同时进入到同步代码块外的if判断中，如果在同步代码块内部不进行判空的话，可能会初始化多个实例。  </p>
+<h2 id="问题所在"><a href="#问题所在" class="headerlink" title="问题所在"></a>问题所在</h2><p>这种写法看似完美无缺，但它却是有问题的，或者说它并不担保一定完美无缺。主要原因在于instance = new Singleton();并不是原子性的操作。<br>创建一个对象可以分为三部：  </p>
+<pre><code>1.分配对象的内存空间
+2.初始化对象
+3.设置instance指向刚分配的内存地址
+当instance指向分配地址时，instance不为空
+</code></pre><p>但是，2、3部之间，可能会被重排序，造成创建对象顺序变为1-3-2.试想一个场景：<br>线程A第一次创建对象Singleton，对象创建顺序为1-3-2；<br>当给instance分配完内存后，这时来了一个线程B调用了getSingleton()方法<br>这时候进行instance == null的判断，发现instance并不为null。<br>但注意这时候instance并没有初始化对象，线程B则会将这个未初始化完成的对象返回。那B线程使用instance时就可能会出现问题，这就是双重检查锁问题所在。</p>
+<h2 id="使用volatile"><a href="#使用volatile" class="headerlink" title="使用volatile"></a>使用volatile</h2><p>对于上述的问题，我们可以通过把instance声明为volatile型来解决  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span></span>&#123;</div><div class="line">	<span class="keyword">private</span> <span class="keyword">volatile</span> <span class="keyword">static</span> Singleton instance;</div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Singleton <span class="title">getSingleton</span><span class="params">()</span> </span>&#123;</div><div class="line">	    <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;                        </div><div class="line">	        <span class="keyword">synchronized</span> (Singleton.class) &#123;</div><div class="line">	            <span class="keyword">if</span> (instance == <span class="keyword">null</span>) &#123;                 </div><div class="line">	                instance = <span class="keyword">new</span> Singleton();</div><div class="line">	            &#125;</div><div class="line">	        &#125;</div><div class="line">	    &#125;</div><div class="line">	    <span class="keyword">return</span> instance ;</div><div class="line">	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>但是必须在JDK5版本以上使用。</p>
+<h2 id="静态内部类"><a href="#静态内部类" class="headerlink" title="静态内部类"></a>静态内部类</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Singleton</span> </span>&#123;  </div><div class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="class"><span class="keyword">class</span> <span class="title">SingletonHolder</span> </span>&#123;  </div><div class="line">        <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton INSTANCE = <span class="keyword">new</span> Singleton();  </div><div class="line">    &#125;  </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="title">Singleton</span> <span class="params">()</span></span>&#123;&#125;  </div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> Singleton <span class="title">getInstance</span><span class="params">()</span> </span>&#123;  </div><div class="line">        <span class="keyword">return</span> SingletonHolder.INSTANCE; </div><div class="line">    &#125;  </div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>这种写法是目前比较推荐的一种写法，采用静态内部类的方式，即实现了懒加载又不会出现线程安全问题。而且减少了synchronized的开销。</p>
+<h2 id="Learn-more"><a href="#Learn-more" class="headerlink" title="Learn more"></a>Learn more</h2><p><a href="http://www.infoq.com/cn/articles/double-checked-locking-with-delay-initialization" target="_blank" rel="external">双重检查锁定与延迟初始化</a><br><a href="https://pmd.github.io/pmd-5.5.4/pmd-java/rules/java/basic.html" target="_blank" rel="external">PMD-DoubleCheckedLocking</a><br><a href="http://www.javaworld.com/article/2074979/java-concurrency/double-checked-locking--clever--but-broken.html" target="_blank" rel="external">Double-checked locking: Clever, but broken</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;单例模式–双重检验锁真的线程安全吗&quot;&gt;&lt;a href=&quot;#单例模式–双重检验锁真的线程安全吗&quot; class=&quot;headerlink&quot; title=&quot;单例模式–双重检验锁真的线程安全吗&quot;&gt;&lt;/a&gt;单例模式–双重检验锁真的线程安全吗&lt;/h1&gt;&lt;p&gt;单例模式是我们最熟悉
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>浅谈HashMap中的hash算法</title>
+    <link href="http://ibat.xyz/2017/02/16/%E6%B5%85%E8%81%8AHashMap%E4%B8%AD%E7%9A%84hash%E7%AE%97%E6%B3%95/"/>
+    <id>http://ibat.xyz/2017/02/16/浅聊HashMap中的hash算法/</id>
+    <published>2017-02-16T14:19:15.000Z</published>
+    <updated>2017-03-05T08:40:39.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="浅谈HashMap中的hash算法"><a href="#浅谈HashMap中的hash算法" class="headerlink" title="浅谈HashMap中的hash算法"></a>浅谈HashMap中的hash算法</h2><p>HashMap是我们常见的一种数据结构，实现Map接口，用来存储键值对,允许null键/值、非同步、不保证有序(比如插入的顺序)。那HashMap中最核心的部分就是哈希函数，又称散列函数。也就是说，哈希函数是通过把key的hash值映射到数组中的一个位置来进行访问。比如：  </p>
+<pre><code>存在一组哈希值 10，13，7，5，4，20
+存在一个长度为10的数组 arrays
+定义一个hash函数 int index = h % arrays.length; 
+
+10 % 10 = 0 那么 哈希值为10的对象放在数组索引为0的位置上；
+13 % 10 = 3 那么 哈希值为13的对象放在数组索引为3的位置上；
+......
+20 % 10 = 0 那么 哈希值为13的对象放在数组索引为0的位置上；
+</code></pre><p>这时候大家看出了一个问题，哈希值为10的对象和哈希值为20的对象，放在了一个索引上。发生了碰撞，那么怎么解决这样碰撞呢，有很多种方式，这里不展开叙述。HashMap中维护了一个链表组成的数组。如果冲突的话就添加到链表中，下面来看下hashmap中的hash算法，以Java8源码为例。</p>
+<pre><code>static final int hash(Object key) {
+        int h;
+        return (key == null) ? 0 : (h = key.hashCode()) ^ (h &gt;&gt;&gt; 16);
+    }
+</code></pre><p>其中，key.hashCode（）是Key自带的hashCode()方法，返回一个int类型的散列值。我们大家知道，32位带符号的int表值范围从-2147483648到2147483648。这样只要hash函数松散的话，一般是很难发生碰撞的，因为HashMap的初始容量只有16。但是这样的散列值我们是不能直接拿来用的。用之前需要对数组的长度取模运算。得到余数才是索引值。我们来看下HashMap中怎么实现的。  </p>
+<pre><code>int index = hash &amp; (arrays.length-1);
+</code></pre><p>那么这也就明白了为什么HashMap的数组长度是2的整数幂。比如以初始长度为16为例，16-1 = 15，15的二进制数位00000000 00000000 00001111。可以看出一个基数二进制最后一位必然位1，当与一个hash值进行与运算时，最后一位可能是0也可能是1。但偶数与一个hash值进行与运算最后一位必然为0，造成有些位置永远映射不上值。<br>但是这时，又出现了一个问题，即使散列函数很松散，但只取最后几位碰撞也会很严重。这时候hash算法的价值就体现出来了，<br><img src="/img/hash算法1.png" alt="扰动函数"><br>hashCode右移16位，正好是32bit的一半。与自己本身做异或操作（相同为0，不同为1）。就是为了混合哈希值的高位和地位，增加低位的随机性。并且混合后的值也变相保持了高位的特征。</p>
+<p>HashMap中用到的编码思想确实很值得我们学习。HashMap在Java1.8后又进行了优化，比如引入红黑树的数据结构和扩容的优化等。有机会我们再结合Java1.8聊聊，HashMap get()和put（）实现原理，装载因子，resize()方法还有红黑树等。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;浅谈HashMap中的hash算法&quot;&gt;&lt;a href=&quot;#浅谈HashMap中的hash算法&quot; class=&quot;headerlink&quot; title=&quot;浅谈HashMap中的hash算法&quot;&gt;&lt;/a&gt;浅谈HashMap中的hash算法&lt;/h2&gt;&lt;p&gt;HashMap是我们
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>TextView进阶用法</title>
+    <link href="http://ibat.xyz/2017/02/06/TextView%E8%BF%9B%E9%98%B6%E7%94%A8%E6%B3%95/"/>
+    <id>http://ibat.xyz/2017/02/06/TextView进阶用法/</id>
+    <published>2017-02-06T15:30:15.000Z</published>
+    <updated>2017-02-07T14:04:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="TextView进阶用法"><a href="#TextView进阶用法" class="headerlink" title="TextView进阶用法"></a>TextView进阶用法</h1><p>在Android中TextView是我们最熟悉不过的控件了，但是它的进阶用法你知道多少呢？下面就来聊一聊TextView的进阶用法。</p>
+<h3 id="1-显示多种颜色"><a href="#1-显示多种颜色" class="headerlink" title="1.显示多种颜色"></a>1.显示多种颜色</h3><p>在做项目中经常会遇到一行字显示多种颜色的需求。用两个或多个TextView也可以实现，但这样比较费事，而且可能还要多一级布局嵌套。接下来我们需要用到SpannableStringBuilder这个类。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"></div><div class="line">TextView textView = (TextView) findViewById(R.id.textview);</div><div class="line"></div><div class="line">String text = <span class="string">"TextView进阶用法"</span>;</div><div class="line"></div><div class="line">SpannableStringBuilder ssb = <span class="keyword">new</span> SpannableStringBuilder(text);</div><div class="line">ssb.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.RED),<span class="number">0</span>,<span class="number">8</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">ssb.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.GREEN),<span class="number">8</span>,text.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line"></div><div class="line">textView.setText(ssb);</div></pre></td></tr></table></figure>
+<p>效果如下:<br><img src="/img/TextView进阶用法-1.png" alt="textview多种颜色"><br>SpannableStringBuilder类实现了CharSequence接口，所以可以直接通过setText()设置值，它更像一个StringBuilder，同时也有append()方法。这样的话无论要指定多少颜色，都可以通过setSpan()来根据字符串的索引长度来解决。<br>注意：   </p>
+<pre><code>1.参数start为闭区间，end为开区间。即本例中的0，8实际代表从0～7的长度。  
+2.int flags：取值有如下四个  
+  Spannable.SPAN_EXCLUSIVE_EXCLUSIVE：前后都不包括，即在指定范围的前面和后面插入新字符都不会应用新样式   
+  Spannable.SPAN_EXCLUSIVE_INCLUSIVE：前面不包括，后面包括。即仅在范围字符的后面插入新字符时会应用新样式  
+  Spannable.SPAN_INCLUSIVE_EXCLUSIVE：前面包括，后面不包括。  
+  Spannable.SPAN_INCLUSIVE_INCLUSIVE：前后都包括。 
+
+大家可以自己试下取不同flags时的效果，可以用EditText试验。  
+</code></pre><h3 id="2-显示不同大小"><a href="#2-显示不同大小" class="headerlink" title="2.显示不同大小"></a>2.显示不同大小</h3><p>将ForegroundColorSpan改为AbsoluteSizeSpan。  </p>
+<pre><code>ssb.setSpan(new AbsoluteSizeSpan(80),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="3-删除线（StrikethroughSpan）"><a href="#3-删除线（StrikethroughSpan）" class="headerlink" title="3.删除线（StrikethroughSpan）"></a>3.删除线（StrikethroughSpan）</h3><pre><code>ssb.setSpan(new StrikethroughSpan(),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="4-下划线（UnderlineSpan）"><a href="#4-下划线（UnderlineSpan）" class="headerlink" title="4.下划线（UnderlineSpan）"></a>4.下划线（UnderlineSpan）</h3><pre><code>ssb.setSpan(new UnderlineSpan(),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="5-加粗斜体（StyleSpan）"><a href="#5-加粗斜体（StyleSpan）" class="headerlink" title="5.加粗斜体（StyleSpan）"></a>5.加粗斜体（StyleSpan）</h3><pre><code>粗体：
+ssb.setSpan(new StyleSpan(Typeface.BOLD),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+斜体：
+ssb.setSpan(new StyleSpan(Typeface.ITALIC),0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+</code></pre><h3 id="6-设置点击事件"><a href="#6-设置点击事件" class="headerlink" title="6.设置点击事件"></a>6.设置点击事件</h3><pre><code>ssb.setSpan(new ClickableSpan() {
+        @Override
+        public void onClick(View widget) {
+            Toast.makeText(getApplicationContext(),&quot;被点击了&quot;,Toast.LENGTH_SHORT).show();
+        }
+    },0,8,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+
+//须调用此方法，不然点击无效
+textView.setMovementMethod(LinkMovementMethod.getInstance());
+</code></pre><p>最终效果如下：<br><img src="/img/TextView进阶用法-2.png" alt="textview多种颜色"> </p>
+<p>当然，如果你想及设置点击又设置颜色或下划线的话，ClickableSpan也提供了一个回调方法来设置颜色下划线等属性。</p>
+<pre><code>@Override
+public void updateDrawState(TextPaint ds) {
+            ds.setColor(Color.RED);
+            ds.setUnderlineText(true);
+}
+</code></pre><h3 id="附上完整代码"><a href="#附上完整代码" class="headerlink" title="附上完整代码"></a>附上完整代码</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line">TextView textView = (TextView) findViewById(R.id.textview);</div><div class="line"></div><div class="line">      String text = <span class="string">"TextView进阶用法"</span>;</div><div class="line"></div><div class="line">      SpannableStringBuilder ssb = <span class="keyword">new</span> SpannableStringBuilder(text);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.RED),<span class="number">0</span>,<span class="number">8</span>, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> ForegroundColorSpan(Color.GREEN),<span class="number">8</span>,text.length(),Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> AbsoluteSizeSpan(<span class="number">80</span>),<span class="number">0</span>,<span class="number">8</span>,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> StrikethroughSpan(),<span class="number">0</span>,<span class="number">8</span>,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> UnderlineSpan(),<span class="number">0</span>,<span class="number">8</span>,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> StyleSpan(Typeface.BOLD),<span class="number">0</span>,<span class="number">8</span>,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line">      ssb.setSpan(<span class="keyword">new</span> StyleSpan(Typeface.ITALIC),<span class="number">0</span>,<span class="number">8</span>,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line"></div><div class="line">      ssb.setSpan(<span class="keyword">new</span> ClickableSpan() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View widget)</span> </span>&#123;</div><div class="line">              Toast.makeText(getApplicationContext(),<span class="string">"被点击了"</span>,Toast.LENGTH_SHORT).show();</div><div class="line">          &#125;</div><div class="line"></div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">updateDrawState</span><span class="params">(TextPaint ds)</span> </span>&#123;</div><div class="line">              ds.setColor(Color.RED);</div><div class="line">              ds.setUnderlineText(<span class="keyword">true</span>);</div><div class="line">          &#125;</div><div class="line"></div><div class="line">      &#125;,<span class="number">0</span>,<span class="number">8</span>,Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);</div><div class="line"></div><div class="line">      <span class="comment">//须调用此方法，不然点击无效</span></div><div class="line">      textView.setMovementMethod(LinkMovementMethod.getInstance());</div><div class="line">      textView.setText(ssb);</div></pre></td></tr></table></figure>
+<p>这样就不用担心一段话要写多个TextView的问题了。一个TextView统统搞定！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;TextView进阶用法&quot;&gt;&lt;a href=&quot;#TextView进阶用法&quot; class=&quot;headerlink&quot; title=&quot;TextView进阶用法&quot;&gt;&lt;/a&gt;TextView进阶用法&lt;/h1&gt;&lt;p&gt;在Android中TextView是我们最熟悉不过的控件了，
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>2017年，我的小目标</title>
+    <link href="http://ibat.xyz/2017/02/05/2017%E5%B9%B4%EF%BC%8C%E6%88%91%E7%9A%84%E5%B0%8F%E7%9B%AE%E6%A0%87/"/>
+    <id>http://ibat.xyz/2017/02/05/2017年，我的小目标/</id>
+    <published>2017-02-05T13:34:21.000Z</published>
+    <updated>2017-03-05T07:06:53.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>2016，一路平淡的走过。仔细想想，虽然做了很多项目，也涉猎了几本技术书籍，和一些用到的新技术，但并没有更深入的了解，更没有一个模块化的知识体系。所以是时候给自己定个目标了，让2017年更加充实。   </p>
+<ul>
+<li><p>Java</p>
+<ul>
+<li>Java编程思想，目前看了一小半，今年争取把这本神书看完</li>
+<li>Effective Java </li>
+</ul>
+</li>
+<li><p>数据结构与算法</p>
+<ul>
+<li><a href="http://open.163.com/special/opencourse/algorithms.html" target="_blank" rel="external">麻省理工学院公开课：算法导论</a></li>
+<li>数据结构与算法-Java语言描述</li>
+</ul>
+</li>
+<li><p>Android </p>
+<ul>
+<li>将现有知识再进行深度扩展，了解更低层的一些东西。</li>
+<li>插件化开发，热更新原理及实践。</li>
+<li>坚持看鸿洋和郭霖的技术公众号，积累技术干货。</li>
+<li>掌握Android技术新动向</li>
+</ul>
+</li>
+<li><p>其他</p>
+<ul>
+<li>至少1500个英语单词</li>
+<li>看两本以上非技术书籍</li>
+<li>GitHub上有一个上百Star的项目</li>
+<li>每个月至少两篇技术博客</li>
+<li>了解下机器学习人工智能方向的知识，这个可能是以后的热点。 </li>
+</ul>
+</li>
+</ul>
+<p>先暂时写这么多吧，一年后看看自己的成果。每做完一件事更新下状态，并标注日期。激励下自己，每天进步一点点。(Ps.地铁上是一段可以很好利用的时间，与其看新闻，不如背单词或者看看技术文章)。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;2016，一路平淡的走过。仔细想想，虽然做了很多项目，也涉猎了几本技术书籍，和一些用到的新技术，但并没有更深入的了解，更没有一个模块化的知识体系。所以是时候给自己定个目标了，让2017年更加充实。   &lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;p&gt;Java&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;J
+    
+    </summary>
+    
+      <category term="学习笔记" scheme="http://ibat.xyz/categories/%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>理解RSA算法</title>
+    <link href="http://ibat.xyz/2016/08/23/%E7%90%86%E8%A7%A3RSA%E7%AE%97%E6%B3%95/"/>
+    <id>http://ibat.xyz/2016/08/23/理解RSA算法/</id>
+    <published>2016-08-23T13:34:21.000Z</published>
+    <updated>2017-03-12T01:26:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="理解RSA算法"><a href="#理解RSA算法" class="headerlink" title="理解RSA算法"></a>理解RSA算法</h1><blockquote>
+<p>本文是看完阮一峰的”RSA算法原理”后所做的笔记,有兴趣的同学可以移步至:<a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html" target="_blank" rel="external">RSA算法原理–阮一峰</a></p>
+<h2 id="一-简介"><a href="#一-简介" class="headerlink" title="一.简介"></a>一.简介</h2><p><strong>非对称加密算法:非对称加密需要两个密钥,公钥和私钥.</strong><br>1.乙方生成两把密钥(公钥和私钥).公钥是公开的,任何人都可以获得,私钥是保密的<br>2.甲方获取乙方的公钥,然后用它对信息加密<br>3.乙方得到加密后的信息,用私钥解密    </p>
+</blockquote>
+<p>如果公钥加密的信息只有私钥解得开,只要私钥不泄露,通信就是安全的.</p>
+<h2 id="二-欧拉函数"><a href="#二-欧拉函数" class="headerlink" title="二.欧拉函数"></a>二.欧拉函数</h2><p><a href="https://zh.wikipedia.org/wiki/%E6%AC%A7%E6%8B%89%E5%87%BD%E6%95%B0" target="_blank" rel="external">欧拉函数</a>,在数论中，对正整数n，欧拉函数φ(n)是小于或等于n的正整数中与n互质的数的数目.例如:φ(8) = 4,因为1,3,5,7均与8互质.  </p>
+<p>通式:<br><img src="/img/rsatongshi.jpeg" alt="欧拉函数公式(1)"><br>其中p1,p2….pn为x的所有质因数,x为不为0的整数.注意：<strong>每种质因数只一个</strong>。<br>比如:12 = 2×2×3 那么 φ（12）=12<em>（1-1/2）</em>(1-1/3)=4  </p>
+<h3 id="第一种情况"><a href="#第一种情况" class="headerlink" title="第一种情况"></a>第一种情况</h3><p>如果n=1，则 φ(1) = 1 。因为1与任何数（包括自身）都构成互质关系。</p>
+<h3 id="第二种情况"><a href="#第二种情况" class="headerlink" title="第二种情况"></a>第二种情况</h3><p>如果n是质数，则 φ(n)=n-1 。因为质数与小于它的每一个数，都构成互质关系。比如5与1、2、3、4都构成互质关系。</p>
+<h3 id="第三种情况"><a href="#第三种情况" class="headerlink" title="第三种情况"></a>第三种情况</h3><p>如果n是质数的某一个次方，即 n = p^k (p为质数，k为大于等于1的整数)，则<br><img src="/img/rsa3.jpeg" alt="欧拉函数公式(2)"><br>这是因为只有当一个数不包含质数p，才可能与n互质。而包含质数p的数一共有p^(k-1)个，即1×p、2×p、3×p、…、p^(k-1)×p，把它们去除，剩下的就是与n互质的数。</p>
+<h3 id="第四种情况"><a href="#第四种情况" class="headerlink" title="第四种情况"></a>第四种情况</h3><p>如果n可以分解成两个互质的整数之积<br><strong>n = p1 × p2</strong>   则  <strong>φ(n) = φ(p1p2) = φ(p1)φ(p2)</strong></p>
+<h2 id="三-欧拉定理"><a href="#三-欧拉定理" class="headerlink" title="三.欧拉定理"></a>三.欧拉定理</h2><p>如果两个正整数a和n互质，则n的欧拉函数 φ(n) 可以让下面的等式成立：<br><img src="/img/ouladingli.jpeg" alt="欧拉定理"><br>也就是说，a的φ(n)次方被n除的余数为1。或者说，a的φ(n)次方减去1，可以被n整除。比如，3和7互质，而7的欧拉函数φ(7)等于6，所以3的6次方（729）减去1，可以被7整除（728/7=104）。<br>欧拉定理有一个特殊情况。<br>假设正整数a与质数p互质，因为质数p的φ(p)等于p-1，则欧拉定理可以写成<br><img src="/img/ouladingli2.jpeg" alt="欧拉定理">  </p>
+<h2 id="四-模反元素"><a href="#四-模反元素" class="headerlink" title="四.模反元素"></a>四.模反元素</h2><p>如果两个正整数a和n互质，那么一定可以找到整数b，使得 ab-1 被n整除，或者说ab被n除的余数是1。</p>
+<blockquote>
+<p>###<strong>ab ≡ 1( mod n )</strong>  </p>
+</blockquote>
+<p>这时，b就叫做a的”模反元素”。<br>比如，3和11互质，那么3的模反元素就是4，因为 (3 × 4)-1 可以被11整除。显然，模反元素不止一个， 4加减11的整数倍都是3的模反元素 {…,-18,-7,4,15,26,…}，即如果b是a的模反元素，则 b+kn 都是a的模反元素。</p>
+<h2 id="五-RSA算法原理"><a href="#五-RSA算法原理" class="headerlink" title="五.RSA算法原理"></a>五.RSA算法原理</h2><h3 id="1-密钥生成步骤"><a href="#1-密钥生成步骤" class="headerlink" title="1.密钥生成步骤"></a>1.密钥生成步骤</h3><p>比如,老张和老王是两名地下工作者,老张要向老王传达一个机密的文件.这时老张想到了RSA算法.<br><strong>(1)  随机选择两个不相等的质数p,q.</strong><br>这时,老张选择了61和53.<br><strong>(2)  计算p和q的乘积n.</strong>  </p>
+<pre><code>n = p * q = 61 * 53 = 3233.  
+</code></pre><p>n的长度就是密钥长度。3233写成二进制是110010100001，一共有12位，所以这个密钥就是12位。实际应用中，RSA密钥一般是1024位，重要场合则为2048位。<br><strong>(3)  计算n的欧拉函数φ(n).</strong><br>根据上面所介绍的欧拉定理第四种情况:</p>
+<pre><code>φ(n) = φ(3233) = φ(61) * φ(53) = 60 * 52 = 3120;  
+</code></pre><p><strong>(4)  随机选择一个整数e，条件是1&lt; e &lt; φ(n)，且e与φ(n) 互质.</strong><br>这时,老张从1-3120之间,随机选择了17.（实际应用中，常常选择65537）.<br><strong>(5)  计算e对于φ(n)的模反元素d</strong><br>所谓”模反元素”就是指有一个整数d，可以使得ed被φ(n)除的余数为1。</p>
+<pre><code>ed ≡ 1 (mod φ(n))  
+</code></pre><p>这个公式等价于 </p>
+<pre><code>ed - 1 = kφ(n)
+</code></pre><p>于是，找到模反元素d，实质上就是对下面这个二元一次方程求解。</p>
+<pre><code>ex - φ(n)y = 1
+</code></pre><p>那么,已知e = 17,φ(n) = 3120 ,求x的值 </p>
+<pre><code>17x - 3120y = 1  
+</code></pre><p>这个方程可以用”扩展欧几里得算法”求解，此处省略具体过程。总之，老张算出一组整数解为 (x,y)=(2753,15)，即 d=2753。<br><strong>(6)  将n和e封装成公钥，n和d封装成私钥</strong><br>n=3233，e=17，d=2753，所以公钥就是 (3233,17)，私钥就是（3233, 2753）,即公钥为( n,e ),私钥为( n,d )。<br>实际应用中，公钥和私钥的数据都采用<a href="https://zh.wikipedia.org/zh-cn/ASN.1" target="_blank" rel="external">ASN.1</a>格式表达。  </p>
+<h3 id="2-RSA算法的可靠性"><a href="#2-RSA算法的可靠性" class="headerlink" title="2.RSA算法的可靠性"></a>2.RSA算法的可靠性</h3><p>老张进行了这些计算后,整理了下上面所提到的数字:  </p>
+<pre><code>随机选择的两个质数:p 61 , q 53  
+质数的乘积:n
+n的欧拉函数φ(n):3120
+随机选择的整数e:17
+e的模反元素d:2753
+</code></pre><p>这六个数字之中，公钥用到了两个（n和e），其余四个数字都是不公开的。其中最关键的是d，因为n和d组成了私钥，一旦d泄漏，就等于私钥泄漏。<br><strong>老张想,有没有可能在已知n和e的情况下,也就是知道公钥的情况下,推导出d?</strong>  </p>
+<pre><code>（1）ed≡1 (mod φ(n))。只有知道e和φ(n)，才能算出d。
+（2）φ(n)=(p-1)(q-1)。只有知道p和q，才能算出φ(n)。
+（3）n=pq。只有将n因数分解，才能算出p和q。
+</code></pre><p>结论：如果n可以被因数分解，d就可以算出，也就意味着私钥被破解。可是，大整数的因数分解，是一件非常困难的事情.</p>
+<blockquote>
+<p>　 “对极大整数做因数分解的难度决定了RSA算法的可靠性。换言之，对一极大整数做因数分解愈困难，RSA算法愈可靠。<br>　假如有人找到一种快速因数分解的算法，那么RSA的可靠性就会极度下降。但找到这样的算法的可能性是非常小的。今天只有短的RSA密钥才可能被暴力破解。到2008年为止，世界上还没有任何可靠的攻击RSA算法的方式。<br>　只要密钥长度足够长，用RSA加密的信息实际上是不能被解破的。”</p>
+</blockquote>
+<h3 id="3-加密和解密"><a href="#3-加密和解密" class="headerlink" title="3.加密和解密"></a>3.加密和解密</h3><p>有了公钥和密钥，就能进行加密和解密了。<br>1.加密要用公钥 (n,e)<br>假设老张要向老王发送加密信息m，他就要用老王的公钥 (n,e) 对m进行加密。这里需要注意，m必须是整数（字符串可以取ascii值或unicode值），且m必须小于n。<br>所谓”加密”，就是算出下式的c：  </p>
+<pre><code>me ≡ c (mod n)
+</code></pre><p>老王的公钥是 (3233, 17)，老张的m假设是65，那么可以算出下面的等式：</p>
+<pre><code>6517 ≡ 2790 (mod 3233)
+</code></pre><p>于是，c等于2790，老张就把2790发给了老王。  </p>
+<p>2.解密要用私钥(n,d)<br>老王拿到老张发来的2790以后，就用自己的私钥(3233, 2753) 进行解密。可以证明，下面的等式一定成立：（证明过程略，有兴趣可以看阮一峰的博客）  </p>
+<pre><code>cd ≡ m (mod n)
+</code></pre><p>　　<br>也就是说，c的d次方除以n的余数为m。现在，c等于2790，私钥是(3233, 2753)，那么，老王算出  </p>
+<pre><code>27902753 ≡ 65 (mod 3233)
+</code></pre><p>因此，老王知道了老张加密前的原文就是65。  </p>
+<p>我们可以看到，如果不知道d，就没有办法从c求出m。而前面已经说过，要知道d就必须分解n，这是极难做到的，所以RSA算法保证了通信安全。<br>你可能会问，公钥(n,e) 只能加密小于n的整数m，那么如果要加密大于n的整数，该怎么办？有两种解决方法：一种是把长信息分割成若干段短消息，每段分别加密；另一种是先选择一种”对称性加密算法”（比如DES），用这种算法的密钥加密信息，再用RSA公钥加密DES密钥。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;理解RSA算法&quot;&gt;&lt;a href=&quot;#理解RSA算法&quot; class=&quot;headerlink&quot; title=&quot;理解RSA算法&quot;&gt;&lt;/a&gt;理解RSA算法&lt;/h1&gt;&lt;blockquote&gt;
+&lt;p&gt;本文是看完阮一峰的”RSA算法原理”后所做的笔记,有兴趣的同学可以移步至:
+    
+    </summary>
+    
+      <category term="算法" scheme="http://ibat.xyz/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>使用productFlavors配置项目移植</title>
+    <link href="http://ibat.xyz/2016/07/16/%E4%BD%BF%E7%94%A8productFlavors%E9%85%8D%E7%BD%AE%E9%A1%B9%E7%9B%AE%E7%A7%BB%E6%A4%8D/"/>
+    <id>http://ibat.xyz/2016/07/16/使用productFlavors配置项目移植/</id>
+    <published>2016-07-16T14:32:15.000Z</published>
+    <updated>2016-11-19T14:33:52.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用productFlavors配置项目移植"><a href="#使用productFlavors配置项目移植" class="headerlink" title="使用productFlavors配置项目移植"></a>使用productFlavors配置项目移植</h1><h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><p>有时候需要做两个或多个项目,但都用的同一套代码.只有稍微的一些布局或者代码的改动.<br>我们常规的做法是再切一个分支,再在这个分支上做相应的改动.但比如发现了某一处bug,或者需要统一改个需求.那我们就需要在每一个分支上都进行这种变动.<br>如果项目多的话会很不好维护.下面就介绍怎样通过productFlavors的方式配置项目移植. </p>
+<h2 id="Flavor"><a href="#Flavor" class="headerlink" title="Flavor"></a>Flavor</h2><h3 id="在主项目build-gradle中配置productFlavors"><a href="#在主项目build-gradle中配置productFlavors" class="headerlink" title="在主项目build.gradle中配置productFlavors"></a>在主项目build.gradle中配置productFlavors</h3><pre><code>android{
+    ...
+    defaultConfig{
+    ...
+    }
+    productFlavors{
+        jkxt {
+            applicationId &quot;com.****.****&quot;
+            buildConfigField &quot;String&quot;, &quot;PROJECT_SIGN&quot;, &quot;\&quot;jkxt\&quot;&quot;
+            manifestPlaceholders = [BAIDU_CHANNEL_VALUE       : &quot;*****&quot;,
+                                    PACKAGE_NAME              : &quot;*****&quot;]
+        }
+        jkhd {
+            applicationId &quot;com.****.****&quot;
+            buildConfigField &quot;String&quot;, &quot;PROJECT_SIGN&quot;, &quot;\&quot;jkhd\&quot;&quot;
+            manifestPlaceholders = [BAIDU_CHANNEL_VALUE       : &quot;*****&quot;,
+                                    PACKAGE_NAME              : &quot;*****&quot;]
+        }
+    }
+}
+</code></pre><p>上面定义了一个productFlavors,gradle会为这个flavor关联对应的sourceSet,默认位置为src/<flavorname>目录,对应到本例就是src/jkhd,如果没有建文件夹,则默认为src/main.看如下解释</flavorname></p>
+<blockquote>
+<p>#####The product flavors support the same properties as defaultConfig—this is because defaultConfig actually belongs to the ProductFlavor class. This means you can provide the base configuration for all flavors in the defaultConfig {} block, and each flavor can override any of these default values, such as the applicationId.  </p>
+</blockquote>
+<p>也就是说,defaultConfig中可以配置的属性,比如applicationId,minSdkVersion等,都可以在productFlavors中配置,因为<strong>defaultConfig就是一个productFlavor实例</strong>.</p>
+<p>在本例中,解释上面两个属性,<strong>buildConfigField</strong>可以理解为定义一个常量,传入的值分别代表type,name,value;<br>通过BuildConfig.PROJECT_SIGN  可以拿到相应的值,比如我们熟悉的BuildConfig.DEBUG,就是系统定义的一个常量.  </p>
+<p><strong>manifestPlaceholders</strong>作用是动态替换manifest文件,传入的是一个map对象,写法如上所示.在配置多个项目时,一些第三方的key比如友盟,极光等需要进行动态配置,就需要用到这个属性,在manifest文件中把需要动态配置的属性按如下写法,android:name=”${PACKAGE_NAME}”</p>
+<h2 id="替换资源文件"><a href="#替换资源文件" class="headerlink" title="替换资源文件"></a>替换资源文件</h2><p>上面讲到productFlavors已经为我们关联了对应的sourceSet,所以我们只需要把不同的资源文件放入相应目录下<br>以jkhd为例,在src/jkhd目录下新建res文件,新建需要替换的资源文件夹,比如需要替换app_name<br>只需要在src/jkhd/res/values/string.xml,新建app_name标签即可.<strong>其他公用的资源不需要添加,找不到的话会默认从主项目下面找</strong>.</p>
+<h2 id="使用第三方sdk"><a href="#使用第三方sdk" class="headerlink" title="使用第三方sdk"></a>使用第三方sdk</h2><p>做某些项目可能用用到不用的第三方sdk,但其他项目并不需要这个sdk,那么怎么为特定的项目添加sdk呢?   </p>
+<pre><code>android {
+productFlavors {
+    jkhd {
+        }
+    }
+}
+...
+dependencies {
+    jkhdCompile &apos;com.nineoldandroids:library:2.4.0&apos;
+}
+</code></pre><p>然后通过反射的方法,进行具体判断</p>
+<pre><code>class MyActivity extends Activity {
+private boolean useSdk;
+
+@override
+public void onCreate(Bundle savedInstanceState) {
+    try {
+        Class.forName(&quot;com.nineoldandroids.......&quot;);
+        useSdk = true;
+    } catch (ClassNotFoundException ignored) {
+        }
+    }
+}
+</code></pre><h2 id="动态替换代码"><a href="#动态替换代码" class="headerlink" title="动态替换代码"></a>动态替换代码</h2><ol>
+<li>如果在src/jkhd目录下新建同名类的话会报类重复的问题.但我们可以新建src/jkhd,和src/jkxt两个文件夹,在这两个文件夹中同时写入一个与主目录不同的类,在主目录中进行调用,这样是没有问题的  </li>
+<li>直接在主目录中以判断标记位的方法来达到动态替换的效果.  </li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>productFlavors对于配置项目移植,和多渠道打包都非常方便,节省了我们大量的工作.目前所介绍的配置基本上可以满足我们的需求.以后再也不用担心多渠道打包和项目移植啦~  </p>
+<p>欢迎大家提出更多新的用法!</p>
+<p>参考资料<br><a href="http://tools.android.com/tech-docs/new-build-system/user-guide#TOC-Product-flavors" target="_blank" rel="external">Product-flavors</a><br><a href="http://tech.meituan.com/mt-apk-adaptation.html" target="_blank" rel="external">美团Android自动化之旅—适配渠道包</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;使用productFlavors配置项目移植&quot;&gt;&lt;a href=&quot;#使用productFlavors配置项目移植&quot; class=&quot;headerlink&quot; title=&quot;使用productFlavors配置项目移植&quot;&gt;&lt;/a&gt;使用productFlavors配置项目
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Android--参考资料</title>
+    <link href="http://ibat.xyz/2016/06/28/Android-%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/"/>
+    <id>http://ibat.xyz/2016/06/28/Android-资料整理/</id>
+    <published>2016-06-28T13:29:49.000Z</published>
+    <updated>2017-04-10T07:54:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="博客推荐"><a href="#博客推荐" class="headerlink" title="博客推荐:"></a>博客推荐:</h1><p>这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  </p>
+<p>Hongyang:<a><a href="http://zhanghongyang.com" target="_blank" rel="external">http://zhanghongyang.com</a></a><br>郭霖：<a><a href="http://guolin.tech" target="_blank" rel="external">http://guolin.tech</a></a><br>stormzhang:<a><a href="http://stormzhang.com/" target="_blank" rel="external">http://stormzhang.com/</a></a><br>任玉刚:<a><a href="http://blog.csdn.net/singwhatiwanna" target="_blank" rel="external">http://blog.csdn.net/singwhatiwanna</a></a><br>阮一峰:<a><a href="http://ruanyifeng.com" target="_blank" rel="external">http://ruanyifeng.com</a></a><br>codeKK(力推，各种源码解析，开源项目汇总。):<a><a href="http://codekk.com" target="_blank" rel="external">http://codekk.com</a></a><br>Trinea():<a><a href="http://www.trinea.cn/" target="_blank" rel="external">http://www.trinea.cn/</a></a><br>泡在网上的日子:<a><a href="http://www.jcodecraeer.com/" target="_blank" rel="external">http://www.jcodecraeer.com/</a></a>  </p>
+<h1 id="知识点备忘"><a href="#知识点备忘" class="headerlink" title="知识点备忘"></a>知识点备忘</h1><p>遗传算法在自动组卷中的应用：<a><a href="http://www.jianshu.com/p/7fe9d3bb00ac" target="_blank" rel="external">http://www.jianshu.com/p/7fe9d3bb00ac</a></a></p>
+<p>java中的ClassLoader详解：<a><a href="http://blog.csdn.net/briblue/article/details/54973413" target="_blank" rel="external">http://blog.csdn.net/briblue/article/details/54973413</a></a>  </p>
+<p>热修复入门，Andoroid中的ClassLoader详解：<a><a href="http://jaeger.itscoder.com/android/2016/08/27/android-classloader.html" target="_blank" rel="external">http://jaeger.itscoder.com/android/2016/08/27/android-classloader.html</a></a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;博客推荐&quot;&gt;&lt;a href=&quot;#博客推荐&quot; class=&quot;headerlink&quot; title=&quot;博客推荐:&quot;&gt;&lt;/a&gt;博客推荐:&lt;/h1&gt;&lt;p&gt;这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  &lt;/p&gt;
+&lt;p&gt;Hongya
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>ViewDragHelper——打造你的专属ViewGroup</title>
+    <link href="http://ibat.xyz/2016/05/17/ViewDragHelper%E7%94%A8%E6%B3%95%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/</id>
+    <published>2016-05-17T14:53:10.000Z</published>
+    <updated>2016-05-17T15:58:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="ViewDragHelper介绍"><a href="#ViewDragHelper介绍" class="headerlink" title="ViewDragHelper介绍"></a>ViewDragHelper介绍</h1><p>转载请注明出处，有问题的话欢迎在下面留言，我会一一回复，谢谢大家。你们的关注是我最大的动力。</p>
+<p>在自定义控件中，很多效果都需要重写onInterceptTouchEvent和onTouchEvent这两个类，但要考虑到各种情况，写出很好的手势处理控件是比较麻烦的。比如多点触控，速度监测等。ViewDragHelper是谷歌io大会上隆重推出的手势处理的类。在android.support.v4中。像Google官方侧滑菜单，DrawerLayout就是用这个类实现的。本节先介绍它的基本用法，以后会介绍如何用ViewDragHelper自定义侧滑菜单。</p>
+<h1 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h1><h2 id="创建实例"><a href="#创建实例" class="headerlink" title="创建实例"></a>创建实例</h2><pre><code>mViewDragHelper = ViewDragHelper.create(this,1.0f,callback);
+</code></pre><p>需要传入三个参数，第一个参数传入当前的ViewGroup；第二个参数是灵敏度，数值越大，灵敏度越低；第三个参数传入ViewDragHelper.Callback,后面详细介绍。</p>
+<h2 id="触摸相关的方法"><a href="#触摸相关的方法" class="headerlink" title="触摸相关的方法"></a>触摸相关的方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onInterceptTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</div><div class="line">	<span class="comment">// 让ViewDragHelper帮我们判断是否应该拦截</span></div><div class="line">	<span class="keyword">boolean</span> result = viewDragHelper.shouldInterceptTouchEvent(ev);</div><div class="line">	<span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</div><div class="line">	<span class="comment">// 将触摸事件交给ViewDragHelper来解析处理</span></div><div class="line">	viewDragHelper.processTouchEvent(event);</div><div class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="ViewDragHelper-Callback的相关方法"><a href="#ViewDragHelper-Callback的相关方法" class="headerlink" title="ViewDragHelper.Callback的相关方法"></a><strong>ViewDragHelper.Callback</strong>的相关方法</h2><p>callback的方法，大家参考注释。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">private</span> ViewDragHelper.Callback callback = <span class="keyword">new</span> ViewDragHelper.Callback() &#123;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 用于判断是否捕获当前child的触摸事件 child: 当前触摸的子View return: true:就捕获并解析 false：不处理</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryCaptureView</span><span class="params">(View child, <span class="keyword">int</span> pointerId)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> child == blueView || child == redView;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 当view被开始捕获和解析的回调 capturedChild:当前被捕获的子view</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewCaptured</span><span class="params">(View capturedChild, <span class="keyword">int</span> activePointerId)</span> </span>&#123;</div><div class="line">			<span class="keyword">super</span>.onViewCaptured(capturedChild, activePointerId);</div><div class="line">			<span class="comment">// Log.e("tag", "onViewCaptured");</span></div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 获取view水平方向的拖拽范围,但是目前不能限制边界,返回的值目前用在手指抬起的时候view缓慢移动的动画世界的计算上面; 最好不要返回0</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getViewHorizontalDragRange</span><span class="params">(View child)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> getMeasuredWidth() - child.getMeasuredWidth();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 获取view垂直方向的拖拽范围，最好不要返回0</div><div class="line">		 */</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getViewVerticalDragRange</span><span class="params">(View child)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> getMeasuredHeight() - child.getMeasuredHeight();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 控制child在水平方向的移动 left:</div><div class="line">		 * 表示ViewDragHelper认为你想让当前child的left改变的值,left=chile.getLeft()+dx dx:</div><div class="line">		 * 本次child水平方向移动的距离 return: 表示你真正想让child的left变成的值</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">clampViewPositionHorizontal</span><span class="params">(View child, <span class="keyword">int</span> left, <span class="keyword">int</span> dx)</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (left &lt; <span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">// 限制左边界</span></div><div class="line">				left = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (left &gt; (getMeasuredWidth() - child.getMeasuredWidth())) &#123;</div><div class="line">				<span class="comment">// 限制右边界</span></div><div class="line">				left = getMeasuredWidth() - child.getMeasuredWidth();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> left;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 控制child在垂直方向的移动 top:</div><div class="line">		 * 表示ViewDragHelper认为你想让当前child的top改变的值,top=chile.getTop()+dy dy:</div><div class="line">		 * 本次child垂直方向移动的距离 return: 表示你真正想让child的top变成的值</div><div class="line">		 */</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">clampViewPositionVertical</span><span class="params">(View child, <span class="keyword">int</span> top, <span class="keyword">int</span> dy)</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (top &lt; <span class="number">0</span>) &#123;</div><div class="line">				top = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (top &gt; getMeasuredHeight() - child.getMeasuredHeight()) &#123;</div><div class="line">				top = getMeasuredHeight() - child.getMeasuredHeight();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> top;</div><div class="line">		&#125;;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 当child的位置改变的时候执行,一般用来做其他子View的伴随移动 changedView：位置改变的child</div><div class="line">		 * left：child当前最新的left top: child当前最新的top dx: 本次水平移动的距离 dy: 本次垂直移动的距离</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewPositionChanged</span><span class="params">(View changedView, <span class="keyword">int</span> left, <span class="keyword">int</span> top,</span></span></div><div class="line">				<span class="keyword">int</span> dx, <span class="keyword">int</span> dy) &#123;</div><div class="line">			<span class="keyword">super</span>.onViewPositionChanged(changedView, left, top, dx, dy);</div><div class="line">			<span class="keyword">if</span> (changedView == blueView) &#123;</div><div class="line">				<span class="comment">// blueView移动的时候需要让redView跟随移动</span></div><div class="line">				redView.layout(redView.getLeft() + dx, redView.getTop() + dy,</div><div class="line">						redView.getRight() + dx, redView.getBottom() + dy);</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (changedView == redView) &#123;</div><div class="line">				<span class="comment">// redView移动的时候需要让blueView跟随移动</span></div><div class="line">				blueView.layout(blueView.getLeft() + dx,</div><div class="line">						blueView.getTop() + dy, blueView.getRight() + dx,</div><div class="line">						blueView.getBottom() + dy);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			<span class="comment">//1.计算view移动的百分比</span></div><div class="line">			<span class="keyword">float</span> fraction = changedView.getLeft()*<span class="number">1f</span>/(getMeasuredWidth()-changedView.getMeasuredWidth());</div><div class="line">			Log.e(<span class="string">"tag"</span>, <span class="string">"fraction:"</span>+fraction);</div><div class="line">			<span class="comment">//2.执行一系列的伴随动画</span></div><div class="line">			executeAnim(fraction);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 手指抬起的执行该方法， releasedChild：当前抬起的view xvel: x方向的移动的速度 正：向右移动， 负：向左移动</div><div class="line">		 * yvel: y方向移动的速度</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewReleased</span><span class="params">(View releasedChild, <span class="keyword">float</span> xvel, <span class="keyword">float</span> yvel)</span> </span>&#123;</div><div class="line">			<span class="keyword">super</span>.onViewReleased(releasedChild, xvel, yvel);</div><div class="line">			<span class="keyword">int</span> centerLeft = getMeasuredWidth() / <span class="number">2</span></div><div class="line">					- releasedChild.getMeasuredWidth() / <span class="number">2</span>;</div><div class="line">			<span class="keyword">if</span> (releasedChild.getLeft() &lt; centerLeft) &#123;</div><div class="line">				<span class="comment">// 在左半边，应该向左缓慢移动</span></div><div class="line">				viewDragHelper.smoothSlideViewTo(releasedChild, <span class="number">0</span>,</div><div class="line">						releasedChild.getTop());</div><div class="line">				ViewCompat.postInvalidateOnAnimation(DragLayout.<span class="keyword">this</span>);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// 在右半边，应该向右缓慢移动</span></div><div class="line">				viewDragHelper.smoothSlideViewTo(releasedChild,</div><div class="line">						getMeasuredWidth() - releasedChild.getMeasuredWidth(),</div><div class="line">						releasedChild.getTop());</div><div class="line">				ViewCompat.postInvalidateOnAnimation(DragLayout.<span class="keyword">this</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">	</div><div class="line"><span class="comment">/**</span></div><div class="line">	 * 执行伴随动画</div><div class="line">	 * <span class="doctag">@param</span> fraction</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">executeAnim</span><span class="params">(<span class="keyword">float</span> fraction)</span></span>&#123;</div><div class="line">		<span class="comment">//fraction: 0 - 1</span></div><div class="line">		<span class="comment">//缩放</span></div><div class="line"><span class="comment">//		ViewHelper.setScaleX(redView, 1+0.5f*fraction);</span></div><div class="line"><span class="comment">//		ViewHelper.setScaleY(redView, 1+0.5f*fraction);</span></div><div class="line">		<span class="comment">//旋转</span></div><div class="line"><span class="comment">//		ViewHelper.setRotation(redView,360*fraction);//围绕z轴转</span></div><div class="line">		ViewHelper.setRotationX(redView,<span class="number">360</span>*fraction);<span class="comment">//围绕x轴转</span></div><div class="line"><span class="comment">//		ViewHelper.setRotationY(redView,360*fraction);//围绕y轴转</span></div><div class="line">		ViewHelper.setRotationX(blueView,<span class="number">360</span>*fraction);<span class="comment">//围绕z轴转</span></div><div class="line">		<span class="comment">//平移</span></div><div class="line"><span class="comment">//		ViewHelper.setTranslationX(redView,80*fraction);</span></div><div class="line">		<span class="comment">//透明</span></div><div class="line"><span class="comment">//		ViewHelper.setAlpha(redView, 1-fraction);</span></div><div class="line">		</div><div class="line">		<span class="comment">//设置过度颜色的渐变</span></div><div class="line">		redView.setBackgroundColor((Integer) ColorUtil.evaluateColor(fraction,Color.RED,Color.GREEN));</div><div class="line"><span class="comment">//		setBackgroundColor((Integer) ColorUtil.evaluateColor(fraction,Color.RED,Color.GREEN));</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">computeScroll</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (viewDragHelper.continueSettling(<span class="keyword">true</span>)) &#123;</div><div class="line">			ViewCompat.postInvalidateOnAnimation(DragLayout.<span class="keyword">this</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="其他代码"><a href="#其他代码" class="headerlink" title="其他代码"></a>其他代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 当DragLayout的xml布局的结束标签被读取完成会执行该方法，此时会知道自己有几个子View了 一般用来初始化子View的引用</div><div class="line"> */</div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onFinishInflate</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>.onFinishInflate();</div><div class="line">	redView = getChildAt(<span class="number">0</span>);</div><div class="line">	blueView = getChildAt(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"> <span class="meta">@Override</span></div><div class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line"> <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line"> <span class="comment">//要测量我自己的子View</span></div><div class="line"> <span class="comment">// int size = getResources().getDimension(R.dimen.width);//100dp</span></div><div class="line"> <span class="comment">// int measureSpec =</span></div><div class="line"> MeasureSpec.makeMeasureSpec(redView.getLayoutParams().width,MeasureSpec.EXACTLY);</div><div class="line"> <span class="comment">// redView.measure(measureSpec,measureSpec);</span></div><div class="line"> <span class="comment">// blueView.measure(measureSpec, measureSpec);</span></div><div class="line"></div><div class="line"> <span class="comment">//如果说没有特殊的对子View的测量需求，可以用如下方法</span></div><div class="line"> measureChild(redView, widthMeasureSpec, heightMeasureSpec);</div><div class="line"> measureChild(blueView, widthMeasureSpec, heightMeasureSpec);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> left = getPaddingLeft();</div><div class="line">	<span class="keyword">int</span> top = getPaddingTop();</div><div class="line">	redView.layout(left, top, left + redView.getMeasuredWidth(), top</div><div class="line">			+ redView.getMeasuredHeight());</div><div class="line">	blueView.layout(left, redView.getBottom(),</div><div class="line">			left + blueView.getMeasuredWidth(), redView.getBottom()</div><div class="line">					+ blueView.getMeasuredHeight());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="布局文件"><a href="#布局文件" class="headerlink" title="布局文件"></a>布局文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">xyz.ibat.circleview.test.DragLayout</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span> &gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:background</span>=<span class="string">"#ff0000"</span> /&gt;</div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:background</span>=<span class="string">"#0000ff"</span> /&gt;</div><div class="line">        </div><div class="line">    <span class="tag">&lt;/<span class="name">xyz.ibat.circleview.test.DragLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>OK~~源码里注释写的很详细，就不过多描述了。开始打造属于你的ViewGroup吧！</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;ViewDragHelper介绍&quot;&gt;&lt;a href=&quot;#ViewDragHelper介绍&quot; class=&quot;headerlink&quot; title=&quot;ViewDragHelper介绍&quot;&gt;&lt;/a&gt;ViewDragHelper介绍&lt;/h1&gt;&lt;p&gt;转载请注明出处，有问题的话欢
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Material Design控件介绍（二）——TabLayout</title>
+    <link href="http://ibat.xyz/2016/05/11/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%BA%8C)/"/>
+    <id>http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/</id>
+    <published>2016-05-11T13:18:37.000Z</published>
+    <updated>2016-06-28T13:27:54.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Material-Design控件介绍（二）——TabLayout"><a href="#Material-Design控件介绍（二）——TabLayout" class="headerlink" title="Material Design控件介绍（二）——TabLayout"></a>Material Design控件介绍（二）——TabLayout</h1><p>项目地址：<a href="https://github.com/JrDong/Android-Sloth" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth</a></p>
+<h2 id="TabLayout的用法"><a href="#TabLayout的用法" class="headerlink" title="TabLayout的用法"></a>TabLayout的用法</h2><p>上一篇，我们讲解了Toolbar,DrawerLayout,NavigationView的用法，现在我们来讲解下TabLayout的用法。<br>相信大家都用过ViewPagerIndicator,ViewPager的指示器，TabLayout就是google为我们提供的原生的ViewPager指示器。使用需要在gradle文件中引入</p>
+<pre><code>compile &apos;com.android.support:design:23.1.1&apos;
+</code></pre><h3 id="布局文件"><a href="#布局文件" class="headerlink" title="布局文件"></a>布局文件</h3><pre><code>&lt;LinearLayout 
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:orientation=&quot;vertical&quot;&gt;
+
+    &lt;android.support.design.widget.TabLayout
+        android:id=&quot;@+id/tabs&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:background=&quot;?attr/colorPrimary&quot;
+        app:tabGravity=&quot;fill&quot;
+        app:tabMode=&quot;fixed&quot; /&gt;
+
+    &lt;android.support.v4.view.ViewPager
+        android:id=&quot;@+id/vp_main&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:background=&quot;@color/white&quot; /&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>这里有两个比较重要的属性，app:tabGravity 和 app:tabMode</p>
+<h4 id="tabGravity"><a href="#tabGravity" class="headerlink" title="tabGravity"></a>tabGravity</h4><p>这个属性有两个值，fill和center，fill指填充满横屏，也就是均分.center指tab居中现实，如下图。<br><img src="/img/tablayout1.png" alt="Alt text"></p>
+<h4 id="tabMode"><a href="#tabMode" class="headerlink" title="tabMode"></a>tabMode</h4><p>这个属性也有两个值，scrollable和fixed。比如说你的app tab比较多的话推荐使用scrollable，设置了这个属性后，Tab页可以左右滑动。但fixed还是占满原屏并平分。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>现在我们来看下怎么和viewpager结合使用，废话不多说，直接上代码~  </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">initViewPager</span><span class="params">()</span> </span>&#123;</div><div class="line">        ViewPagerAdapter adapter = <span class="keyword">new</span> ViewPagerAdapter((getActivity()).getSupportFragmentManager());</div><div class="line">        adapter.addFragment(<span class="keyword">new</span> OneFragment(), <span class="string">"ONE"</span>);</div><div class="line">        adapter.addFragment(<span class="keyword">new</span> TwoFragment(), <span class="string">"TWO"</span>);</div><div class="line">        adapter.addFragment(<span class="keyword">new</span> ThreeFragment(), <span class="string">"THREE"</span>);</div><div class="line">        mViewPager.setAdapter(adapter);</div><div class="line">        <span class="comment">//必须在setAdapter之后调用</span></div><div class="line">        mTabs.setupWithViewPager(mViewPager);</div><div class="line">        <span class="comment">//设置指示器颜色</span></div><div class="line">        mTabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));</div><div class="line">        <span class="comment">//tab的颜色,属性一,正常颜色;属性二,被选中的颜色.</span></div><div class="line">        mTabs.setTabTextColors(getResources().getColor(R.color.white_66), getResources().getColor(R.color.white));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ViewPagerAdapter</span> <span class="keyword">extends</span> <span class="title">FragmentPagerAdapter</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Fragment&gt; mFragmentList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> List&lt;String&gt; mFragmentTitleList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ViewPagerAdapter</span><span class="params">(FragmentManager manager)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(manager);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">addFragment</span><span class="params">(Fragment fragment, String title)</span> </span>&#123;</div><div class="line">            mFragmentList.add(fragment);</div><div class="line">            mFragmentTitleList.add(title);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function">Fragment <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">return</span> mFragmentList.<span class="title">get</span><span class="params">(position)</span></span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">return</span> mFragmentList.<span class="title">size</span><span class="params">()</span></span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function">CharSequence <span class="title">getPageTitle</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">return</span> mFragmentTitleList.<span class="title">get</span><span class="params">(position)</span></span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>注意一点，mTabs.setupWithViewPager(mViewPager);必须在setAdapter之后调用,看下源码:</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">setupWithViewPager</span><span class="params">(ViewPager viewPager)</span> </span>&#123;</div><div class="line">   	PagerAdapter adapter = viewPager.getAdapter();</div><div class="line">   	<span class="keyword">if</span>(adapter == <span class="keyword">null</span>) &#123;</div><div class="line">      	 <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"ViewPager does not have a PagerAdapter set"</span>);</div><div class="line">   	&#125; <span class="keyword">else</span> &#123;</div><div class="line">       ...</div><div class="line">   	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="其他要点"><a href="#其他要点" class="headerlink" title="其他要点"></a>其他要点</h3><h4 id="单独设置tab"><a href="#单独设置tab" class="headerlink" title="单独设置tab"></a>单独设置tab</h4><pre><code>TabLayout tabLayout = ...;
+ tabLayout.addTab(tabLayout.newTab().setText(&quot;Tab 1&quot;));
+tabLayout.addTab(tabLayout.newTab().setText(&quot;Tab 2&quot;));
+tabLayout.addTab(tabLayout.newTab().setText(&quot;Tab 3&quot;));
+</code></pre><h4 id="设置icon"><a href="#设置icon" class="headerlink" title="设置icon"></a>设置icon</h4>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Material-Design控件介绍（二）——TabLayout&quot;&gt;&lt;a href=&quot;#Material-Design控件介绍（二）——TabLayout&quot; class=&quot;headerlink&quot; title=&quot;Material Design控件介绍（二）——Ta
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</title>
+    <link href="http://ibat.xyz/2016/04/19/Material%20Design%E6%8E%A7%E4%BB%B6%E4%BB%8B%E7%BB%8D(%E4%B8%80)/"/>
+    <id>http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/</id>
+    <published>2016-04-19T13:46:05.000Z</published>
+    <updated>2016-06-28T13:27:33.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView"><a href="#Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView" class="headerlink" title="Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView"></a>Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView</h1><p>项目地址:<a href="https://github.com/JrDong/Android-Sloth" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="介绍的控件有："><a href="#介绍的控件有：" class="headerlink" title="介绍的控件有："></a>介绍的控件有：</h3><p>Toolbar,TabLayout,DrawerLayout,NavigationView<br>CoordinatorLayout,AppBarLayout,CollapsingToolbarLayout<br>NestedScrollView,CardView,FloatingActionButton,Snackbar等<br>还有自定义CoordinatorLayout.Behavior。</p>
+<p>先看下效果：<br><img src="/img/Android-Sloth-gif.gif" alt="Alt text"><br>本次先介绍Toolbar，DrawerLayout和NavigationView</p>
+<h2 id="Toolbar的用法"><a href="#Toolbar的用法" class="headerlink" title="Toolbar的用法"></a>Toolbar的用法</h2><p>之前大家都接触过ActionBar，继ActionBar之后。Google又推出了一个更加灵活的控件——Toolbar.为什么说Toolbar更加灵活呢，点开Toolbar的源码，我们发现，Toolbar继承自ViewGroup。也就是说，我们可以以Toolbar为父控件，随意的摆放我们需要的控件，并自定义控件的位置。但也可以不这样麻烦，Toolbar也提供了一系列的方法，供我们使用。注意，使用Toolbar需要在AppCompatActivity中，并使用NoActionBar的主题。  </p>
+<h3 id="1-首先我们来看下布局文件"><a href="#1-首先我们来看下布局文件" class="headerlink" title="1.首先我们来看下布局文件"></a>1.首先我们来看下布局文件</h3><pre><code>&lt;android.support.v7.widget.Toolbar
+xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+android:id=&quot;@+id/main_toolbar&quot;
+android:layout_width=&quot;match_parent&quot;
+android:layout_height=&quot;wrap_content&quot;
+android:minHeight=&quot;?attr/actionBarSize&quot;
+android:fitsSystemWindows=&quot;true&quot;
+android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+app:popupTheme=&quot;@style/ThemeOverlay.AppCompat.Light&quot;
+android:background=&quot;?attr/colorPrimary&quot;&gt;
+</code></pre><p>Theme表示Toolbar的主题样式，popupTheme表示弹出框的样式。需要改变颜色的话，需要自定义theme，这里先不做介绍。<br>fitsSystemWindows这个属性，是我们使用透明状态栏时用的。当我们使用透明状态栏时。我们应用的标题栏会顶上去，占据原来系统状态栏的位置。这个属性就是用来让view可以根据系统窗口(如status bar)来调整自己的布局，如果值为true,就会调整view的paingding属性来给system windows留出空间….需要在标题栏的父控件中使用。 </p>
+<h3 id="2-布局了解-图片来源于网络"><a href="#2-布局了解-图片来源于网络" class="headerlink" title="2.布局了解(图片来源于网络)"></a>2.布局了解(图片来源于网络)</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/1416285884351.png" alt="Alt text" title="">
+                </div>
+                <div class="image-caption">Alt text</div>
+            </figure>
+<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h3><p>添加以下代码就可以使用Toolbar<br>    setSupportActionBar(mainToolbar);<br>setNavigationIcon：比如返回按钮等<br>setLogo:设置应用图标<br>setTitle:主标题<br>setSubTitle:副标题<br>setOnMenuItemClickListener:菜单按钮的点击事件。  </p>
+<h3 id="4-菜单栏用法"><a href="#4-菜单栏用法" class="headerlink" title="4.菜单栏用法"></a>4.菜单栏用法</h3><h4 id="在res-menu-menu-main-xml中定义"><a href="#在res-menu-menu-main-xml中定义" class="headerlink" title="在res/menu/menu_main.xml中定义"></a>在res/menu/menu_main.xml中定义</h4><pre><code>&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+  xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+  tools:context=&quot;.MainActivity&quot;&gt;
+&lt;item android:id=&quot;@+id/action_settings&quot;
+      android:title=&quot;@string/action_settings&quot;
+      android:orderInCategory=&quot;100&quot;
+      app:showAsAction=&quot;never&quot;/&gt;
+&lt;item android:id=&quot;@+id/action_about&quot;
+    android:title=&quot;@string/action_about&quot;
+    android:orderInCategory=&quot;100&quot;
+    app:showAsAction=&quot;never&quot;/&gt;
+&lt;item android:id=&quot;@+id/action_search&quot;
+    android:title=&quot;@string/action_search&quot;
+    android:orderInCategory=&quot;100&quot;
+    android:icon=&quot;@mipmap/icon_search&quot;
+    app:showAsAction=&quot;ifRoom&quot;
+    /&gt;
+&lt;/menu&gt;
+</code></pre><p>这里需要介绍showAsAction中常用的属性：never表示始终在菜单栏中；ifRoom表示如果标题栏有空闲则在标题栏上显示，没有空闲就在菜单栏中显示；always表示无论有没有空余控件，始终显示在标题栏。不过不推荐使用always，推荐使用ifRoom。  </p>
+<pre><code>@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+}
+</code></pre><h4 id="设置点击事件"><a href="#设置点击事件" class="headerlink" title="设置点击事件"></a>设置点击事件</h4><pre><code>mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            String msg = &quot;&quot;;
+            switch (item.getItemId()){
+                case R.id.action_search:
+                    msg = &quot;search&quot;;
+                    break;
+                case R.id.action_about:
+                    msg = &quot;about&quot;;
+                    break;
+                case R.id.action_settings:
+                    msg = &quot;setting&quot;;
+                    break;
+            }
+            SlothUtil.showToast(msg);
+            return false;
+        }
+    });
+</code></pre><p>至此Toolbar介绍完毕，有需要再继续做补充</p>
+<h2 id="DrawerLayout，NavigationView的用法"><a href="#DrawerLayout，NavigationView的用法" class="headerlink" title="DrawerLayout，NavigationView的用法"></a>DrawerLayout，NavigationView的用法</h2><p>DrawerLayout是Google官方的侧滑菜单栏，要使用需要引入v4包，看源码我们发现DrawerLayout其实使用了ViewDragHelper这个类来进行手势处理（有时间会讲解这个类，自定义侧滑菜单）。之前我们使用DrawerLayout，菜单栏喜欢用ListView实现。但有了NavigationView之后，就方便许多。省去了写Adapter的时间。下面就两个结合起来讲解。</p>
+<h3 id="首先我们来看下布局文件："><a href="#首先我们来看下布局文件：" class="headerlink" title="首先我们来看下布局文件："></a>首先我们来看下布局文件：</h3><pre><code>&lt;android.support.v4.widget.DrawerLayout
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+
+    &lt;FrameLayout
+        android:id=&quot;@+id/fl_root&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        /&gt;
+
+
+    &lt;android.support.design.widget.NavigationView
+        android:id=&quot;@+id/navigation_main&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:layout_gravity=&quot;left&quot;
+        app:headerLayout=&quot;@layout/navigationview_header&quot;
+        app:menu=&quot;@menu/menu_drawer&quot; /&gt;
+
+&lt;/android.support.v4.widget.DrawerLayout&gt;
+</code></pre><p>在布局的最外层是DrawerLayout，内容使用FrameLayout，Drawer使用NavigationView<br>细心的同学可能会发现NavigationView多了两个属性。 app:headerLayout=”@layout/navigationview_header”，app:menu=”@menu/menu_drawer” 。这两个属性分别代表，菜单栏的头布局和菜单布局。我们来看下这两个属性中的内容：</p>
+<h4 id="1-headerLayout"><a href="#1-headerLayout" class="headerlink" title="1.headerLayout"></a>1.headerLayout</h4><pre><code>&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;192dp&quot;
+    android:background=&quot;@mipmap/banner2&quot;
+    android:fitsSystemWindows=&quot;true&quot;
+    android:orientation=&quot;vertical&quot;
+    android:padding=&quot;16dp&quot;
+    android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark&quot;&gt;
+
+&lt;TextView
+    android:id=&quot;@+id/id_link&quot;
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:layout_alignParentBottom=&quot;true&quot;
+    android:layout_marginBottom=&quot;16dp&quot;
+    android:text=&quot;http://ibat.xyz&quot; /&gt;
+
+&lt;TextView
+    android:id=&quot;@+id/id_username&quot;
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:layout_above=&quot;@id/id_link&quot;
+    android:text=&quot;DongJr&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre><h4 id="2-menu"><a href="#2-menu" class="headerlink" title="2.menu"></a>2.menu</h4><pre><code>&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+&lt;group android:checkableBehavior=&quot;single&quot;&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_home&quot;
+        android:icon=&quot;@mipmap/ic_dashboard&quot;
+        android:title=&quot;Home&quot;/&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_messages&quot;
+        android:icon=&quot;@mipmap/ic_event&quot;
+        android:title=&quot;Messages&quot;/&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_friends&quot;
+        android:icon=&quot;@mipmap/ic_headset&quot;
+        android:title=&quot;Friends&quot;/&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_discussion&quot;
+        android:icon=&quot;@mipmap/ic_forum&quot;
+        android:title=&quot;Discussion&quot;/&gt;
+&lt;/group&gt;
+
+&lt;item android:title=&quot;Sub items&quot;&gt;
+    &lt;menu&gt;
+        &lt;item
+            android:id=&quot;@+id/sub_item1&quot;
+            android:icon=&quot;@mipmap/ic_dashboard&quot;
+            android:title=&quot;Sub item 1&quot;/&gt;
+        &lt;item
+            android:id=&quot;@+id/sub_item2&quot;
+            android:icon=&quot;@mipmap/ic_forum&quot;
+            android:title=&quot;Sub item 2&quot;/&gt;
+    &lt;/menu&gt;
+&lt;/item&gt;
+&lt;/menu&gt;
+</code></pre><p>写好布局后，我们就可以看到效果了。使用起来是不是很方便呢，当然，你也可以调整布局，达到自己想要的效果。</p>
+<h3 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h3><h4 id="设置菜单栏监听。"><a href="#设置菜单栏监听。" class="headerlink" title="设置菜单栏监听。"></a>设置菜单栏监听。</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">mNavigationView.setNavigationItemSelectedListener(<span class="keyword">this</span>);  </div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> onNavigationItemSelected(MenuItem item) &#123;</div><div class="line">        <span class="keyword">switch</span> (item.getItemId()) &#123;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_home:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"HOME"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,HomeActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_messages:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"MESSAGE"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,MessageActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_friends:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"FRIENDS"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,FriendActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_discussion:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"DISCUSSION"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,DiscussionActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">sub_item1:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"SUB_ITEM1"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">sub_item2:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"SUB_ITEM2"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="下面来讲解设置Toolbar和DrawerLayout的监听。"><a href="#下面来讲解设置Toolbar和DrawerLayout的监听。" class="headerlink" title="下面来讲解设置Toolbar和DrawerLayout的监听。"></a>下面来讲解设置Toolbar和DrawerLayout的监听。</h3><p>就是我们常见的三个横杠变箭头，然后菜单栏滑出的效果。<br>这里需要用到ActionBarDrawerToggle这个类。  </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">initDrawLayout</span><span class="params">()</span> </span>&#123;</div><div class="line">       <span class="comment">//DrawerLayout和Toolbar关联</span></div><div class="line">       mDrawerToggle = <span class="keyword">new</span> ActionBarDrawerToggle(<span class="keyword">this</span>, mDrawerLayout, mainToolbar, R.string.app_name, R.string.app_name);</div><div class="line">       mDrawerLayout.setDrawerListener(mDrawerToggle);</div><div class="line"></div><div class="line">      mainToolbar.setNavigationOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">              <span class="keyword">if</span> (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) &#123;</div><div class="line">                  mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">              &#125; <span class="keyword">else</span> &#123;</div><div class="line">                  mDrawerLayout.openDrawer(Gravity.LEFT);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;);</div><div class="line"></div><div class="line">      mNavigationView.setNavigationItemSelectedListener(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">    * Activity彻底运行起来之后的回调</div><div class="line">    * Called when activity start-up is complete</div><div class="line">    * (after onStart() and onRestoreInstanceState(Bundle) have been called).</div><div class="line">    */</div><div class="line">   <span class="meta">@Override</span></div><div class="line">   <span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onPostCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">       <span class="keyword">super</span>.onPostCreate(savedInstanceState);</div><div class="line">       <span class="comment">//箭头旋转动画的关键</span></div><div class="line">       mDrawerToggle.syncState();</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>DrawerLayout，NavigationView的用法讲解结束，有兴趣的同学可以查看源代码——Meterial Design的控件Demo。</p>
+<h3 id="https-github-com-JrDong-Android-Sloth"><a href="#https-github-com-JrDong-Android-Sloth" class="headerlink" title="https://github.com/JrDong/Android-Sloth"></a><a href="https://github.com/JrDong/Android-Sloth" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth</a></h3>]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView&quot;&gt;&lt;a href=&quot;#Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Material Design介绍</title>
+    <link href="http://ibat.xyz/2016/04/09/Material%20Design%E4%BB%8B%E7%BB%8D/"/>
+    <id>http://ibat.xyz/2016/04/09/Material Design介绍/</id>
+    <published>2016-04-09T14:33:06.000Z</published>
+    <updated>2016-06-28T13:27:45.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="Material-Design介绍"><a href="#Material-Design介绍" class="headerlink" title="Material Design介绍"></a>Material Design介绍</h1><h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>在Google I/O大会上Google引入了Material Design。Material Design是一门用户界面视觉设计语言。可以基于智能手机，平板，电视等等设备。从我的角度理解，Material Design其实就是Google为我们提供的一种设计规范。<br>我们可以发现在之前的软件中，许多IOS的软件，都有一些相似的共性。但Android 软件却各有各的特点。这应该也是Google推出Material Design的初衷之一吧。统一Android应用的设计规范，让应用更加清爽，有设计感。<br>Material Design设计灵感来源与对纸和墨水的研究，用纸张拼接来作为交互手段。</p>
+<h2 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h2><p>从Material Design文档中可以看出一下几点Material Design特点：</p>
+<h3 id="1-3D效果"><a href="#1-3D效果" class="headerlink" title="1.3D效果"></a>1.3D效果</h3><p>谷歌推出了立体视觉的概念，也是Material Design中最重要的概念。从许多控件比如CardView，FloatingActionButton等都可以看出，添加了对高度的设置。如果说之前的设计效果只是基于x，y轴设计的话，Material Design则添加了z轴的概念。如下图<br><img src="/img/62b809272022724eac120be1587b04de_r.jpg" alt="Alt text"></p>
+<h3 id="2-亮度和阴影（以FloatingActionButton为例）"><a href="#2-亮度和阴影（以FloatingActionButton为例）" class="headerlink" title="2.亮度和阴影（以FloatingActionButton为例）"></a>2.亮度和阴影（以FloatingActionButton为例）</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/5083a5b853a84385b6ddce356016c57b_r.jpg" alt="Alt text" title="">
+                </div>
+                <div class="image-caption">Alt text</div>
+            </figure>
+<h3 id="3-压缩和拉伸-CollapsingToolbarLayout效果，之后会讲"><a href="#3-压缩和拉伸-CollapsingToolbarLayout效果，之后会讲" class="headerlink" title="3.压缩和拉伸(CollapsingToolbarLayout效果，之后会讲)"></a>3.压缩和拉伸(CollapsingToolbarLayout效果，之后会讲)</h3><h3 id="4-水波纹效果："><a href="#4-水波纹效果：" class="headerlink" title="4.水波纹效果："></a>4.水波纹效果：</h3><p>这个效果经常可以见到，在Android 5.0的手机上，点击button后的波纹扩散效果。</p>
+<p>……颜色，动画，布局，样式等等，在之后讲解控件时再详细介绍。<br>总的来说，Material Design 为我们一共了一系列的规范，希望我们通过这套规范，设计出更简洁，更高大上的应用。设计和产品同学可以看看这套规范，google已经设计好了很多东西。</p>
+<h3 id="图片素材推荐："><a href="#图片素材推荐：" class="headerlink" title="图片素材推荐："></a>图片素材推荐：</h3><p>参考 <a href="https://design.google.com/icons/" target="_blank" rel="external">https://design.google.com/icons/</a></p>
+<h3 id="颜色规范参考："><a href="#颜色规范参考：" class="headerlink" title="颜色规范参考："></a>颜色规范参考：</h3><p><a href="https://www.google.com/design/spec/style/color.html#" target="_blank" rel="external">https://www.google.com/design/spec/style/color.html#</a></p>
+<h3 id="更多Material-Design规范参考："><a href="#更多Material-Design规范参考：" class="headerlink" title="更多Material Design规范参考："></a>更多Material Design规范参考：</h3><p><a href="https://www.google.com/design/spec/material-design/introduction.html" target="_blank" rel="external">https://www.google.com/design/spec/material-design/introduction.html</a></p>
+<h3 id="我的Material-Design-Demo"><a href="#我的Material-Design-Demo" class="headerlink" title="我的Material-Design  Demo"></a>我的Material-Design  Demo</h3><p><a href="https://github.com/JrDong/Android-Sloth,其中用到了大部分的md控件。欢迎fork" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth,其中用到了大部分的md控件。欢迎fork</a></p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;Material-Design介绍&quot;&gt;&lt;a href=&quot;#Material-Design介绍&quot; class=&quot;headerlink&quot; title=&quot;Material Design介绍&quot;&gt;&lt;/a&gt;Material Design介绍&lt;/h1&gt;&lt;h2 id=&quot;背景&quot;&gt;&lt;
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>OAuth2.0协议&amp;第三方登录（微信，QQ，微博）</title>
+    <link href="http://ibat.xyz/2016/03/08/OAuth2.0%E5%8D%8F%E8%AE%AE&amp;%E7%AC%AC%E4%B8%89%E6%96%B9%E7%99%BB%E5%BD%95/"/>
+    <id>http://ibat.xyz/2016/03/08/OAuth2.0协议&amp;第三方登录/</id>
+    <published>2016-03-08T13:12:05.000Z</published>
+    <updated>2016-05-11T13:19:21.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="OAuth2-0协议-amp-第三方登录（微信，QQ，微博）"><a href="#OAuth2-0协议-amp-第三方登录（微信，QQ，微博）" class="headerlink" title="OAuth2.0协议&amp;第三方登录（微信，QQ，微博）"></a>OAuth2.0协议&amp;第三方登录（微信，QQ，微博）</h1><h2 id="OAuth-2-0协议"><a href="#OAuth-2-0协议" class="headerlink" title="OAuth 2.0协议"></a>OAuth 2.0协议</h2><h3 id="1-应用场景"><a href="#1-应用场景" class="headerlink" title="1.应用场景"></a>1.应用场景</h3><p>OAuth 2.0是一个关于授权的开放标准。<br>假如某个应用需要得到你的授权，如果不使用OAuth2.0协议，会要求输入账号密码。这样就带来了一些问题：  </p>
+<blockquote>
+<ol>
+<li>第三方应用会保存用户的账户和密码，这样很不安全。  </li>
+<li>用户没法限制第三方应用的授权范围和有效期。  </li>
+<li>用户只有修改密码才会取消授权，但这样的话会使其他的第三方授权也失效。  </li>
+<li>如果第三方应用被破解，那么就会导致用户密码泄露，和数据泄露。  </li>
+</ol>
+</blockquote>
+<p>使用OAuth 2.0就不会出现上述问题了。</p>
+<h3 id="2-OAuth思路"><a href="#2-OAuth思路" class="headerlink" title="2.OAuth思路"></a>2.OAuth思路</h3><p>OAuth在”客户端”与”服务提供商”之间，设置了一个授权层（authorization layer）。<br>“客户端”不能直接登录”服务提供商”，只能登录授权层，以此将用户与客户端区分开来。”客户端”登录授权层所用的令牌（token），与用户的密码不同。用户可以在登录的时候，指定授权层令牌的权限范围和有效期。（一般是开发时指定scope，规定权限范围。）<br>“客户端”登录授权层以后，”服务提供商”根据令牌的权限范围和有效期，向”客户端”开放用户储存的资料。这个令牌授权“客户端”在特定时间内（assert_token具有有效期）访问特定资源。这样就恰如其分的控制了第三方应用所获取的权限。</p>
+<h3 id="3-运行流程"><a href="#3-运行流程" class="headerlink" title="3.运行流程"></a>3.运行流程</h3><blockquote>
+<p>1.打开客户端后，客户端要求用户授权<br>2.用户同意授权<br>3.客户端使用授权，向认证服务器（第三方认证服务器）申请令牌<br>4.认证服务器进行认证后，同意发放令牌<br>5.用户使用令牌，向资源服务器申请资源(第三方资源服务器，可以是一个服务器，也可以是两个)<br>6.资源服务器确认令牌无误，同意向客户端开放资源 </p>
+</blockquote>
+<p><img src="file:///C:/Users/aidonglei/Desktop/OAuth授权流程.jpg" alt="Alt text"></p>
+<h2 id="微信登录"><a href="#微信登录" class="headerlink" title="微信登录"></a>微信登录</h2><blockquote>
+<p>0.个人感觉微信登录最大的难点在回调上，如果接收不到回调，请确认1，2两点。并仔细检查应用的签名和包名，和在微信开放平台申请时候的完全一致。<br>1.在AndroidManifest.xml中配置，其中Theme.NoDisplay代表透明主题。</p>
+</blockquote>
+<pre><code>&lt;activity
+        android:name=&quot;com.xywy.xytrain.wxapi.WXEntryActivity&quot;
+        android:exported=&quot;true&quot;
+        android:configChanges=&quot;keyboardHidden|orientation|screenSize&quot;
+        android:launchMode=&quot;singleTop&quot;
+        android:theme=&quot;@android:style/Theme.NoDisplay&quot;
+        android:screenOrientation=&quot;portrait&quot;/&gt;
+</code></pre><blockquote>
+<p>2.在主项目跟目录下（包名下的目录）,新建wxapi文件夹，并创建WXEntryActivity，继承activity。必须在跟目录下，不然无法回调。<br>3.微信提供了两个回调类onReq和onResp，客户端将消息发送的微信会回调onReq，从微信接受到消息会回调onResp。在onResp回调方法里，可以得到ErrCode，code等参数，通过ErrCode可以判断用户行为，通过Code可以换取access_token，这个code只有在ErrCode为0时才有效。</p>
+</blockquote>
+<h2 id="QQ登录"><a href="#QQ登录" class="headerlink" title="QQ登录"></a>QQ登录</h2><p>1.QQ登录相比较微信登录要简单点，初始化QQ,和IUiListener回调</p>
+<pre><code>if (mTencent == null) {
+       mTencent = Tencent.createInstance(MineConstants.QQAPP_ID, getContext());
+   }
+</code></pre><p>2.在进行登录的activity中重写OnActivityResult方法  </p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">@<span class="type">Override</span></div><div class="line"> protected void onActivityResult(int requestCode, int resultCode, <span class="type">Intent</span> <span class="class"><span class="keyword">data</span>) &#123;</span></div><div class="line">     //一定要在与<span class="title">fragment</span>绑定的<span class="title">activity</span>中重写此方法，不然无法回调</div><div class="line">     <span class="title">if</span> (<span class="title">requestCode</span> == <span class="type">Constants</span>.<span class="type">REQUEST_API</span> ||</div><div class="line">             <span class="title">requestCode</span> == <span class="type">Constants</span>.<span class="type">REQUEST_LOGIN</span>) &#123;</div><div class="line">         <span class="type">Tencent</span>.<span class="title">handleResultData</span>(<span class="title">data</span>, <span class="type">ThirdLoginFragment</span>.<span class="title">mTencentListener</span>);</div><div class="line">     &#125;</div><div class="line"> &#125;</div></pre></td></tr></table></figure>
+<p>3.IUiListener中有三个回调方法，onComplete(Object response)授权成功调用,onError(UiError e)授权失败调用,onCancel()授权取消调用.onComplete中的response是一个JsonObject，里面含有OpenId， AccessToken等参数，通过参数就可以取得用户信息。<br>4.注意一点，QQ文档中介绍，只需要在AndroidManifest.xml中配置</p>
+<pre><code>&lt;activity
+        android:name=&quot;com.tencent.tauth.AuthActivity&quot;
+        android:launchMode=&quot;singleTask&quot;
+        android:noHistory=&quot;true&quot;&gt;
+        &lt;intent-filter&gt;
+            &lt;action android:name=&quot;android.intent.action.VIEW&quot; /&gt;
+
+            &lt;category android:name=&quot;android.intent.category.DEFAULT&quot; /&gt;
+            &lt;category android:name=&quot;android.intent.category.BROWSABLE&quot; /&gt;
+
+            &lt;data android:scheme=&quot;tencent+&quot;your appid&quot;&quot; /&gt;
+        &lt;/intent-filter&gt;
+    &lt;/activity&gt;
+</code></pre><p>但如果使用最新的sdk还需要配置以下内容，这点在文档中没有介绍，走了一点弯路。</p>
+<pre><code>&lt;activity
+       android:name=&quot;com.tencent.connect.common.AssistActivity&quot;
+       android:screenOrientation=&quot;portrait&quot;
+       android:theme=&quot;@android:style/Theme.Translucent.NoTitleBar&quot; /&gt;
+</code></pre><h2 id="微博登录"><a href="#微博登录" class="headerlink" title="微博登录"></a>微博登录</h2><p>1.微博登录文档写的比较详细，大家看文档就可以了。<a href="https://github.com/sinaweibosdk/weibo_android_sdk" target="_blank" rel="external">https://github.com/sinaweibosdk/weibo_android_sdk</a><br>2.注意一点，如果把第三方登录放入子项目中，微博的jni文件需要放在main目录下，不然会找不到jni文件。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;OAuth2-0协议-amp-第三方登录（微信，QQ，微博）&quot;&gt;&lt;a href=&quot;#OAuth2-0协议-amp-第三方登录（微信，QQ，微博）&quot; class=&quot;headerlink&quot; title=&quot;OAuth2.0协议&amp;amp;第三方登录（微信，QQ，微博）&quot;&gt;
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>markdown语法</title>
+    <link href="http://ibat.xyz/2016/01/27/markdown%E8%AF%AD%E6%B3%95/"/>
+    <id>http://ibat.xyz/2016/01/27/markdown语法/</id>
+    <published>2016-01-27T14:14:00.000Z</published>
+    <updated>2016-05-09T12:59:41.000Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="使用Markdown写博客"><a href="#使用Markdown写博客" class="headerlink" title="使用Markdown写博客"></a>使用Markdown写博客</h1><h2 id="Markdown基本语法"><a href="#Markdown基本语法" class="headerlink" title="Markdown基本语法"></a>Markdown基本语法</h2><h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><pre><code>＃——###### 分别代表 h1--h6
+比如 #### text
+</code></pre><h4 id="text"><a href="#text" class="headerlink" title="text"></a>text</h4><h3 id="区块引用"><a href="#区块引用" class="headerlink" title="区块引用"></a>区块引用</h3><pre><code>1.可以在每一行都加上引用，也可以只在段落之前加上引用
+&gt; 这里填写要引用的文字
+2.区块引用可以嵌套
+&gt;&gt; 这里填写要嵌套的文字
+3.区块内部也可以使用其他语法
+&gt; #### text
+</code></pre><blockquote>
+<p>这里是正文</p>
+<blockquote>
+<p>这里填写要引用的文字</p>
+<p>####text</p>
+</blockquote>
+</blockquote>
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><h5 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h5><pre><code>*号之前加上制表符会有多级效果
+
+* 苹果
+* 香蕉
+    * 梨
+</code></pre><p><strong>另外：* + - 三者效果相同    </strong></p>
+<ul>
+<li>苹果</li>
+<li>香蕉<ul>
+<li>梨  </li>
+</ul>
+</li>
+</ul>
+<h5 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h5><pre><code>使用数字加上英文句点
+1. 苹果
+2. 香蕉
+3. 梨
+6. 草莓
+</code></pre><p><strong>另外注意一点，列表标记的数字并不会影响结果，即使是乱序排列，Markdown也会自动排序成有序的</strong>  </p>
+<ol>
+<li>苹果</li>
+<li>香蕉</li>
+<li>梨</li>
+<li>草莓</li>
+</ol>
+<h3 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h3><ul>
+<li>强制换行，在语句后面加上两个空格</li>
+<li>用markdown语法时，在关键字符后面尽量加上空格，不然可能语句会不生效，例如 # text</li>
+</ul>
+<h2 id="Markdown及扩展"><a href="#Markdown及扩展" class="headerlink" title="Markdown及扩展"></a>Markdown及扩展</h2><h3 id="标记语言"><a href="#标记语言" class="headerlink" title="标记语言"></a>标记语言</h3><pre><code>&gt; Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。      
+—— &lt;a href=&quot;https://zh.wikipedia.org/wiki/Markdown&quot; target=&quot;_blank&quot;&gt; [ 维基百科 ]
+</code></pre><blockquote>
+<p>Markdown 是一种轻量级标记语言，它允许人们使用易读易写的纯文本格式编写文档，然后转换成格式丰富的HTML页面。    —— <a href="https://zh.wikipedia.org/wiki/Markdown" target="_blank"> [ 维基百科 ]    </a></p>
+</blockquote>
+<h3 id="字体，链接"><a href="#字体，链接" class="headerlink" title="字体，链接"></a>字体，链接</h3><pre><code>使用简单的符号标识不同的标题，将某些文字标记为**粗体**或者*斜体*，创建一个[链接](http://ibat.xyz)等
+</code></pre><p>使用简单的符号标识不同的标题，将某些文字标记为<strong>粗体</strong>或者<em>斜体</em>，创建一个<a href="http://ibat.xyz">链接</a>等</p>
+<h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><p><strong>Markdown</strong>　表格语法：  </p>
+<pre><code>项目     | 价格  
+-------- | ---  
+Computer | $1600  
+iPhone    | $12  
+iPad     | $1  
+</code></pre><table>
+<thead>
+<tr>
+<th>项目</th>
+<th>价格</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Computer</td>
+<td>$1600</td>
+</tr>
+<tr>
+<td>iPhone</td>
+<td>$12</td>
+</tr>
+<tr>
+<td>iPad</td>
+<td>$1</td>
+</tr>
+</tbody>
+</table>
+<p><strong>可以使用冒号来定义对齐方式：</strong></p>
+<pre><code>| 项目      |    价格 | 数量  |  
+| :-------- | --------:| :--: |  
+|左对齐        |右对齐        |居中    |
+| Computer  | 1600 元 |  5   |  
+| iPhone     |   12 元 |  12  |  
+| iPad      |    1 元 | 234  |      
+</code></pre><table>
+<thead>
+<tr>
+<th style="text-align:left">项目</th>
+<th style="text-align:right">价格</th>
+<th style="text-align:center">数量</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">左对齐</td>
+<td style="text-align:right">右对齐</td>
+<td style="text-align:center">居中</td>
+</tr>
+<tr>
+<td style="text-align:left">Computer</td>
+<td style="text-align:right">1600 元</td>
+<td style="text-align:center">5</td>
+</tr>
+<tr>
+<td style="text-align:left">iPhone</td>
+<td style="text-align:right">12 元</td>
+<td style="text-align:center">12</td>
+</tr>
+<tr>
+<td style="text-align:left">iPad</td>
+<td style="text-align:right">1 元</td>
+<td style="text-align:center">234</td>
+</tr>
+</tbody>
+</table>
+<h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p><strong>代码块语法遵循标准markdown代码，例如：</strong><br>  ``` python(这里写哪种语言)<br>  代码块<br>  ```   </p>
+ <figure class="highlight python"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@requires_authorization</span></div><div class="line"><span class="function"><span class="keyword">def</span> <span class="title">somefunc</span><span class="params">(param1=<span class="string">''</span>, param2=<span class="number">0</span>)</span>:</span></div><div class="line">    <span class="string">'''A docstring'''</span></div><div class="line">    <span class="keyword">if</span> param1 &gt; param2: <span class="comment"># interesting</span></div><div class="line">        <span class="keyword">print</span> <span class="string">'Greater'</span></div><div class="line">    <span class="keyword">return</span> (param2 - param1 + <span class="number">1</span>) <span class="keyword">or</span> <span class="keyword">None</span></div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">SomeClass</span>:</span></div><div class="line">    <span class="keyword">pass</span></div><div class="line"><span class="meta">&gt;&gt;&gt; </span>message = <span class="string">'''interpreter</span></div><div class="line"><span class="meta">... </span>prompt'''</div></pre></td></tr></table></figure>
+<p><strong>简单的四个空格或者一个制表符生成代码块</strong>  </p>
+<pre><code>这里放代码区块
+</code></pre><h3 id="图片"><a href="#图片" class="headerlink" title="图片"></a>图片</h3><p>很明显地，要在纯文字应用中设计一个「自然」的语法来插入图片是有一定难度的。</p>
+<p>Markdown 使用一种和链接很相似的语法来标记图片，同样也允许两种样式： 行内式和参考式。</p>
+<p>行内式的图片语法看起来像是：</p>
+<pre><code>![Alt text](/path/to/img.jpg)
+
+{% image /path/to/img.jpg 'Alt text' 'Optional' %}  
+</code></pre><p>详细叙述如下：</p>
+<pre><code>一个惊叹号 !  
+接着一个方括号，里面放上图片的替代文字（可以不填）  
+接着一个普通括号，里面放上图片的网址，最后还可以用引号包住并加上 选择性的 &apos;title&apos; 文字。  
+参考式的图片语法则长得像这样：  
+
+![Alt text][id]
+</code></pre><p>到目前为止， Markdown 还没有办法指定图片的宽高，如果你需要的话，你可以使用普通的 <img> 标签。</p>
+<ul>
+<li>关于 <strong>序列图</strong> 语法，参考 <a href="http://bramp.github.io/js-sequence-diagrams/" target="_blank" rel="external">这儿</a>,</li>
+<li>关于 <strong>流程图</strong> 语法，参考 <a href="http://adrai.github.io/flowchart.js/" target="_blank" rel="external">这儿</a>.</li>
+</ul>
+<p>先写到这里，有新的东西再继续补充。</p>
+<hr>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;使用Markdown写博客&quot;&gt;&lt;a href=&quot;#使用Markdown写博客&quot; class=&quot;headerlink&quot; title=&quot;使用Markdown写博客&quot;&gt;&lt;/a&gt;使用Markdown写博客&lt;/h1&gt;&lt;h2 id=&quot;Markdown基本语法&quot;&gt;&lt;a href
+    
+    </summary>
+    
+      <category term="markdown" scheme="http://ibat.xyz/categories/markdown/"/>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>RecyclerView初体验--列表的实现</title>
+    <link href="http://ibat.xyz/2015/12/27/RecyclerView%E5%88%9D%E4%BD%93%E9%AA%8C--%E5%88%97%E8%A1%A8%E7%9A%84%E5%AE%9E%E7%8E%B0/"/>
+    <id>http://ibat.xyz/2015/12/27/RecyclerView初体验--列表的实现/</id>
+    <published>2015-12-27T11:36:58.000Z</published>
+    <updated>2016-05-17T15:42:55.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进RecyclerView的世界。    </p>
+<h3 id="基本用法"><a href="#基本用法" class="headerlink" title="基本用法"></a>基本用法</h3><p>使用RecyclerView必须导入support－v7包，与ListView不相同的是，需要设置布局管理器LayoutManager，下面就分别介绍LinearLayoutManager,<br>GirdLayoutManager,<br>StaggeredGridLayoutManager，<br>实现ListView,GirdView,瀑布流。   </p>
+<h4 id="首先看listview列表的实现。"><a href="#首先看listview列表的实现。" class="headerlink" title="首先看listview列表的实现。"></a>首先看<strong>listview</strong>列表的实现。</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div></pre></td><td class="code"><pre><div class="line">MyAdapter adapter = <span class="keyword">new</span> MyAdapter(<span class="keyword">this</span>, initData());</div><div class="line">recyclerView = (RecyclerView) findViewById(R.id.recyclerView);  </div><div class="line"><span class="comment">//设置布局管理器LayoutManager()  </span></div><div class="line">recyclerView.setLayoutManager(<span class="keyword">new</span> LinearLayoutManager(<span class="keyword">this</span>));</div><div class="line"><span class="comment">//设置adapter</span></div><div class="line">recyclerView.setAdapter(adapter);</div><div class="line"><span class="comment">//初始化数据</span></div><div class="line"><span class="function"><span class="keyword">private</span> ArrayList <span class="title">initData</span><span class="params">()</span> </span>&#123;</div><div class="line">  ArrayList lists = <span class="keyword">new</span> ArrayList();</div><div class="line">  <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= <span class="number">100</span>; i++) &#123;</div><div class="line">        lists.add(i);</div><div class="line">      &#125;</div><div class="line">       <span class="keyword">return</span> lists;</div><div class="line">   &#125;</div><div class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">MyAdapter</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">Adapter</span>&lt;<span class="title">MyViewHolder</span>&gt; </span>&#123;</div><div class="line">    <span class="keyword">private</span> ArrayList arrayList;</div><div class="line">    <span class="keyword">private</span> Context context;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyAdapter</span><span class="params">(Context context, ArrayList arrayList)</span> </span>&#123;</div><div class="line">        <span class="keyword">this</span>.arrayList = arrayList;</div><div class="line">        <span class="keyword">this</span>.context = context;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> MyViewHolder <span class="title">onCreateViewHolder</span><span class="params">(ViewGroup parent, <span class="keyword">int</span> viewType)</span> </span>&#123;</div><div class="line">    <span class="comment">//创建一个view</span></div><div class="line">       MyViewHolder myViewHolder = <span class="keyword">new</span> MyViewHolder(LayoutInflater.from(context).inflate(R.layout.item_recyclerview_text, parent, <span class="keyword">false</span>));</div><div class="line">        <span class="keyword">return</span> myViewHolder;</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onBindViewHolder</span><span class="params">(MyViewHolder holder, <span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">    <span class="comment">//绑定数据到viewholder上</span></div><div class="line">        holder.textView.setText(arrayList.get(position) + <span class="string">""</span>);</div><div class="line">    &#125;</div><div class="line">    <span class="meta">@Override</span></div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getItemCount</span><span class="params">()</span> </span>&#123;</div><div class="line">    <span class="comment">//条目的总数量</span></div><div class="line">        <span class="keyword">return</span> arrayList.size();</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"><span class="class"><span class="keyword">class</span> <span class="title">MyViewHolder</span> <span class="keyword">extends</span> <span class="title">RecyclerView</span>.<span class="title">ViewHolder</span> </span>&#123;</div><div class="line">    TextView textView;</div><div class="line">    <span class="function"><span class="keyword">public</span> <span class="title">MyViewHolder</span><span class="params">(View itemView)</span> </span>&#123;</div><div class="line">        <span class="keyword">super</span>(itemView);</div><div class="line">        textView = (TextView) itemView.findViewById(R.id.textView);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><strong>xml文件</strong></p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span></span></div><div class="line">   <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">   <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">   <span class="attr">android:orientation</span>=<span class="string">"vertical"</span></div><div class="line">   <span class="attr">xmlns:app</span>=<span class="string">"http://schemas.android.com/apk/res-auto"</span>&gt;</div><div class="line">   <span class="tag">&lt;<span class="name">android.support.v7.widget.Toolbar</span></span></div><div class="line">       <span class="attr">android:id</span>=<span class="string">"@+id/my_toolbar"</span></div><div class="line">       <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">       <span class="attr">android:layout_height</span>=<span class="string">"?attr/actionBarSize"</span></div><div class="line">       <span class="attr">android:background</span>=<span class="string">"@color/colorPrimary"</span></div><div class="line">       <span class="attr">app:theme</span>=<span class="string">"@style/AppTheme.Base"</span></div><div class="line">       <span class="attr">app:popupTheme</span>=<span class="string">"@style/ToolBarPopupTheme"</span>/&gt;</div><div class="line">   <span class="tag">&lt;<span class="name">android.support.v7.widget.RecyclerView</span></span></div><div class="line">       <span class="attr">android:id</span>=<span class="string">"@+id/recyclerView"</span></div><div class="line">       <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">       <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span></div><div class="line">       /&gt;</div><div class="line"><span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>可以看出来RecyclerView更标准化了ViewHolder,Adapter面向的也是ViewHolder，而不是view。复用的逻辑进行了封装。使用的时候可以更加的灵活。</p>
+<h4 id="GirdView的实现"><a href="#GirdView的实现" class="headerlink" title="GirdView的实现"></a>GirdView的实现</h4><pre><code>recyclerView.setLayoutManager(new GridLayoutManager(this, 4));  
+</code></pre><p>this代表context，4表示spanCount列数，只需要将上面的LayoutManager改为上面的代码，是不是很方便呢。</p>
+<h4 id="瀑布流的实现"><a href="#瀑布流的实现" class="headerlink" title="瀑布流的实现"></a>瀑布流的实现</h4><pre><code>recyclerView.setLayoutManager(new StaggeredGridLayoutManager(3,StaggeredGridLayoutManager.VERTICAL));  
+</code></pre><p>3代表瀑布流的列数，后面的参数可以设置横向或着纵向的瀑布流，为了演示，我们给每个模块设置一个随机的高度:  </p>
+<pre><code>    @Override  
+public void onBindViewHolder(MyViewHolder holder, int position) {  
+    holder.textView.setText(arrayList.get(position) + &quot;&quot;);  
+    LinearLayout.LayoutParams ll = new LinearLayout.LayoutParams(  
+            LinearLayout.LayoutParams.MATCH_PARENT, 200+(int) (Math.random()*100)  
+    );  
+    holder.textView.setLayoutParams(ll);  
+}
+</code></pre>]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;RecyclerView通过名称可以看出，是可以复用的view。官方对其解释为：可以在有限的窗口展示大量的数据集。其实类似的控件我们也了解很多，比如ListView,GridView.然而RecyclerView更专注于复用，也更加的灵活。下面我们就一起走进Recycler
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
+  
+</feed>

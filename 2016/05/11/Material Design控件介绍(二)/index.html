@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Material Design控件介绍（二）——TabLayout | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="Material Design控件介绍（二）——TabLayout项目地址：https://github.com/JrDong/Android-Sloth TabLayout的用法上一篇，我们讲解了Toolbar,DrawerLayout,NavigationView的用法，现在我们来讲解下TabLayout的用法。相信大家都用过ViewPagerIndicator,ViewPager的指示器，T">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Material Design控件介绍（二）——TabLayout">
+<meta property="og:url" content="http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="Material Design控件介绍（二）——TabLayout项目地址：https://github.com/JrDong/Android-Sloth TabLayout的用法上一篇，我们讲解了Toolbar,DrawerLayout,NavigationView的用法，现在我们来讲解下TabLayout的用法。相信大家都用过ViewPagerIndicator,ViewPager的指示器，T">
+<meta property="og:image" content="http://ibat.xyz/img/tablayout1.png">
+<meta property="og:updated_time" content="2016-06-28T13:27:54.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Material Design控件介绍（二）——TabLayout">
+<meta name="twitter:description" content="Material Design控件介绍（二）——TabLayout项目地址：https://github.com/JrDong/Android-Sloth TabLayout的用法上一篇，我们讲解了Toolbar,DrawerLayout,NavigationView的用法，现在我们来讲解下TabLayout的用法。相信大家都用过ViewPagerIndicator,ViewPager的指示器，T">
+<meta name="twitter:image" content="http://ibat.xyz/img/tablayout1.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect active">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Material Design控件介绍（二）——TabLayout</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Material Design控件介绍（二）——TabLayout</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-05-11T13:18:37.000Z" itemprop="datePublished" class="page-time">
+  2016-05-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Material-Design控件介绍（二）——TabLayout"><span class="post-toc-number">1.</span> <span class="post-toc-text">Material Design控件介绍（二）——TabLayout</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#TabLayout的用法"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">TabLayout的用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#布局文件"><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">布局文件</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#tabGravity"><span class="post-toc-number">1.1.1.1.</span> <span class="post-toc-text">tabGravity</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#tabMode"><span class="post-toc-number">1.1.1.2.</span> <span class="post-toc-text">tabMode</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现"><span class="post-toc-number">1.1.2.</span> <span class="post-toc-text">代码实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#其他要点"><span class="post-toc-number">1.1.3.</span> <span class="post-toc-text">其他要点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#单独设置tab"><span class="post-toc-number">1.1.3.1.</span> <span class="post-toc-text">单独设置tab</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#设置icon"><span class="post-toc-number">1.1.3.2.</span> <span class="post-toc-text">设置icon</span></a></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Material Design控件介绍(二)"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Material Design控件介绍（二）——TabLayout</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-05-11 21:18:37" datetime="2016-05-11T13:18:37.000Z"  itemprop="datePublished">2016-05-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Material-Design控件介绍（二）——TabLayout"><a href="#Material-Design控件介绍（二）——TabLayout" class="headerlink" title="Material Design控件介绍（二）——TabLayout"></a>Material Design控件介绍（二）——TabLayout</h1><p>项目地址：<a href="https://github.com/JrDong/Android-Sloth" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth</a></p>
+<h2 id="TabLayout的用法"><a href="#TabLayout的用法" class="headerlink" title="TabLayout的用法"></a>TabLayout的用法</h2><p>上一篇，我们讲解了Toolbar,DrawerLayout,NavigationView的用法，现在我们来讲解下TabLayout的用法。<br>相信大家都用过ViewPagerIndicator,ViewPager的指示器，TabLayout就是google为我们提供的原生的ViewPager指示器。使用需要在gradle文件中引入</p>
+<pre><code>compile &apos;com.android.support:design:23.1.1&apos;
+</code></pre><h3 id="布局文件"><a href="#布局文件" class="headerlink" title="布局文件"></a>布局文件</h3><pre><code>&lt;LinearLayout 
+    xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;
+    xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+    android:orientation=&quot;vertical&quot;&gt;
+
+    &lt;android.support.design.widget.TabLayout
+        android:id=&quot;@+id/tabs&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:background=&quot;?attr/colorPrimary&quot;
+        app:tabGravity=&quot;fill&quot;
+        app:tabMode=&quot;fixed&quot; /&gt;
+
+    &lt;android.support.v4.view.ViewPager
+        android:id=&quot;@+id/vp_main&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;wrap_content&quot;
+        android:background=&quot;@color/white&quot; /&gt;
+&lt;/LinearLayout&gt;
+</code></pre><p>这里有两个比较重要的属性，app:tabGravity 和 app:tabMode</p>
+<h4 id="tabGravity"><a href="#tabGravity" class="headerlink" title="tabGravity"></a>tabGravity</h4><p>这个属性有两个值，fill和center，fill指填充满横屏，也就是均分.center指tab居中现实，如下图。<br><img src="/img/tablayout1.png" alt="Alt text"></p>
+<h4 id="tabMode"><a href="#tabMode" class="headerlink" title="tabMode"></a>tabMode</h4><p>这个属性也有两个值，scrollable和fixed。比如说你的app tab比较多的话推荐使用scrollable，设置了这个属性后，Tab页可以左右滑动。但fixed还是占满原屏并平分。</p>
+<h3 id="代码实现"><a href="#代码实现" class="headerlink" title="代码实现"></a>代码实现</h3><p>现在我们来看下怎么和viewpager结合使用，废话不多说，直接上代码~  </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">initViewPager</span><span class="params">()</span> </span>&#123;</div><div class="line">        ViewPagerAdapter adapter = <span class="keyword">new</span> ViewPagerAdapter((getActivity()).getSupportFragmentManager());</div><div class="line">        adapter.addFragment(<span class="keyword">new</span> OneFragment(), <span class="string">"ONE"</span>);</div><div class="line">        adapter.addFragment(<span class="keyword">new</span> TwoFragment(), <span class="string">"TWO"</span>);</div><div class="line">        adapter.addFragment(<span class="keyword">new</span> ThreeFragment(), <span class="string">"THREE"</span>);</div><div class="line">        mViewPager.setAdapter(adapter);</div><div class="line">        <span class="comment">//必须在setAdapter之后调用</span></div><div class="line">        mTabs.setupWithViewPager(mViewPager);</div><div class="line">        <span class="comment">//设置指示器颜色</span></div><div class="line">        mTabs.setSelectedTabIndicatorColor(getResources().getColor(R.color.white));</div><div class="line">        <span class="comment">//tab的颜色,属性一,正常颜色;属性二,被选中的颜色.</span></div><div class="line">        mTabs.setTabTextColors(getResources().getColor(R.color.white_66), getResources().getColor(R.color.white));</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="class"><span class="keyword">class</span> <span class="title">ViewPagerAdapter</span> <span class="keyword">extends</span> <span class="title">FragmentPagerAdapter</span> </span>&#123;</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> List&lt;Fragment&gt; mFragmentList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line">        <span class="keyword">private</span> <span class="keyword">final</span> List&lt;String&gt; mFragmentTitleList = <span class="keyword">new</span> ArrayList&lt;&gt;();</div><div class="line"></div><div class="line">        <span class="function"><span class="keyword">public</span> <span class="title">ViewPagerAdapter</span><span class="params">(FragmentManager manager)</span> </span>&#123;</div><div class="line">            <span class="keyword">super</span>(manager);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">addFragment</span><span class="params">(Fragment fragment, String title)</span> </span>&#123;</div><div class="line">            mFragmentList.add(fragment);</div><div class="line">            mFragmentTitleList.add(title);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function">Fragment <span class="title">getItem</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">return</span> mFragmentList.<span class="title">get</span><span class="params">(position)</span></span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function"><span class="keyword">int</span> <span class="title">getCount</span><span class="params">()</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">return</span> mFragmentList.<span class="title">size</span><span class="params">()</span></span>;</div><div class="line">        &#125;</div><div class="line"></div><div class="line"></div><div class="line">        <span class="meta">@Override</span></div><div class="line">        <span class="keyword">public</span> <span class="function">CharSequence <span class="title">getPageTitle</span><span class="params">(<span class="keyword">int</span> position)</span> </span>&#123;</div><div class="line">            <span class="function"><span class="keyword">return</span> mFragmentTitleList.<span class="title">get</span><span class="params">(position)</span></span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>注意一点，mTabs.setupWithViewPager(mViewPager);必须在setAdapter之后调用,看下源码:</p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">setupWithViewPager</span><span class="params">(ViewPager viewPager)</span> </span>&#123;</div><div class="line">   	PagerAdapter adapter = viewPager.getAdapter();</div><div class="line">   	<span class="keyword">if</span>(adapter == <span class="keyword">null</span>) &#123;</div><div class="line">      	 <span class="keyword">throw</span> <span class="keyword">new</span> IllegalArgumentException(<span class="string">"ViewPager does not have a PagerAdapter set"</span>);</div><div class="line">   	&#125; <span class="keyword">else</span> &#123;</div><div class="line">       ...</div><div class="line">   	&#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h3 id="其他要点"><a href="#其他要点" class="headerlink" title="其他要点"></a>其他要点</h3><h4 id="单独设置tab"><a href="#单独设置tab" class="headerlink" title="单独设置tab"></a>单独设置tab</h4><pre><code>TabLayout tabLayout = ...;
+ tabLayout.addTab(tabLayout.newTab().setText(&quot;Tab 1&quot;));
+tabLayout.addTab(tabLayout.newTab().setText(&quot;Tab 2&quot;));
+tabLayout.addTab(tabLayout.newTab().setText(&quot;Tab 3&quot;));
+</code></pre><h4 id="设置icon"><a href="#设置icon" class="headerlink" title="设置icon"></a>设置icon</h4>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2016-06-28T13:27:54.000Z" itemprop="dateUpdated">2016-06-28 21:27:54</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2016/05/11/Material Design控件介绍(二)/" target="_blank" rel="external">http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/&title=《Material Design控件介绍（二）——TabLayout》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/&title=《Material Design控件介绍（二）——TabLayout》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Material Design控件介绍（二）——TabLayout》 — JrDong’s Blog&url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/19/Material Design控件介绍(一)/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/17/ViewDragHelper用法介绍/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">ViewDragHelper——打造你的专属ViewGroup</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="Material Design控件介绍(二)" data-title="Material Design控件介绍（二）——TabLayout" data-url="http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/&title=《Material Design控件介绍（二）——TabLayout》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/&title=《Material Design控件介绍（二）——TabLayout》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Material Design控件介绍（二）——TabLayout》 — JrDong’s Blog&url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2016/05/11/Material Design控件介绍(二)/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

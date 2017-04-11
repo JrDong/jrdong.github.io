@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>分治法——快速排序，归并排序 | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="分治法 分治法是一种很重要的算法，也就是“分而治之”的意思，就是把一个复杂的问题分解成两个或者多个相似的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。  比如二分搜索算法，排序算法中的快速排序和归并排序都属于分治法的一种。下面我们来看看归并排序和快速排序算法的实现。 归并排序简介">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="分治法——快速排序，归并排序">
+<meta property="og:url" content="http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="分治法 分治法是一种很重要的算法，也就是“分而治之”的意思，就是把一个复杂的问题分解成两个或者多个相似的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。  比如二分搜索算法，排序算法中的快速排序和归并排序都属于分治法的一种。下面我们来看看归并排序和快速排序算法的实现。 归并排序简介">
+<meta property="og:image" content="http://ibat.xyz/img/Merge-sort-anim2.gif">
+<meta property="og:image" content="http://ibat.xyz/img/Merge-sort-anim.gif">
+<meta property="og:image" content="http://ibat.xyz/img/Sorting_quicksort_anim.gif">
+<meta property="og:updated_time" content="2017-03-12T09:08:28.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="分治法——快速排序，归并排序">
+<meta name="twitter:description" content="分治法 分治法是一种很重要的算法，也就是“分而治之”的意思，就是把一个复杂的问题分解成两个或者多个相似的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。  比如二分搜索算法，排序算法中的快速排序和归并排序都属于分治法的一种。下面我们来看看归并排序和快速排序算法的实现。 归并排序简介">
+<meta name="twitter:image" content="http://ibat.xyz/img/Merge-sort-anim2.gif">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect active">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">分治法——快速排序，归并排序</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">分治法——快速排序，归并排序</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-03-12T01:32:21.000Z" itemprop="datePublished" class="page-time">
+  2017-03-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/算法/">算法</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#分治法"><span class="post-toc-number">1.</span> <span class="post-toc-text">分治法</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#归并排序"><span class="post-toc-number">2.</span> <span class="post-toc-text">归并排序</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实例分析"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">实例分析</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#两个有序数组排序"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">两个有序数组排序</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Java代码实现"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">Java代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#快速排序"><span class="post-toc-number">3.</span> <span class="post-toc-text">快速排序</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#简介-1"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">简介</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#具体操作"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">具体操作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Java代码实现-1"><span class="post-toc-number">3.3.</span> <span class="post-toc-text">Java代码实现</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#总结"><span class="post-toc-number">4.</span> <span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-分治法——快速排序，归并排序"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">分治法——快速排序，归并排序</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-03-12 09:32:21" datetime="2017-03-12T01:32:21.000Z"  itemprop="datePublished">2017-03-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/算法/">算法</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="分治法"><a href="#分治法" class="headerlink" title="分治法"></a>分治法</h1><blockquote>
+<p>分治法是一种很重要的算法，也就是“分而治之”的意思，就是把一个复杂的问题分解成两个或者多个相似的子问题，直到最后子问题可以简单的直接求解，原问题的解即子问题的解的合并。</p>
+</blockquote>
+<p>比如二分搜索算法，排序算法中的快速排序和归并排序都属于分治法的一种。下面我们来看看归并排序和快速排序算法的实现。</p>
+<h1 id="归并排序"><a href="#归并排序" class="headerlink" title="归并排序"></a>归并排序</h1><h2 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/Merge-sort-anim2.gif" alt="MergeSort2" title="">
+                </div>
+                <div class="image-caption">MergeSort2</div>
+            </figure>  
+<p>(维基百科)<br><strong>归并排序</strong>（Merge sort）,是创建在归并操作上的一种有效的排序算法，效率为O(n log n)。最优时间复杂度，O(n),平均时间复杂度为O(n log n)。由上图我们可以了解到归并排序的过程。  </p>
+<h2 id="实例分析"><a href="#实例分析" class="headerlink" title="实例分析"></a>实例分析</h2><p>以数组6 5 3 1 8 7 2 4为例。首先递归的将数组一分为2，并对子数组排序  </p>
+<pre><code>[6, 5, 3, 1]  [8, 7, 2, 4]
+
+[6, 5]  [3, 1]  [8, 7]  [2, 4]
+
+[6], [5]  [4], [3]  [7], [8]  [2], [4]
+</code></pre><p>然后向上回溯，将两个数组合并成有序数组</p>
+<pre><code>[6], [5]  [4], [3]  [7], [8]  [2], [4]
+
+[5, 6]  [3, 4]  [7, 8]  [2, 4]
+
+[3, 4, 5, 6] [2, 4, 7, 8]           
+
+[1, 2, 3, 4, 5, 6, 7, 8]
+</code></pre><p>动图如下所示<br><img src="/img/Merge-sort-anim.gif" alt="MergeSort"><br>(维基百科)</p>
+<h2 id="两个有序数组排序"><a href="#两个有序数组排序" class="headerlink" title="两个有序数组排序"></a>两个有序数组排序</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div></pre></td><td class="code"><pre><div class="line"><span class="comment">/**</span></div><div class="line">    *</div><div class="line">    * <span class="doctag">@param</span> a 有序数组a</div><div class="line">    * <span class="doctag">@param</span> b 有序数组b</div><div class="line">    * <span class="doctag">@param</span> result 结果数组</div><div class="line">    */</div><div class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge2</span><span class="params">(<span class="keyword">int</span>[] a,<span class="keyword">int</span> [] b, <span class="keyword">int</span>[] result)</span></span>&#123;</div><div class="line"></div><div class="line">       <span class="keyword">int</span> i = <span class="number">0</span> , j = <span class="number">0</span> , k = <span class="number">0</span> ;</div><div class="line">       <span class="keyword">while</span> (i &lt; a.length &amp;&amp; j &lt; b.length)&#123;</div><div class="line">           <span class="keyword">if</span> (a[i] &lt; b[j])&#123;</div><div class="line">               result[k++] = a[i++];</div><div class="line">           &#125;<span class="keyword">else</span> &#123;</div><div class="line">               result[k++] = b[j++];</div><div class="line">           &#125;</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">while</span> (i &lt; a.length)&#123;</div><div class="line">           result[k++] = a[i++];</div><div class="line">       &#125;</div><div class="line"></div><div class="line">       <span class="keyword">while</span> (j &lt; b.length)&#123;</div><div class="line">           result[k++] = b[j++];</div><div class="line">       &#125;</div><div class="line">       print(result);</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>看会了两个有序数组的排序,则知道了如何实现归并排序</p>
+<h2 id="Java代码实现"><a href="#Java代码实现" class="headerlink" title="Java代码实现"></a>Java代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">merge</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span>[] result, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (start &gt;= end) <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> center = (start + end) / <span class="number">2</span>;</div><div class="line">        <span class="keyword">int</span> start1 = start, end1 = center;</div><div class="line">        <span class="keyword">int</span> start2 = center + <span class="number">1</span>, end2 = end;</div><div class="line">        merge(arr, result, start1, end1);</div><div class="line">        merge(arr, result, start2, end2);</div><div class="line">        <span class="keyword">int</span> k = start1;</div><div class="line">        <span class="keyword">while</span> (start1 &lt;= end1 &amp;&amp; start2 &lt;= end2) &#123;</div><div class="line">            <span class="keyword">if</span> (arr[start1] &lt; arr[start2]) &#123;</div><div class="line">                result[k++] = arr[start1++];</div><div class="line">            &#125; <span class="keyword">else</span> &#123;</div><div class="line">                result[k++] = arr[start2++];</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">while</span> (start1 &lt;= end1) &#123;</div><div class="line">            result[k++] = arr[start1++];</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (start2 &lt;= end2) &#123;</div><div class="line">            result[k++] = arr[start2++];</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">for</span> (k = start; k &lt;= end; k++) &#123;</div><div class="line">            arr[k] = result[k];</div><div class="line">        &#125;</div><div class="line">        print(arr);</div><div class="line"></div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="快速排序"><a href="#快速排序" class="headerlink" title="快速排序"></a>快速排序</h1><h2 id="简介-1"><a href="#简介-1" class="headerlink" title="简介"></a>简介</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/Sorting_quicksort_anim.gif" alt="quickSort" title="">
+                </div>
+                <div class="image-caption">quickSort</div>
+            </figure>  
+<p>(使用快速排序法对一列数字进行排序的过程——维基百科)  </p>
+<p><strong>快速排序</strong>（Quicksort），是一种排序算法，最坏情况复杂度：Ο(n2)，最优时间复杂度：Ο(n log n)，平均时间复杂度：Ο(n log n)。快速排序的基本思想也是用了分治法的思想：找出一个元素X，在一趟排序中，使X左边的数都比X小，X右边的数都比X要大。然后再分别对X左边的数组和X右边的数组进行排序，直到数组不能分割为止。   </p>
+<h2 id="具体操作"><a href="#具体操作" class="headerlink" title="具体操作"></a>具体操作</h2><p>ok,我们来看一下具体操作：  </p>
+<p>1.设置一个长度为n的数组A,定义两个变量i = 0,j = n - 1;<br>2.从数组中挑选出一个元素作为基准元素，复制给key；<br>3.从j开始从后向前搜索，j–,找到比key小的值，将A[j]与A[i]互换；<br>4.从i 开始向后搜索，i++,找到比key大的值，将A[i]与A[j]互换；<br>5.递归的，重复2，3，4步，直到i == j ;  </p>
+<p>举个栗子：  </p>
+<ul>
+<li>存在一个数组A：6 2 7 3 8 9  ,创建i = 0 ; j = 5,选择一个基准元素 k = 6  </li>
+<li>j 从右向左查找比k小的元素，发现，当 j = 3 时，发现元素3比k小，则另A[i] 与 A[j]交换，得到3 2 7 6 8 9;  </li>
+<li>i 从左向右进行查找，当 i = 2时，发现元素 7 比k大，则另A[i] 与A[j]进行交换，得到 3 2 6 7 8 9;  </li>
+<li>接着，再减小j，重复上面的循环。  </li>
+<li>但是我们发现，在本例中，一次循环后j与i就相等了，他们的下标同时指向了2.这时候，我们就进行分组，将3 2分为一组，7 8 9分为一组继续上述的比较，最终得到排序好的数组。</li>
+</ul>
+<h2 id="Java代码实现-1"><a href="#Java代码实现-1" class="headerlink" title="Java代码实现"></a>Java代码实现</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">quickSort</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> start, <span class="keyword">int</span> end)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (start &gt;= end)</div><div class="line">            <span class="keyword">return</span>;</div><div class="line"></div><div class="line">        <span class="keyword">int</span> mid = arr[end];</div><div class="line">        <span class="keyword">int</span> left = start;</div><div class="line">        <span class="keyword">int</span> right = end - <span class="number">1</span>;</div><div class="line"></div><div class="line">        <span class="keyword">while</span> (left &lt; right) &#123;</div><div class="line">            <span class="keyword">while</span> (arr[left] &lt;= mid &amp;&amp; left &lt; right) &#123;</div><div class="line">                left++;</div><div class="line">            &#125;</div><div class="line">            <span class="keyword">while</span> (arr[right] &gt;= mid &amp;&amp; left &lt; right) &#123;</div><div class="line">                right--;</div><div class="line">            &#125;</div><div class="line">            swap(arr, left, right);</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        <span class="keyword">if</span> (arr[left] &gt;= arr[end]) &#123;</div><div class="line">            swap(arr, left, end);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            left++;</div><div class="line">        &#125;</div><div class="line">        quickSort(arr, start, left - <span class="number">1</span>);</div><div class="line">        quickSort(arr, left + <span class="number">1</span>, end);</div><div class="line"></div><div class="line">        print(arr);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">    <span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">swap</span><span class="params">(<span class="keyword">int</span>[] arr, <span class="keyword">int</span> x, <span class="keyword">int</span> y)</span> </span>&#123;</div><div class="line">        <span class="keyword">int</span> temp = arr[x];</div><div class="line">        arr[x] = arr[y];</div><div class="line">        arr[y] = temp;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>可以看出分治法的策略还是递归的去解决问题，基本分为三个步骤：  </p>
+<p>分解：将原问题分解为若干个规模较小，相互独立，与原问题形式相同的子问题；  </p>
+<p>解决：若子问题规模较小而容易被解决则直接解，否则递归地解各个子问题；  </p>
+<p>合并：将各个子问题的解合并为原问题的解。  </p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2017-03-12T09:08:28.000Z" itemprop="dateUpdated">2017-03-12 17:08:28</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2017/03/12/分治法——快速排序，归并排序/" target="_blank" rel="external">http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/&title=《分治法——快速排序，归并排序》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/&title=《分治法——快速排序，归并排序》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分治法——快速排序，归并排序》 — JrDong’s Blog&url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/03/10/单例模式--双重检验锁真的线程安全吗/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">单例模式--双重检验锁真的线程安全吗</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="分治法——快速排序，归并排序" data-title="分治法——快速排序，归并排序" data-url="http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/&title=《分治法——快速排序，归并排序》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/&title=《分治法——快速排序，归并排序》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《分治法——快速排序，归并排序》 — JrDong’s Blog&url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2017/03/12/分治法——快速排序，归并排序/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

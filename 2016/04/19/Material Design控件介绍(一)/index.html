@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView项目地址:https://github.com/JrDong/Android-Sloth 概述介绍的控件有：Toolbar,TabLayout,DrawerLayout,NavigationViewCoordinatorLayout,AppBarLayout,Collapsing">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView">
+<meta property="og:url" content="http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView项目地址:https://github.com/JrDong/Android-Sloth 概述介绍的控件有：Toolbar,TabLayout,DrawerLayout,NavigationViewCoordinatorLayout,AppBarLayout,Collapsing">
+<meta property="og:image" content="http://ibat.xyz/img/Android-Sloth-gif.gif">
+<meta property="og:image" content="http://ibat.xyz/img/1416285884351.png">
+<meta property="og:updated_time" content="2016-06-28T13:27:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView">
+<meta name="twitter:description" content="Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView项目地址:https://github.com/JrDong/Android-Sloth 概述介绍的控件有：Toolbar,TabLayout,DrawerLayout,NavigationViewCoordinatorLayout,AppBarLayout,Collapsing">
+<meta name="twitter:image" content="http://ibat.xyz/img/Android-Sloth-gif.gif">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect active">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-04-19T13:46:05.000Z" itemprop="datePublished" class="page-time">
+  2016-04-19
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView"><span class="post-toc-number">1.</span> <span class="post-toc-text">Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#概述"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">概述</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#介绍的控件有："><span class="post-toc-number">1.1.1.</span> <span class="post-toc-text">介绍的控件有：</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Toolbar的用法"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">Toolbar的用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-首先我们来看下布局文件"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">1.首先我们来看下布局文件</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-布局了解-图片来源于网络"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">2.布局了解(图片来源于网络)</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-代码实现"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">3.代码实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#4-菜单栏用法"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">4.菜单栏用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#在res-menu-menu-main-xml中定义"><span class="post-toc-number">1.2.4.1.</span> <span class="post-toc-text">在res/menu/menu_main.xml中定义</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#设置点击事件"><span class="post-toc-number">1.2.4.2.</span> <span class="post-toc-text">设置点击事件</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DrawerLayout，NavigationView的用法"><span class="post-toc-number">1.3.</span> <span class="post-toc-text">DrawerLayout，NavigationView的用法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#首先我们来看下布局文件："><span class="post-toc-number">1.3.1.</span> <span class="post-toc-text">首先我们来看下布局文件：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#1-headerLayout"><span class="post-toc-number">1.3.1.1.</span> <span class="post-toc-text">1.headerLayout</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#2-menu"><span class="post-toc-number">1.3.1.2.</span> <span class="post-toc-text">2.menu</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#代码实现："><span class="post-toc-number">1.3.2.</span> <span class="post-toc-text">代码实现：</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#设置菜单栏监听。"><span class="post-toc-number">1.3.2.1.</span> <span class="post-toc-text">设置菜单栏监听。</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#下面来讲解设置Toolbar和DrawerLayout的监听。"><span class="post-toc-number">1.3.3.</span> <span class="post-toc-text">下面来讲解设置Toolbar和DrawerLayout的监听。</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#https-github-com-JrDong-Android-Sloth"><span class="post-toc-number">1.3.4.</span> <span class="post-toc-text">https://github.com/JrDong/Android-Sloth</span></a></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Material Design控件介绍(一)"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-04-19 21:46:05" datetime="2016-04-19T13:46:05.000Z"  itemprop="datePublished">2016-04-19</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView"><a href="#Material-Design控件介绍（一）———Toolbar-DrawerLayout-NavigationView" class="headerlink" title="Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView"></a>Material Design控件介绍（一）———Toolbar,DrawerLayout,NavigationView</h1><p>项目地址:<a href="https://github.com/JrDong/Android-Sloth" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth</a></p>
+<h2 id="概述"><a href="#概述" class="headerlink" title="概述"></a>概述</h2><h3 id="介绍的控件有："><a href="#介绍的控件有：" class="headerlink" title="介绍的控件有："></a>介绍的控件有：</h3><p>Toolbar,TabLayout,DrawerLayout,NavigationView<br>CoordinatorLayout,AppBarLayout,CollapsingToolbarLayout<br>NestedScrollView,CardView,FloatingActionButton,Snackbar等<br>还有自定义CoordinatorLayout.Behavior。</p>
+<p>先看下效果：<br><img src="/img/Android-Sloth-gif.gif" alt="Alt text"><br>本次先介绍Toolbar，DrawerLayout和NavigationView</p>
+<h2 id="Toolbar的用法"><a href="#Toolbar的用法" class="headerlink" title="Toolbar的用法"></a>Toolbar的用法</h2><p>之前大家都接触过ActionBar，继ActionBar之后。Google又推出了一个更加灵活的控件——Toolbar.为什么说Toolbar更加灵活呢，点开Toolbar的源码，我们发现，Toolbar继承自ViewGroup。也就是说，我们可以以Toolbar为父控件，随意的摆放我们需要的控件，并自定义控件的位置。但也可以不这样麻烦，Toolbar也提供了一系列的方法，供我们使用。注意，使用Toolbar需要在AppCompatActivity中，并使用NoActionBar的主题。  </p>
+<h3 id="1-首先我们来看下布局文件"><a href="#1-首先我们来看下布局文件" class="headerlink" title="1.首先我们来看下布局文件"></a>1.首先我们来看下布局文件</h3><pre><code>&lt;android.support.v7.widget.Toolbar
+xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+android:id=&quot;@+id/main_toolbar&quot;
+android:layout_width=&quot;match_parent&quot;
+android:layout_height=&quot;wrap_content&quot;
+android:minHeight=&quot;?attr/actionBarSize&quot;
+android:fitsSystemWindows=&quot;true&quot;
+android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark.ActionBar&quot;
+app:popupTheme=&quot;@style/ThemeOverlay.AppCompat.Light&quot;
+android:background=&quot;?attr/colorPrimary&quot;&gt;
+</code></pre><p>Theme表示Toolbar的主题样式，popupTheme表示弹出框的样式。需要改变颜色的话，需要自定义theme，这里先不做介绍。<br>fitsSystemWindows这个属性，是我们使用透明状态栏时用的。当我们使用透明状态栏时。我们应用的标题栏会顶上去，占据原来系统状态栏的位置。这个属性就是用来让view可以根据系统窗口(如status bar)来调整自己的布局，如果值为true,就会调整view的paingding属性来给system windows留出空间….需要在标题栏的父控件中使用。 </p>
+<h3 id="2-布局了解-图片来源于网络"><a href="#2-布局了解-图片来源于网络" class="headerlink" title="2.布局了解(图片来源于网络)"></a>2.布局了解(图片来源于网络)</h3><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/1416285884351.png" alt="Alt text" title="">
+                </div>
+                <div class="image-caption">Alt text</div>
+            </figure>
+<h3 id="3-代码实现"><a href="#3-代码实现" class="headerlink" title="3.代码实现"></a>3.代码实现</h3><p>添加以下代码就可以使用Toolbar<br>    setSupportActionBar(mainToolbar);<br>setNavigationIcon：比如返回按钮等<br>setLogo:设置应用图标<br>setTitle:主标题<br>setSubTitle:副标题<br>setOnMenuItemClickListener:菜单按钮的点击事件。  </p>
+<h3 id="4-菜单栏用法"><a href="#4-菜单栏用法" class="headerlink" title="4.菜单栏用法"></a>4.菜单栏用法</h3><h4 id="在res-menu-menu-main-xml中定义"><a href="#在res-menu-menu-main-xml中定义" class="headerlink" title="在res/menu/menu_main.xml中定义"></a>在res/menu/menu_main.xml中定义</h4><pre><code>&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+  xmlns:app=&quot;http://schemas.android.com/apk/res-auto&quot;
+  xmlns:tools=&quot;http://schemas.android.com/tools&quot;
+  tools:context=&quot;.MainActivity&quot;&gt;
+&lt;item android:id=&quot;@+id/action_settings&quot;
+      android:title=&quot;@string/action_settings&quot;
+      android:orderInCategory=&quot;100&quot;
+      app:showAsAction=&quot;never&quot;/&gt;
+&lt;item android:id=&quot;@+id/action_about&quot;
+    android:title=&quot;@string/action_about&quot;
+    android:orderInCategory=&quot;100&quot;
+    app:showAsAction=&quot;never&quot;/&gt;
+&lt;item android:id=&quot;@+id/action_search&quot;
+    android:title=&quot;@string/action_search&quot;
+    android:orderInCategory=&quot;100&quot;
+    android:icon=&quot;@mipmap/icon_search&quot;
+    app:showAsAction=&quot;ifRoom&quot;
+    /&gt;
+&lt;/menu&gt;
+</code></pre><p>这里需要介绍showAsAction中常用的属性：never表示始终在菜单栏中；ifRoom表示如果标题栏有空闲则在标题栏上显示，没有空闲就在菜单栏中显示；always表示无论有没有空余控件，始终显示在标题栏。不过不推荐使用always，推荐使用ifRoom。  </p>
+<pre><code>@Override
+public boolean onCreateOptionsMenu(Menu menu) {
+    getMenuInflater().inflate(R.menu.menu_main, menu);
+    return true;
+}
+</code></pre><h4 id="设置点击事件"><a href="#设置点击事件" class="headerlink" title="设置点击事件"></a>设置点击事件</h4><pre><code>mainToolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+        @Override
+        public boolean onMenuItemClick(MenuItem item) {
+            String msg = &quot;&quot;;
+            switch (item.getItemId()){
+                case R.id.action_search:
+                    msg = &quot;search&quot;;
+                    break;
+                case R.id.action_about:
+                    msg = &quot;about&quot;;
+                    break;
+                case R.id.action_settings:
+                    msg = &quot;setting&quot;;
+                    break;
+            }
+            SlothUtil.showToast(msg);
+            return false;
+        }
+    });
+</code></pre><p>至此Toolbar介绍完毕，有需要再继续做补充</p>
+<h2 id="DrawerLayout，NavigationView的用法"><a href="#DrawerLayout，NavigationView的用法" class="headerlink" title="DrawerLayout，NavigationView的用法"></a>DrawerLayout，NavigationView的用法</h2><p>DrawerLayout是Google官方的侧滑菜单栏，要使用需要引入v4包，看源码我们发现DrawerLayout其实使用了ViewDragHelper这个类来进行手势处理（有时间会讲解这个类，自定义侧滑菜单）。之前我们使用DrawerLayout，菜单栏喜欢用ListView实现。但有了NavigationView之后，就方便许多。省去了写Adapter的时间。下面就两个结合起来讲解。</p>
+<h3 id="首先我们来看下布局文件："><a href="#首先我们来看下布局文件：" class="headerlink" title="首先我们来看下布局文件："></a>首先我们来看下布局文件：</h3><pre><code>&lt;android.support.v4.widget.DrawerLayout
+    android:id=&quot;@+id/drawerLayout&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;match_parent&quot;&gt;
+
+
+    &lt;FrameLayout
+        android:id=&quot;@+id/fl_root&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        /&gt;
+
+
+    &lt;android.support.design.widget.NavigationView
+        android:id=&quot;@+id/navigation_main&quot;
+        android:layout_width=&quot;match_parent&quot;
+        android:layout_height=&quot;match_parent&quot;
+        android:layout_gravity=&quot;left&quot;
+        app:headerLayout=&quot;@layout/navigationview_header&quot;
+        app:menu=&quot;@menu/menu_drawer&quot; /&gt;
+
+&lt;/android.support.v4.widget.DrawerLayout&gt;
+</code></pre><p>在布局的最外层是DrawerLayout，内容使用FrameLayout，Drawer使用NavigationView<br>细心的同学可能会发现NavigationView多了两个属性。 app:headerLayout=”@layout/navigationview_header”，app:menu=”@menu/menu_drawer” 。这两个属性分别代表，菜单栏的头布局和菜单布局。我们来看下这两个属性中的内容：</p>
+<h4 id="1-headerLayout"><a href="#1-headerLayout" class="headerlink" title="1.headerLayout"></a>1.headerLayout</h4><pre><code>&lt;RelativeLayout xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;
+    android:layout_width=&quot;match_parent&quot;
+    android:layout_height=&quot;192dp&quot;
+    android:background=&quot;@mipmap/banner2&quot;
+    android:fitsSystemWindows=&quot;true&quot;
+    android:orientation=&quot;vertical&quot;
+    android:padding=&quot;16dp&quot;
+    android:theme=&quot;@style/ThemeOverlay.AppCompat.Dark&quot;&gt;
+
+&lt;TextView
+    android:id=&quot;@+id/id_link&quot;
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:layout_alignParentBottom=&quot;true&quot;
+    android:layout_marginBottom=&quot;16dp&quot;
+    android:text=&quot;http://ibat.xyz&quot; /&gt;
+
+&lt;TextView
+    android:id=&quot;@+id/id_username&quot;
+    android:layout_width=&quot;wrap_content&quot;
+    android:layout_height=&quot;wrap_content&quot;
+    android:layout_above=&quot;@id/id_link&quot;
+    android:text=&quot;DongJr&quot; /&gt;
+
+&lt;/RelativeLayout&gt;
+</code></pre><h4 id="2-menu"><a href="#2-menu" class="headerlink" title="2.menu"></a>2.menu</h4><pre><code>&lt;menu xmlns:android=&quot;http://schemas.android.com/apk/res/android&quot;&gt;
+
+&lt;group android:checkableBehavior=&quot;single&quot;&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_home&quot;
+        android:icon=&quot;@mipmap/ic_dashboard&quot;
+        android:title=&quot;Home&quot;/&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_messages&quot;
+        android:icon=&quot;@mipmap/ic_event&quot;
+        android:title=&quot;Messages&quot;/&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_friends&quot;
+        android:icon=&quot;@mipmap/ic_headset&quot;
+        android:title=&quot;Friends&quot;/&gt;
+    &lt;item
+        android:id=&quot;@+id/nav_discussion&quot;
+        android:icon=&quot;@mipmap/ic_forum&quot;
+        android:title=&quot;Discussion&quot;/&gt;
+&lt;/group&gt;
+
+&lt;item android:title=&quot;Sub items&quot;&gt;
+    &lt;menu&gt;
+        &lt;item
+            android:id=&quot;@+id/sub_item1&quot;
+            android:icon=&quot;@mipmap/ic_dashboard&quot;
+            android:title=&quot;Sub item 1&quot;/&gt;
+        &lt;item
+            android:id=&quot;@+id/sub_item2&quot;
+            android:icon=&quot;@mipmap/ic_forum&quot;
+            android:title=&quot;Sub item 2&quot;/&gt;
+    &lt;/menu&gt;
+&lt;/item&gt;
+&lt;/menu&gt;
+</code></pre><p>写好布局后，我们就可以看到效果了。使用起来是不是很方便呢，当然，你也可以调整布局，达到自己想要的效果。</p>
+<h3 id="代码实现："><a href="#代码实现：" class="headerlink" title="代码实现："></a>代码实现：</h3><h4 id="设置菜单栏监听。"><a href="#设置菜单栏监听。" class="headerlink" title="设置菜单栏监听。"></a>设置菜单栏监听。</h4><figure class="highlight groovy"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line">mNavigationView.setNavigationItemSelectedListener(<span class="keyword">this</span>);  </div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line">    <span class="keyword">public</span> <span class="keyword">boolean</span> onNavigationItemSelected(MenuItem item) &#123;</div><div class="line">        <span class="keyword">switch</span> (item.getItemId()) &#123;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_home:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"HOME"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,HomeActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_messages:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"MESSAGE"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,MessageActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_friends:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"FRIENDS"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,FriendActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">nav_discussion:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"DISCUSSION"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                startActivity(<span class="keyword">new</span> Intent(<span class="keyword">this</span>,DiscussionActivity.<span class="keyword">class</span>));</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">sub_item1:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"SUB_ITEM1"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">            <span class="keyword">case</span> R.id.<span class="string">sub_item2:</span></div><div class="line">                SlothUtil.showToast(<span class="string">"SUB_ITEM2"</span>);</div><div class="line">                mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">                <span class="keyword">break</span>;</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> <span class="literal">false</span>;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<h3 id="下面来讲解设置Toolbar和DrawerLayout的监听。"><a href="#下面来讲解设置Toolbar和DrawerLayout的监听。" class="headerlink" title="下面来讲解设置Toolbar和DrawerLayout的监听。"></a>下面来讲解设置Toolbar和DrawerLayout的监听。</h3><p>就是我们常见的三个横杠变箭头，然后菜单栏滑出的效果。<br>这里需要用到ActionBarDrawerToggle这个类。  </p>
+<figure class="highlight aspectj"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"> <span class="keyword">private</span> <span class="function"><span class="keyword">void</span> <span class="title">initDrawLayout</span><span class="params">()</span> </span>&#123;</div><div class="line">       <span class="comment">//DrawerLayout和Toolbar关联</span></div><div class="line">       mDrawerToggle = <span class="keyword">new</span> ActionBarDrawerToggle(<span class="keyword">this</span>, mDrawerLayout, mainToolbar, R.string.app_name, R.string.app_name);</div><div class="line">       mDrawerLayout.setDrawerListener(mDrawerToggle);</div><div class="line"></div><div class="line">      mainToolbar.setNavigationOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">          <span class="meta">@Override</span></div><div class="line">          <span class="keyword">public</span> <span class="function"><span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line">              <span class="keyword">if</span> (mDrawerLayout.isDrawerOpen(Gravity.LEFT)) &#123;</div><div class="line">                  mDrawerLayout.closeDrawer(Gravity.LEFT);</div><div class="line">              &#125; <span class="keyword">else</span> &#123;</div><div class="line">                  mDrawerLayout.openDrawer(Gravity.LEFT);</div><div class="line">              &#125;</div><div class="line">          &#125;</div><div class="line">      &#125;);</div><div class="line"></div><div class="line">      mNavigationView.setNavigationItemSelectedListener(<span class="keyword">this</span>);</div><div class="line">  &#125;</div><div class="line"></div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line">    * Activity彻底运行起来之后的回调</div><div class="line">    * Called when activity start-up is complete</div><div class="line">    * (after onStart() and onRestoreInstanceState(Bundle) have been called).</div><div class="line">    */</div><div class="line">   <span class="meta">@Override</span></div><div class="line">   <span class="keyword">protected</span> <span class="function"><span class="keyword">void</span> <span class="title">onPostCreate</span><span class="params">(Bundle savedInstanceState)</span> </span>&#123;</div><div class="line">       <span class="keyword">super</span>.onPostCreate(savedInstanceState);</div><div class="line">       <span class="comment">//箭头旋转动画的关键</span></div><div class="line">       mDrawerToggle.syncState();</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>DrawerLayout，NavigationView的用法讲解结束，有兴趣的同学可以查看源代码——Meterial Design的控件Demo。</p>
+<h3 id="https-github-com-JrDong-Android-Sloth"><a href="#https-github-com-JrDong-Android-Sloth" class="headerlink" title="https://github.com/JrDong/Android-Sloth"></a><a href="https://github.com/JrDong/Android-Sloth" target="_blank" rel="external">https://github.com/JrDong/Android-Sloth</a></h3>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2016-06-28T13:27:33.000Z" itemprop="dateUpdated">2016-06-28 21:27:33</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2016/04/19/Material Design控件介绍(一)/" target="_blank" rel="external">http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/&title=《Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/&title=《Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView》 — JrDong’s Blog&url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/04/09/Material Design介绍/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Material Design介绍</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/05/11/Material Design控件介绍(二)/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Material Design控件介绍（二）——TabLayout</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="Material Design控件介绍(一)" data-title="Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView" data-url="http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/&title=《Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/&title=《Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Material Design控件介绍（一）——Toolbar,DrawerLayout,NavigationView》 — JrDong’s Blog&url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2016/04/19/Material Design控件介绍(一)/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

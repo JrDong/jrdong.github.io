@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>ViewDragHelper——打造你的专属ViewGroup | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="ViewDragHelper介绍转载请注明出处，有问题的话欢迎在下面留言，我会一一回复，谢谢大家。你们的关注是我最大的动力。 在自定义控件中，很多效果都需要重写onInterceptTouchEvent和onTouchEvent这两个类，但要考虑到各种情况，写出很好的手势处理控件是比较麻烦的。比如多点触控，速度监测等。ViewDragHelper是谷歌io大会上隆重推出的手势处理的类。在andro">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="ViewDragHelper——打造你的专属ViewGroup">
+<meta property="og:url" content="http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="ViewDragHelper介绍转载请注明出处，有问题的话欢迎在下面留言，我会一一回复，谢谢大家。你们的关注是我最大的动力。 在自定义控件中，很多效果都需要重写onInterceptTouchEvent和onTouchEvent这两个类，但要考虑到各种情况，写出很好的手势处理控件是比较麻烦的。比如多点触控，速度监测等。ViewDragHelper是谷歌io大会上隆重推出的手势处理的类。在andro">
+<meta property="og:updated_time" content="2016-05-17T15:58:04.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="ViewDragHelper——打造你的专属ViewGroup">
+<meta name="twitter:description" content="ViewDragHelper介绍转载请注明出处，有问题的话欢迎在下面留言，我会一一回复，谢谢大家。你们的关注是我最大的动力。 在自定义控件中，很多效果都需要重写onInterceptTouchEvent和onTouchEvent这两个类，但要考虑到各种情况，写出很好的手势处理控件是比较麻烦的。比如多点触控，速度监测等。ViewDragHelper是谷歌io大会上隆重推出的手势处理的类。在andro">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect active">
+              <a href="/" target="_blank" >
+                <i class="icon icon-lg icon-weibo"></i>
+                Weibo
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/custom"  >
+                <i class="icon icon-lg icon-link"></i>
+                测试
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">ViewDragHelper——打造你的专属ViewGroup</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">ViewDragHelper——打造你的专属ViewGroup</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2016-05-17T14:53:10.000Z" itemprop="datePublished" class="page-time">
+  2016-05-17
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#ViewDragHelper介绍"><span class="post-toc-number">1.</span> <span class="post-toc-text">ViewDragHelper介绍</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#基本实现"><span class="post-toc-number">2.</span> <span class="post-toc-text">基本实现</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#创建实例"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">创建实例</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#触摸相关的方法"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">触摸相关的方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#ViewDragHelper-Callback的相关方法"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">ViewDragHelper.Callback的相关方法</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#其他代码"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">其他代码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#布局文件"><span class="post-toc-number">2.5.</span> <span class="post-toc-text">布局文件</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-ViewDragHelper用法介绍"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">ViewDragHelper——打造你的专属ViewGroup</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2016-05-17 22:53:10" datetime="2016-05-17T14:53:10.000Z"  itemprop="datePublished">2016-05-17</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="ViewDragHelper介绍"><a href="#ViewDragHelper介绍" class="headerlink" title="ViewDragHelper介绍"></a>ViewDragHelper介绍</h1><p>转载请注明出处，有问题的话欢迎在下面留言，我会一一回复，谢谢大家。你们的关注是我最大的动力。</p>
+<p>在自定义控件中，很多效果都需要重写onInterceptTouchEvent和onTouchEvent这两个类，但要考虑到各种情况，写出很好的手势处理控件是比较麻烦的。比如多点触控，速度监测等。ViewDragHelper是谷歌io大会上隆重推出的手势处理的类。在android.support.v4中。像Google官方侧滑菜单，DrawerLayout就是用这个类实现的。本节先介绍它的基本用法，以后会介绍如何用ViewDragHelper自定义侧滑菜单。</p>
+<h1 id="基本实现"><a href="#基本实现" class="headerlink" title="基本实现"></a>基本实现</h1><h2 id="创建实例"><a href="#创建实例" class="headerlink" title="创建实例"></a>创建实例</h2><pre><code>mViewDragHelper = ViewDragHelper.create(this,1.0f,callback);
+</code></pre><p>需要传入三个参数，第一个参数传入当前的ViewGroup；第二个参数是灵敏度，数值越大，灵敏度越低；第三个参数传入ViewDragHelper.Callback,后面详细介绍。</p>
+<h2 id="触摸相关的方法"><a href="#触摸相关的方法" class="headerlink" title="触摸相关的方法"></a>触摸相关的方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onInterceptTouchEvent</span><span class="params">(MotionEvent ev)</span> </span>&#123;</div><div class="line">	<span class="comment">// 让ViewDragHelper帮我们判断是否应该拦截</span></div><div class="line">	<span class="keyword">boolean</span> result = viewDragHelper.shouldInterceptTouchEvent(ev);</div><div class="line">	<span class="keyword">return</span> result;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">onTouchEvent</span><span class="params">(MotionEvent event)</span> </span>&#123;</div><div class="line">	<span class="comment">// 将触摸事件交给ViewDragHelper来解析处理</span></div><div class="line">	viewDragHelper.processTouchEvent(event);</div><div class="line">	<span class="keyword">return</span> <span class="keyword">true</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="ViewDragHelper-Callback的相关方法"><a href="#ViewDragHelper-Callback的相关方法" class="headerlink" title="ViewDragHelper.Callback的相关方法"></a><strong>ViewDragHelper.Callback</strong>的相关方法</h2><p>callback的方法，大家参考注释。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="keyword">private</span> ViewDragHelper.Callback callback = <span class="keyword">new</span> ViewDragHelper.Callback() &#123;</div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 用于判断是否捕获当前child的触摸事件 child: 当前触摸的子View return: true:就捕获并解析 false：不处理</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">tryCaptureView</span><span class="params">(View child, <span class="keyword">int</span> pointerId)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> child == blueView || child == redView;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 当view被开始捕获和解析的回调 capturedChild:当前被捕获的子view</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewCaptured</span><span class="params">(View capturedChild, <span class="keyword">int</span> activePointerId)</span> </span>&#123;</div><div class="line">			<span class="keyword">super</span>.onViewCaptured(capturedChild, activePointerId);</div><div class="line">			<span class="comment">// Log.e("tag", "onViewCaptured");</span></div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 获取view水平方向的拖拽范围,但是目前不能限制边界,返回的值目前用在手指抬起的时候view缓慢移动的动画世界的计算上面; 最好不要返回0</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getViewHorizontalDragRange</span><span class="params">(View child)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> getMeasuredWidth() - child.getMeasuredWidth();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 获取view垂直方向的拖拽范围，最好不要返回0</div><div class="line">		 */</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">getViewVerticalDragRange</span><span class="params">(View child)</span> </span>&#123;</div><div class="line">			<span class="keyword">return</span> getMeasuredHeight() - child.getMeasuredHeight();</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 控制child在水平方向的移动 left:</div><div class="line">		 * 表示ViewDragHelper认为你想让当前child的left改变的值,left=chile.getLeft()+dx dx:</div><div class="line">		 * 本次child水平方向移动的距离 return: 表示你真正想让child的left变成的值</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">clampViewPositionHorizontal</span><span class="params">(View child, <span class="keyword">int</span> left, <span class="keyword">int</span> dx)</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (left &lt; <span class="number">0</span>) &#123;</div><div class="line">				<span class="comment">// 限制左边界</span></div><div class="line">				left = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (left &gt; (getMeasuredWidth() - child.getMeasuredWidth())) &#123;</div><div class="line">				<span class="comment">// 限制右边界</span></div><div class="line">				left = getMeasuredWidth() - child.getMeasuredWidth();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> left;</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 控制child在垂直方向的移动 top:</div><div class="line">		 * 表示ViewDragHelper认为你想让当前child的top改变的值,top=chile.getTop()+dy dy:</div><div class="line">		 * 本次child垂直方向移动的距离 return: 表示你真正想让child的top变成的值</div><div class="line">		 */</div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">clampViewPositionVertical</span><span class="params">(View child, <span class="keyword">int</span> top, <span class="keyword">int</span> dy)</span> </span>&#123;</div><div class="line">			<span class="keyword">if</span> (top &lt; <span class="number">0</span>) &#123;</div><div class="line">				top = <span class="number">0</span>;</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (top &gt; getMeasuredHeight() - child.getMeasuredHeight()) &#123;</div><div class="line">				top = getMeasuredHeight() - child.getMeasuredHeight();</div><div class="line">			&#125;</div><div class="line">			<span class="keyword">return</span> top;</div><div class="line">		&#125;;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 当child的位置改变的时候执行,一般用来做其他子View的伴随移动 changedView：位置改变的child</div><div class="line">		 * left：child当前最新的left top: child当前最新的top dx: 本次水平移动的距离 dy: 本次垂直移动的距离</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewPositionChanged</span><span class="params">(View changedView, <span class="keyword">int</span> left, <span class="keyword">int</span> top,</span></span></div><div class="line">				<span class="keyword">int</span> dx, <span class="keyword">int</span> dy) &#123;</div><div class="line">			<span class="keyword">super</span>.onViewPositionChanged(changedView, left, top, dx, dy);</div><div class="line">			<span class="keyword">if</span> (changedView == blueView) &#123;</div><div class="line">				<span class="comment">// blueView移动的时候需要让redView跟随移动</span></div><div class="line">				redView.layout(redView.getLeft() + dx, redView.getTop() + dy,</div><div class="line">						redView.getRight() + dx, redView.getBottom() + dy);</div><div class="line">			&#125; <span class="keyword">else</span> <span class="keyword">if</span> (changedView == redView) &#123;</div><div class="line">				<span class="comment">// redView移动的时候需要让blueView跟随移动</span></div><div class="line">				blueView.layout(blueView.getLeft() + dx,</div><div class="line">						blueView.getTop() + dy, blueView.getRight() + dx,</div><div class="line">						blueView.getBottom() + dy);</div><div class="line">			&#125;</div><div class="line">			</div><div class="line">			<span class="comment">//1.计算view移动的百分比</span></div><div class="line">			<span class="keyword">float</span> fraction = changedView.getLeft()*<span class="number">1f</span>/(getMeasuredWidth()-changedView.getMeasuredWidth());</div><div class="line">			Log.e(<span class="string">"tag"</span>, <span class="string">"fraction:"</span>+fraction);</div><div class="line">			<span class="comment">//2.执行一系列的伴随动画</span></div><div class="line">			executeAnim(fraction);</div><div class="line">		&#125;</div><div class="line"></div><div class="line">		<span class="comment">/**</span></div><div class="line">		 * 手指抬起的执行该方法， releasedChild：当前抬起的view xvel: x方向的移动的速度 正：向右移动， 负：向左移动</div><div class="line">		 * yvel: y方向移动的速度</div><div class="line">		 */</div><div class="line">		<span class="meta">@Override</span></div><div class="line">		<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onViewReleased</span><span class="params">(View releasedChild, <span class="keyword">float</span> xvel, <span class="keyword">float</span> yvel)</span> </span>&#123;</div><div class="line">			<span class="keyword">super</span>.onViewReleased(releasedChild, xvel, yvel);</div><div class="line">			<span class="keyword">int</span> centerLeft = getMeasuredWidth() / <span class="number">2</span></div><div class="line">					- releasedChild.getMeasuredWidth() / <span class="number">2</span>;</div><div class="line">			<span class="keyword">if</span> (releasedChild.getLeft() &lt; centerLeft) &#123;</div><div class="line">				<span class="comment">// 在左半边，应该向左缓慢移动</span></div><div class="line">				viewDragHelper.smoothSlideViewTo(releasedChild, <span class="number">0</span>,</div><div class="line">						releasedChild.getTop());</div><div class="line">				ViewCompat.postInvalidateOnAnimation(DragLayout.<span class="keyword">this</span>);</div><div class="line">			&#125; <span class="keyword">else</span> &#123;</div><div class="line">				<span class="comment">// 在右半边，应该向右缓慢移动</span></div><div class="line">				viewDragHelper.smoothSlideViewTo(releasedChild,</div><div class="line">						getMeasuredWidth() - releasedChild.getMeasuredWidth(),</div><div class="line">						releasedChild.getTop());</div><div class="line">				ViewCompat.postInvalidateOnAnimation(DragLayout.<span class="keyword">this</span>);</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;;</div><div class="line">	</div><div class="line"><span class="comment">/**</span></div><div class="line">	 * 执行伴随动画</div><div class="line">	 * <span class="doctag">@param</span> fraction</div><div class="line">	 */</div><div class="line">	<span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">executeAnim</span><span class="params">(<span class="keyword">float</span> fraction)</span></span>&#123;</div><div class="line">		<span class="comment">//fraction: 0 - 1</span></div><div class="line">		<span class="comment">//缩放</span></div><div class="line"><span class="comment">//		ViewHelper.setScaleX(redView, 1+0.5f*fraction);</span></div><div class="line"><span class="comment">//		ViewHelper.setScaleY(redView, 1+0.5f*fraction);</span></div><div class="line">		<span class="comment">//旋转</span></div><div class="line"><span class="comment">//		ViewHelper.setRotation(redView,360*fraction);//围绕z轴转</span></div><div class="line">		ViewHelper.setRotationX(redView,<span class="number">360</span>*fraction);<span class="comment">//围绕x轴转</span></div><div class="line"><span class="comment">//		ViewHelper.setRotationY(redView,360*fraction);//围绕y轴转</span></div><div class="line">		ViewHelper.setRotationX(blueView,<span class="number">360</span>*fraction);<span class="comment">//围绕z轴转</span></div><div class="line">		<span class="comment">//平移</span></div><div class="line"><span class="comment">//		ViewHelper.setTranslationX(redView,80*fraction);</span></div><div class="line">		<span class="comment">//透明</span></div><div class="line"><span class="comment">//		ViewHelper.setAlpha(redView, 1-fraction);</span></div><div class="line">		</div><div class="line">		<span class="comment">//设置过度颜色的渐变</span></div><div class="line">		redView.setBackgroundColor((Integer) ColorUtil.evaluateColor(fraction,Color.RED,Color.GREEN));</div><div class="line"><span class="comment">//		setBackgroundColor((Integer) ColorUtil.evaluateColor(fraction,Color.RED,Color.GREEN));</span></div><div class="line">	&#125;</div><div class="line"></div><div class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">computeScroll</span><span class="params">()</span> </span>&#123;</div><div class="line">		<span class="keyword">if</span> (viewDragHelper.continueSettling(<span class="keyword">true</span>)) &#123;</div><div class="line">			ViewCompat.postInvalidateOnAnimation(DragLayout.<span class="keyword">this</span>);</div><div class="line">		&#125;</div><div class="line">	&#125;</div></pre></td></tr></table></figure>
+<h2 id="其他代码"><a href="#其他代码" class="headerlink" title="其他代码"></a>其他代码</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"> * 当DragLayout的xml布局的结束标签被读取完成会执行该方法，此时会知道自己有几个子View了 一般用来初始化子View的引用</div><div class="line"> */</div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onFinishInflate</span><span class="params">()</span> </span>&#123;</div><div class="line">	<span class="keyword">super</span>.onFinishInflate();</div><div class="line">	redView = getChildAt(<span class="number">0</span>);</div><div class="line">	blueView = getChildAt(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"> <span class="meta">@Override</span></div><div class="line"> <span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onMeasure</span><span class="params">(<span class="keyword">int</span> widthMeasureSpec, <span class="keyword">int</span> heightMeasureSpec)</span> </span>&#123;</div><div class="line"> <span class="keyword">super</span>.onMeasure(widthMeasureSpec, heightMeasureSpec);</div><div class="line"> <span class="comment">//要测量我自己的子View</span></div><div class="line"> <span class="comment">// int size = getResources().getDimension(R.dimen.width);//100dp</span></div><div class="line"> <span class="comment">// int measureSpec =</span></div><div class="line"> MeasureSpec.makeMeasureSpec(redView.getLayoutParams().width,MeasureSpec.EXACTLY);</div><div class="line"> <span class="comment">// redView.measure(measureSpec,measureSpec);</span></div><div class="line"> <span class="comment">// blueView.measure(measureSpec, measureSpec);</span></div><div class="line"></div><div class="line"> <span class="comment">//如果说没有特殊的对子View的测量需求，可以用如下方法</span></div><div class="line"> measureChild(redView, widthMeasureSpec, heightMeasureSpec);</div><div class="line"> measureChild(blueView, widthMeasureSpec, heightMeasureSpec);</div><div class="line"> &#125;</div><div class="line"></div><div class="line"><span class="meta">@Override</span></div><div class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onLayout</span><span class="params">(<span class="keyword">boolean</span> changed, <span class="keyword">int</span> l, <span class="keyword">int</span> t, <span class="keyword">int</span> r, <span class="keyword">int</span> b)</span> </span>&#123;</div><div class="line">	<span class="keyword">int</span> left = getPaddingLeft();</div><div class="line">	<span class="keyword">int</span> top = getPaddingTop();</div><div class="line">	redView.layout(left, top, left + redView.getMeasuredWidth(), top</div><div class="line">			+ redView.getMeasuredHeight());</div><div class="line">	blueView.layout(left, redView.getBottom(),</div><div class="line">			left + blueView.getMeasuredWidth(), redView.getBottom()</div><div class="line">					+ blueView.getMeasuredHeight());</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h2 id="布局文件"><a href="#布局文件" class="headerlink" title="布局文件"></a>布局文件</h2><figure class="highlight xml"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"></div><div class="line"><span class="tag">&lt;<span class="name">xyz.ibat.circleview.test.DragLayout</span></span></div><div class="line">        <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span></div><div class="line">        <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span> &gt;</div><div class="line"></div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:background</span>=<span class="string">"#ff0000"</span> /&gt;</div><div class="line">        <span class="tag">&lt;<span class="name">TextView</span></span></div><div class="line">            <span class="attr">android:layout_width</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:layout_height</span>=<span class="string">"@dimen/width"</span></div><div class="line">            <span class="attr">android:background</span>=<span class="string">"#0000ff"</span> /&gt;</div><div class="line">        </div><div class="line">    <span class="tag">&lt;/<span class="name">xyz.ibat.circleview.test.DragLayout</span>&gt;</span></div></pre></td></tr></table></figure>
+<p>OK~~源码里注释写的很详细，就不过多描述了。开始打造属于你的ViewGroup吧！</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2016-05-17T15:58:04.000Z" itemprop="dateUpdated">2016-05-17 23:58:04</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2016/05/17/ViewDragHelper用法介绍/" target="_blank" rel="external">http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/&title=《ViewDragHelper——打造你的专属ViewGroup》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/&title=《ViewDragHelper——打造你的专属ViewGroup》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ViewDragHelper——打造你的专属ViewGroup》 — JrDong’s Blog&url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2016/05/11/Material Design控件介绍(二)/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Material Design控件介绍（二）——TabLayout</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2016/06/28/Android-资料整理/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Android--参考资料</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="ViewDragHelper用法介绍" data-title="ViewDragHelper——打造你的专属ViewGroup" data-url="http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/&title=《ViewDragHelper——打造你的专属ViewGroup》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/&title=《ViewDragHelper——打造你的专属ViewGroup》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《ViewDragHelper——打造你的专属ViewGroup》 — JrDong’s Blog&url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2016/05/17/ViewDragHelper用法介绍/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
