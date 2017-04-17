@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ibat.xyz/"/>
-  <updated>2017-04-12T12:31:49.000Z</updated>
+  <updated>2017-04-12T12:32:28.000Z</updated>
   <id>http://ibat.xyz/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://ibat.xyz/2017/04/12/%E8%87%AA%E5%AE%9A%E4%B9%89%E8%87%AA%E9%80%82%E5%BA%94%E5%BC%B9%E5%87%BA%E4%BD%8D%E7%BD%AE%E7%9A%84PopupWindow/"/>
     <id>http://ibat.xyz/2017/04/12/自定义自适应弹出位置的PopupWindow/</id>
     <published>2017-04-12T03:48:04.000Z</published>
-    <updated>2017-04-12T12:31:49.000Z</updated>
+    <updated>2017-04-12T12:32:28.000Z</updated>
     
     <content type="html"><![CDATA[<p>项目地址： <a href="https://github.com/JrDong/FitPopupWindow" target="_blank" rel="external">https://github.com/JrDong/FitPopupWindow</a><br>效果图：<br><img src="/img/popupwindow.gif" alt="效果图"></p>
 <h1 id="简介"><a href="#简介" class="headerlink" title="简介"></a>简介</h1><p>项目是仿照网易新闻或者今日头条的不感兴趣功能。现在很多应用都加入了feed流，对自己不感兴趣的条目可以删除。<br>考虑到两个因素：1.每个item中叉号的位置并不是固定的，所以我们要根据点击的位置来判断弹框气泡的位置。2.list滑动时，当我想点击下面的item，则弹框应该向上弹出，反之亦然，所以要判断弹出的方向。<br>功能实现的话选择PopupWindow来实现。</p>
@@ -489,13 +489,15 @@ public void onCreate(Bundle savedInstanceState) {
     <link href="http://ibat.xyz/2016/06/28/Android-%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/"/>
     <id>http://ibat.xyz/2016/06/28/Android-资料整理/</id>
     <published>2016-06-28T13:29:49.000Z</published>
-    <updated>2017-04-10T07:54:41.000Z</updated>
+    <updated>2017-04-17T07:32:03.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="博客推荐"><a href="#博客推荐" class="headerlink" title="博客推荐:"></a>博客推荐:</h1><p>这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  </p>
 <p>Hongyang:<a><a href="http://zhanghongyang.com" target="_blank" rel="external">http://zhanghongyang.com</a></a><br>郭霖：<a><a href="http://guolin.tech" target="_blank" rel="external">http://guolin.tech</a></a><br>stormzhang:<a><a href="http://stormzhang.com/" target="_blank" rel="external">http://stormzhang.com/</a></a><br>任玉刚:<a><a href="http://blog.csdn.net/singwhatiwanna" target="_blank" rel="external">http://blog.csdn.net/singwhatiwanna</a></a><br>阮一峰:<a><a href="http://ruanyifeng.com" target="_blank" rel="external">http://ruanyifeng.com</a></a><br>codeKK(力推，各种源码解析，开源项目汇总。):<a><a href="http://codekk.com" target="_blank" rel="external">http://codekk.com</a></a><br>Trinea():<a><a href="http://www.trinea.cn/" target="_blank" rel="external">http://www.trinea.cn/</a></a><br>泡在网上的日子:<a><a href="http://www.jcodecraeer.com/" target="_blank" rel="external">http://www.jcodecraeer.com/</a></a>  </p>
-<h1 id="知识点备忘"><a href="#知识点备忘" class="headerlink" title="知识点备忘"></a>知识点备忘</h1><p>遗传算法在自动组卷中的应用：<a><a href="http://www.jianshu.com/p/7fe9d3bb00ac" target="_blank" rel="external">http://www.jianshu.com/p/7fe9d3bb00ac</a></a></p>
-<p>java中的ClassLoader详解：<a><a href="http://blog.csdn.net/briblue/article/details/54973413" target="_blank" rel="external">http://blog.csdn.net/briblue/article/details/54973413</a></a>  </p>
-<p>热修复入门，Andoroid中的ClassLoader详解：<a><a href="http://jaeger.itscoder.com/android/2016/08/27/android-classloader.html" target="_blank" rel="external">http://jaeger.itscoder.com/android/2016/08/27/android-classloader.html</a></a></p>
+<h1 id="知识点备忘"><a href="#知识点备忘" class="headerlink" title="知识点备忘"></a>知识点备忘</h1><p><a href="http://www.jianshu.com/p/7fe9d3bb00ac" target="_blank" rel="external">遗传算法在自动组卷中的应用</a></p>
+<p><a href="http://blog.csdn.net/briblue/article/details/54973413" target="_blank" rel="external">java中的ClassLoader详解</a> </p>
+<p><a href="http://jaeger.itscoder.com/android/2016/08/27/android-classloader.html" target="_blank" rel="external">热修复入门，Andoroid中的ClassLoader详解</a></p>
+<p><a href="http://blog.csdn.net/luoshengyang/article/details/8791064" target="_blank" rel="external">Android应用程序资源管理器（Asset Manager）的创建过程分析</a>  </p>
+<p><a href="http://blog.csdn.net/singwhatiwanna/article/details/24532419" target="_blank" rel="external">Android源码分析-资源加载机制</a></p>
 ]]></content>
     
     <summary type="html">
