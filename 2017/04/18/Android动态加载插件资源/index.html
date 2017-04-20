@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Android动态加载插件资源 | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,插件化">
+    <meta name="description" content="Android动态加载插件资源最近在看app的换肤功能。简单的来说就是动态读取插件apk中的资源，需要进行换肤的控件所用到的资源在主apk和插件apk中各维护了一份，且资源名称相同。插件听起来高大上，但其实就是一个apk文件。所以我们所要做的，就是怎么样能让插件中的资源加载进本地，并且读取到。   Resource的创建在app内部加载资源使用的是context.getResources(),co">
+<meta name="keywords" content="Android,插件化">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Android动态加载插件资源">
+<meta property="og:url" content="http://ibat.xyz/2017/04/18/Android动态加载插件资源/index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="Android动态加载插件资源最近在看app的换肤功能。简单的来说就是动态读取插件apk中的资源，需要进行换肤的控件所用到的资源在主apk和插件apk中各维护了一份，且资源名称相同。插件听起来高大上，但其实就是一个apk文件。所以我们所要做的，就是怎么样能让插件中的资源加载进本地，并且读取到。   Resource的创建在app内部加载资源使用的是context.getResources(),co">
+<meta property="og:image" content="http://ibat.xyz/img/Android动态加载资源1.png">
+<meta property="og:image" content="http://ibat.xyz/img/Android动态加载资源2.png">
+<meta property="og:updated_time" content="2017-04-20T08:01:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Android动态加载插件资源">
+<meta name="twitter:description" content="Android动态加载插件资源最近在看app的换肤功能。简单的来说就是动态读取插件apk中的资源，需要进行换肤的控件所用到的资源在主apk和插件apk中各维护了一份，且资源名称相同。插件听起来高大上，但其实就是一个apk文件。所以我们所要做的，就是怎么样能让插件中的资源加载进本地，并且读取到。   Resource的创建在app内部加载资源使用的是context.getResources(),co">
+<meta name="twitter:image" content="http://ibat.xyz/img/Android动态加载资源1.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/todo"  >
+                <i class="icon icon-lg icon-link"></i>
+                TODO
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Android动态加载插件资源</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Android动态加载插件资源</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-04-18T08:30:28.000Z" itemprop="datePublished" class="page-time">
+  2017-04-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Android动态加载插件资源"><span class="post-toc-number">1.</span> <span class="post-toc-text">Android动态加载插件资源</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Resource的创建"><span class="post-toc-number">2.</span> <span class="post-toc-text">Resource的创建</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Demo"><span class="post-toc-number">3.</span> <span class="post-toc-text">Demo</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#参考资料"><span class="post-toc-number">4.</span> <span class="post-toc-text">参考资料</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Android动态加载插件资源"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Android动态加载插件资源</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-04-18 16:30:28" datetime="2017-04-18T08:30:28.000Z"  itemprop="datePublished">2017-04-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Android动态加载插件资源"><a href="#Android动态加载插件资源" class="headerlink" title="Android动态加载插件资源"></a>Android动态加载插件资源</h1><p>最近在看app的换肤功能。简单的来说就是动态读取插件apk中的资源，需要进行换肤的控件所用到的资源在主apk和插件apk中各维护了一份，且资源名称相同。<br>插件听起来高大上，但其实就是一个apk文件。所以我们所要做的，就是怎么样能让插件中的资源加载进本地，并且读取到。  </p>
+<h1 id="Resource的创建"><a href="#Resource的创建" class="headerlink" title="Resource的创建"></a>Resource的创建</h1><p>在app内部加载资源使用的是context.getResources(),context中getResources()方法是一个抽象方法，具体的实现在ContextImpl类中。  </p>
+<pre><code>Resources resources = packageInfo.getResources(mainThread);
+</code></pre><p>参数packageInfo指向的是一个LoadedApk对象，这个LoadedApk对象描述的是当前正在启动的Activity组所属的Apk。  </p>
+<p>进入到LoadedApk的getResources(mainThread)方法  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Resources <span class="title">getResources</span><span class="params">(ActivityThread mainThread)</span> </span>&#123;</div><div class="line">        <span class="keyword">if</span> (mResources == <span class="keyword">null</span>) &#123;</div><div class="line">            mResources = mainThread.getTopLevelResources(mResDir, mSplitResDirs, mOverlayDirs,</div><div class="line">                    mApplicationInfo.sharedLibraryFiles, Display.DEFAULT_DISPLAY, <span class="keyword">this</span>);</div><div class="line">        &#125;</div><div class="line">        <span class="keyword">return</span> mResources;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>LoadedApk类的成员函数getResources首先检查其成员变量mResources的值是否等于null。如果不等于的话，那么就会将它所指向的一个Resources对象返回给调用者，否则的话，就会调用参数mainThread的成员函数getTopLevelResources来获得这个Resources对象，然后再返回给调用者。 mainThread指向一个ActivityThread对象。</p>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div></pre></td><td class="code"><pre><div class="line">public final class ActivityThread &#123;  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    final HashMap&lt;ResourcesKey, WeakReference&lt;Resources&gt; &gt; mActiveResources  </div><div class="line">            = new HashMap&lt;ResourcesKey, WeakReference&lt;Resources&gt; &gt;();  </div><div class="line">    ......  </div><div class="line">  </div><div class="line">    Resources getTopLevelResources(String resDir, CompatibilityInfo compInfo) &#123;  </div><div class="line">        ResourcesKey key = new ResourcesKey(resDir, compInfo.applicationScale);  </div><div class="line">        Resources r;  </div><div class="line">        synchronized (mPackages) &#123;  </div><div class="line">            ......  </div><div class="line">  </div><div class="line">            WeakReference&lt;Resources&gt; wr = mActiveResources.get(key);  </div><div class="line">            r = wr != null ? wr.get() : null;  </div><div class="line">            ......  </div><div class="line">  </div><div class="line">            if (r != null &amp;&amp; r.getAssets().isUpToDate()) &#123;  </div><div class="line">                ......  </div><div class="line">                return r;  </div><div class="line">            &#125;  </div><div class="line">        &#125;  </div><div class="line">  </div><div class="line">        ......  </div><div class="line">  </div><div class="line">        AssetManager assets = new AssetManager();  </div><div class="line">        if (assets.addAssetPath(resDir) == 0) &#123;  </div><div class="line">            return null;  </div><div class="line">        &#125;  </div><div class="line">        ......  </div><div class="line">  </div><div class="line">        r = new Resources(assets, metrics, getConfiguration(), compInfo);  </div><div class="line">        ......  </div><div class="line">  </div><div class="line">        synchronized (mPackages) &#123;  </div><div class="line">            WeakReference&lt;Resources&gt; wr = mActiveResources.get(key);  </div><div class="line">            Resources existing = wr != null ? wr.get() : null;  </div><div class="line">            if (existing != null &amp;&amp; existing.getAssets().isUpToDate()) &#123;  </div><div class="line">                // Someone else already created the resources while we were  </div><div class="line">                // unlocked; go ahead and use theirs.  </div><div class="line">                r.getAssets().close();  </div><div class="line">                return existing;  </div><div class="line">            &#125;  </div><div class="line">  </div><div class="line">            // XXX need to remove entries when weak references go away  </div><div class="line">            mActiveResources.put(key, new WeakReference&lt;Resources&gt;(r));  </div><div class="line">            return r;  </div><div class="line">        &#125;  </div><div class="line">    &#125;  </div><div class="line">    ...... </div><div class="line">&#125; </div><div class="line">```  </div><div class="line"></div><div class="line">在其中创建了AssertManager对象，assets.addAssetPath(resDir)这句话的意思是把资源目录里的资源都加载到AssetManager对象中	如果我们把一个未安装的apk的路径传给这个方法，那么apk中的资源就被加载到AssetManager对象里面了。但它是一个隐藏方法，需要反射调用。有了AssertManager对象就能创建Resources对象了。  </div><div class="line"></div><div class="line">	</div><div class="line"># AssetManager介绍  </div><div class="line">&gt; Provides access to an application's raw asset files; see Resources for the way most applications will want to retrieve their resource data. This class presents a lower-level API that allows you to open and read raw files that have been bundled with the application as a simple stream of bytes.  </div><div class="line"></div><div class="line">AssetManager提供了应用的原始资源，通过它可以让应用程序检索他们的资源数据。  </div><div class="line">在ResourcesImpl类中存在AssetManager的引用mAsset.举个例子看下Resources怎么通过AssetManager加载数据.看下Resources的getString()方法  </div><div class="line"></div><div class="line">```java</div><div class="line">public String getString(@StringRes int id) throws NotFoundException &#123;</div><div class="line">        return getText(id).toString();</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    </div><div class="line">public CharSequence getText(@StringRes int id) throws NotFoundException &#123;</div><div class="line">        CharSequence res = mResourcesImpl.getAssets().getResourceText(id);</div><div class="line">        if (res != null) &#123;</div><div class="line">            return res;</div><div class="line">        &#125;</div><div class="line">        throw new NotFoundException("String resource ID #0x"</div><div class="line">                                    + Integer.toHexString(id));</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>Resources将资源id传给了AssetManager的getResourceText方法。从AssetManager中返回了资源数据。有兴趣大家可以深入研究一下，这里不做过多介绍。  接下来我们写一个小demo看看更换皮肤包的简单实现。  </p>
+<h1 id="Demo"><a href="#Demo" class="headerlink" title="Demo"></a>Demo</h1><p>首先如果只加载本地皮肤包(带有皮肤资源的apk)的时候，我们将皮肤包放入assets文件夹内，再在初始化的时候加载进sdcard中。如果要下载皮肤包，则直接下载进sdcard指定目录中。我们现在只做本地皮肤包的更换。  </p>
+<p>先进行初始化的操作：  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div></pre></td><td class="code"><pre><div class="line"><span class="comment">//先定义全局的名称和存储路径</span></div><div class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String APK_NAME = <span class="string">"sample.apk"</span>;</div><div class="line"> <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> String APK_DIR = Environment.</div><div class="line">            getExternalStorageDirectory() + File.separator + APK_NAME;</div><div class="line">	</div><div class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(Context context)</span> </span>&#123;</div><div class="line"></div><div class="line">        File pluginFile = <span class="keyword">new</span> File(APK_DIR);</div><div class="line">        <span class="keyword">if</span> (pluginFile.exists()) &#123;</div><div class="line">            pluginFile.delete();</div><div class="line">        &#125;</div><div class="line"></div><div class="line">        InputStream is = <span class="keyword">null</span>;</div><div class="line">        FileOutputStream fos = <span class="keyword">null</span>;</div><div class="line"></div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">            is = context.getAssets().open(APK_NAME);</div><div class="line">            fos = <span class="keyword">new</span> FileOutputStream(APK_DIR);</div><div class="line">            <span class="keyword">int</span> bytes;</div><div class="line">            <span class="keyword">byte</span>[] byteArr = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span> * <span class="number">4</span>];</div><div class="line">            <span class="keyword">while</span> ((bytes = is.read(byteArr, <span class="number">0</span>, <span class="number">1024</span> * <span class="number">4</span>)) != -<span class="number">1</span>) &#123;</div><div class="line">                fos.write(byteArr, <span class="number">0</span>, bytes);</div><div class="line">            &#125;</div><div class="line">			PackageManager mPm = context.getPackageManager();</div><div class="line">        	PackageInfo mInfo = mPm.getPackageArchiveInfo(APK_DIR, PackageManager.GET_ACTIVITIES);</div><div class="line">        	mSkinPackageName = mInfo.packageName;</div><div class="line"></div><div class="line">            AssetManager assetManager = AssetManager.class.newInstance();</div><div class="line">            Method method = assetManager.getClass().getMethod(<span class="string">"addAssetPath"</span>, String.class);</div><div class="line">            method.invoke(assetManager, pluginFile.getAbsolutePath());</div><div class="line"></div><div class="line">            mSuperResources = context.getResources();</div><div class="line">            mResources = <span class="keyword">new</span> Resources(assetManager, mSuperResources.getDisplayMetrics(),</div><div class="line">                    mSuperResources.getConfiguration());</div><div class="line"></div><div class="line">        &#125; <span class="keyword">catch</span> (Exception e) &#123;</div><div class="line">            e.printStackTrace();</div><div class="line">        &#125; <span class="keyword">finally</span> &#123;</div><div class="line">            <span class="keyword">try</span> &#123;</div><div class="line">                <span class="keyword">if</span> (is != <span class="keyword">null</span>) &#123;</div><div class="line">                    is.close();</div><div class="line">                &#125;</div><div class="line">                <span class="keyword">if</span> (fos != <span class="keyword">null</span>) &#123;</div><div class="line">                    fos.close();</div><div class="line">                &#125;</div><div class="line">            &#125; <span class="keyword">catch</span> (IOException e) &#123;</div><div class="line">                e.printStackTrace();</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div></pre></td></tr></table></figure>
+<p>读取assets下的sample.apk，将其放进sdcard中。通过反射创建AssetManager,并调用addAssetPath方法，将apk的路径传入AssetManager中。再new 一个Resources对象，传入上步生成的AssetManager对象，这时就拿到了皮肤包apk的Resources对象。初始化完成。  </p>
+<p>接下来在布局中放入一个TextView,动态替换TextView控件用到的资源。  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;TextView</div><div class="line">        android:id=<span class="string">"@+id/tv_name"</span></div><div class="line">        android:layout_width=<span class="string">"wrap_content"</span></div><div class="line">        android:layout_height=<span class="string">"wrap_content"</span></div><div class="line">        android:text=<span class="string">"@string/app_name"</span></div><div class="line">        android:textSize=<span class="string">"20sp"</span></div><div class="line">        android:layout_centerHorizontal=<span class="string">"true"</span></div><div class="line">        android:textColor=<span class="string">"@color/colorPrimaryDark"</span></div><div class="line">        android:background=<span class="string">"@mipmap/ic_launcher"</span></div><div class="line">        /&gt;</div></pre></td></tr></table></figure>
+<p>代码实现</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div></pre></td><td class="code"><pre><div class="line">btnLoad = (Button) findViewById(R.id.btn_load);</div><div class="line">        tvName = (TextView) findViewById(R.id.tv_name);</div><div class="line">        btnLoad.setOnClickListener(<span class="keyword">new</span> View.OnClickListener() &#123;</div><div class="line">            <span class="meta">@Override</span></div><div class="line">            <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onClick</span><span class="params">(View v)</span> </span>&#123;</div><div class="line"></div><div class="line">                tvName.setBackground(ResourceManager.getInstance()</div><div class="line">                        .loadMipmapResource(R.mipmap.ic_launcher));</div><div class="line"></div><div class="line">                tvName.setText(ResourceManager.getInstance()</div><div class="line">                        .loadStringResource(R.string.app_name));</div><div class="line"></div><div class="line">                tvName.setTextColor(ResourceManager.getInstance()</div><div class="line">                        .loadColorResource(R.color.colorPrimaryDark));</div><div class="line"></div><div class="line">            &#125;</div><div class="line">        &#125;);</div></pre></td></tr></table></figure>
+<p>ok,这时候我们看下ResourceManager.getInstance().loadMipmapResource(R.mipmap.ic_launcher)的实现；</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">public</span> Drawable <span class="title">loadMipmapResource</span><span class="params">(<span class="keyword">int</span> resId)</span></span>&#123;</div><div class="line">       <span class="keyword">return</span> mResources.getDrawable(findTrueResId(resId,<span class="string">"mipmap"</span>));</div><div class="line">&#125;</div><div class="line"></div><div class="line">   <span class="comment">/**</span></div><div class="line">    * 找到插件app中rescource的真正id</div><div class="line">    * <span class="doctag">@param</span> resId 主app中的资源id</div><div class="line">    */</div><div class="line">   <span class="function"><span class="keyword">private</span> <span class="keyword">int</span> <span class="title">findTrueResId</span><span class="params">(<span class="keyword">int</span> resId,String defType)</span></span>&#123;</div><div class="line">       String entryName = mSuperResources.getResourceEntryName(resId);</div><div class="line">       Log.e(TAG, <span class="string">"entryName "</span> + entryName);</div><div class="line">       String resourceName = mSuperResources.getResourceName(resId);</div><div class="line">       Log.e(TAG, <span class="string">"resourceName "</span> + resourceName);</div><div class="line">       <span class="keyword">int</span> trueResId = mResources.getIdentifier(entryName, defType,mSkinPackageName);</div><div class="line">       Log.e(TAG, <span class="string">"trueResId "</span> + trueResId);</div><div class="line"></div><div class="line">       <span class="keyword">return</span> trueResId;</div><div class="line">   &#125;</div></pre></td></tr></table></figure>
+<p>上面的代码,mSuperResources是当前apk的Resources对象，通过getResourceEntryName(resId)，拿到resId对应的名称.<br>还有一个方法，getResourceName，这个和getResourceEntryName的区别在于，getResourceName拿到的全名包括包名，getResourceEntryName拿到的是简短名称.这里我们使用getResourceEntryName方法。<br>调用皮肤包的Resources对象的getIdentifier方法，会返回资源在皮肤包中的真实id，将真实id拿到后，就可以调用getDrawable（trueId）来加载资源了。来看下打印出来的日志。  </p>
+<pre><code>xyz.ibat.pluginsloader E/DONG: entryName ic_launcher
+xyz.ibat.pluginsloader E/DONG: resourceName xyz.ibat.pluginsloader:mipmap/ic_launcher
+xyz.ibat.pluginsloader E/DONG: trueResId 2130903047
+</code></pre><p>加载string和color和上述方法原理相同。我们来看下最终效果。  </p>
+<p>换肤前：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/img/Android动态加载资源1.png" alt="换肤前" title="">
+                </div>
+                <div class="image-caption">换肤前</div>
+            </figure>  
+<p>换肤后：  </p>
+<p><img src="/img/Android动态加载资源2.png" alt="换肤后">  </p>
+<h1 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h1><p><a href="http://blog.csdn.net/luoshengyang/article/details/8791064" target="_blank" rel="external">Android应用程序资源管理器（Asset Manager）的创建过程分析</a><br><a href="http://blog.csdn.net/singwhatiwanna/article/details/24532419" target="_blank" rel="external">Android源码分析-资源加载机制</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2017-04-20T08:01:25.000Z" itemprop="dateUpdated">2017-04-20 16:01:25</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2017/04/18/Android动态加载插件资源/" target="_blank" rel="external">http://ibat.xyz/2017/04/18/Android动态加载插件资源/</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/插件化/">插件化</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/&title=《Android动态加载插件资源》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/&title=《Android动态加载插件资源》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2017/04/18/Android动态加载插件资源/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android动态加载插件资源》 — JrDong’s Blog&url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/12/自定义自适应弹出位置的PopupWindow/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">自定义自适应弹出位置的PopupWindow</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="Android动态加载插件资源" data-title="Android动态加载插件资源" data-url="http://ibat.xyz/2017/04/18/Android动态加载插件资源/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/&title=《Android动态加载插件资源》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/&title=《Android动态加载插件资源》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2017/04/18/Android动态加载插件资源/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Android动态加载插件资源》 — JrDong’s Blog&url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2017/04/18/Android动态加载插件资源/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2017/04/18/Android动态加载插件资源/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
