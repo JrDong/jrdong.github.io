@@ -554,7 +554,7 @@ public void onCreate(Bundle savedInstanceState) {
     <link href="http://ibat.xyz/2016/06/28/Android-%E8%B5%84%E6%96%99%E6%95%B4%E7%90%86/"/>
     <id>http://ibat.xyz/2016/06/28/Android-资料整理/</id>
     <published>2016-06-28T13:29:49.000Z</published>
-    <updated>2017-05-19T03:03:06.000Z</updated>
+    <updated>2017-05-24T03:19:00.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="博客推荐"><a href="#博客推荐" class="headerlink" title="博客推荐:"></a>博客推荐:</h1><p>这些都是我在学习Android的时候经常会看的一些博客，希望有一天能像这些大神一样牛逼。  </p>
 <p>Hongyang:<a><a href="http://zhanghongyang.com" target="_blank" rel="external">http://zhanghongyang.com</a></a><br>郭霖：<a><a href="http://guolin.tech" target="_blank" rel="external">http://guolin.tech</a></a><br>stormzhang:<a><a href="http://stormzhang.com/" target="_blank" rel="external">http://stormzhang.com/</a></a><br>任玉刚:<a><a href="http://blog.csdn.net/singwhatiwanna" target="_blank" rel="external">http://blog.csdn.net/singwhatiwanna</a></a><br>阮一峰:<a><a href="http://ruanyifeng.com" target="_blank" rel="external">http://ruanyifeng.com</a></a><br>codeKK(力推，各种源码解析，开源项目汇总。):<a><a href="http://codekk.com" target="_blank" rel="external">http://codekk.com</a></a><br>Trinea():<a><a href="http://www.trinea.cn/" target="_blank" rel="external">http://www.trinea.cn/</a></a><br>泡在网上的日子:<a><a href="http://www.jcodecraeer.com/" target="_blank" rel="external">http://www.jcodecraeer.com/</a></a>  </p>
@@ -562,7 +562,8 @@ public void onCreate(Bundle savedInstanceState) {
 <p><a href="http://blog.csdn.net/briblue/article/details/54973413" target="_blank" rel="external">java中的ClassLoader详解</a> </p>
 <p><a href="http://jaeger.itscoder.com/android/2016/08/27/android-classloader.html" target="_blank" rel="external">热修复入门，Andoroid中的ClassLoader详解</a></p>
 <p><a href="http://blog.csdn.net/luoshengyang/article/details/8791064" target="_blank" rel="external">Android应用程序资源管理器（Asset Manager）的创建过程分析</a>  </p>
-<p><a href="http://blog.csdn.net/singwhatiwanna/article/details/24532419" target="_blank" rel="external">Android源码分析-资源加载机制</a>  </p>
+<p><a href="http://blog.csdn.net/singwhatiwanna/article/details/24532419" target="_blank" rel="external">Android源码分析-资源加载机制</a>    </p>
+<p><a href="http://www.jcodecraeer.com/a/anzhuokaifa/androidkaifa/2017/0523/7963.html" target="_blank" rel="external">App开发架构指南（谷歌官方文档译文）</a></p>
 <h1 id="Kotlin相关"><a href="#Kotlin相关" class="headerlink" title="Kotlin相关"></a>Kotlin相关</h1><p><a href="https://android-developers.googleblog.com/2017/05/android-announces-support-for-kotlin.html" target="_blank" rel="external">Android Announces Support for Kotlin</a><br><a href="https://www.kotlincn.net/docs/reference/" target="_blank" rel="external">Kotlin语言中文站</a><br><a href="https://www.gitbook.com/book/hltj/kotlin-reference-chinese/details" target="_blank" rel="external">Kotlin官方参考文档 中文版</a><br><a href="https://github.com/wangjiegulu/kotlin-for-android-developers-zh/blob/master/README.md" target="_blank" rel="external">《Kotlin for android developers》中文版翻译</a><br><a href="https://kymjs.com/column/kotlin.html" target="_blank" rel="external">张涛-开源实验室</a>  </p>
 ]]></content>
     
