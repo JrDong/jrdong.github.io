@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>Drawable加载流程及Drawable mutations(上) | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,Drawable">
+    <meta name="description" content="Drawable mutations有没有遇到过这样一种情况，我们要加载同一资源到两个ImageView，但需要给其中一个资源改变颜色或者透明度。如下面的代码   123456789ImageView imageView1 = (ImageView) view.findViewById(R.id.imageview);   ImageView imageView2 = (ImageView) vi">
+<meta name="keywords" content="Android,Drawable">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Drawable加载流程及Drawable mutations(上)">
+<meta property="og:url" content="http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="Drawable mutations有没有遇到过这样一种情况，我们要加载同一资源到两个ImageView，但需要给其中一个资源改变颜色或者透明度。如下面的代码   123456789ImageView imageView1 = (ImageView) view.findViewById(R.id.imageview);   ImageView imageView2 = (ImageView) vi">
+<meta property="og:image" content="http://ibat.xyz/img/drawable_mutate1.png">
+<meta property="og:image" content="http://ibat.xyz/img/drawable_mutate2.png">
+<meta property="og:image" content="http://ibat.xyz/img/drawable_mutate3.png">
+<meta property="og:updated_time" content="2017-07-03T14:55:33.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Drawable加载流程及Drawable mutations(上)">
+<meta name="twitter:description" content="Drawable mutations有没有遇到过这样一种情况，我们要加载同一资源到两个ImageView，但需要给其中一个资源改变颜色或者透明度。如下面的代码   123456789ImageView imageView1 = (ImageView) view.findViewById(R.id.imageview);   ImageView imageView2 = (ImageView) vi">
+<meta name="twitter:image" content="http://ibat.xyz/img/drawable_mutate1.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/todo"  >
+                <i class="icon icon-lg icon-link"></i>
+                TODO
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Drawable加载流程及Drawable mutations(上)</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="Search">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Drawable加载流程及Drawable mutations(上)</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-06-14T15:19:06.000Z" itemprop="datePublished" class="page-time">
+  2017-06-14
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Drawable-mutations"><span class="post-toc-number">1.</span> <span class="post-toc-text">Drawable mutations</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Drawable加载流程及Drawable mutations "
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Drawable加载流程及Drawable mutations(上)</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-06-14 23:19:06" datetime="2017-06-14T15:19:06.000Z"  itemprop="datePublished">2017-06-14</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="Drawable-mutations"><a href="#Drawable-mutations" class="headerlink" title="Drawable mutations"></a>Drawable mutations</h1><p>有没有遇到过这样一种情况，我们要加载同一资源到两个ImageView，但需要给其中一个资源改变颜色或者透明度。如下面的代码  </p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ImageView imageView1 = (ImageView) view.findViewById(R.id.imageview);</div><div class="line">   ImageView imageView2 = (ImageView) view.findViewById(R.id.imageview2);</div><div class="line"></div><div class="line">   Drawable drawable = getResources().getDrawable(R.mipmap.ic_launcher);</div><div class="line">   drawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);</div><div class="line">imageView.setImageDrawable(drawable);</div><div class="line"></div><div class="line">Drawable drawable1 = getResources().getDrawable(R.mipmap.ic_launcher);</div><div class="line">imageView2.setImageDrawable(drawable1);</div></pre></td></tr></table></figure>
+<p>我们给imageView1设置ColorFilter改变一下图标的颜色，imageview2保持不变。这样会发生什么呢，看下面的图:  </p>
+<p><img src="/img/drawable_mutate1.png" alt="mutate(1)">  </p>
+<p>这时候奇怪的事情发生了，两个ImageView都被改变了颜色。这是因为Drawable使用在Android系统中使用范围比较广，系统对此作了优化，同一资源的drawable共享一个状态，叫做ConstantState.例如,上面的R.mipmap.ic_launcher,每次新建一个drawable都是一个不同的drawable实例,但他们共享一个状态,这个状态中包含bitmap image,所以所有的R.mipmap.ic_launcher都共享一个bitmap,这就是两个ImageView都改变颜色原因。 </p>
+<blockquote>
+<p>Because drawables are used so extensively throughout the system, Android optimizes them when they are loaded from resources. For instance, every time you create a Button, a new drawable is loaded from the framework resources (android.R.drawable.btn_default). This means all buttons across all the apps use a different drawable instance as their background. However, all these drawables share a common state, called the “constant state.” The content of this state varies according to the type of drawable you are using, but it usually contains all the properties that can be defined by a resource. In the case of a button, the constant state contains a bitmap image. This way, all buttons across all applications share the same bitmap, which saves a lot of memory.(摘抄自<a href="https://android-developers.googleblog.com/2009/05/drawable-mutations.html" target="_blank" rel="external">Android Developers Blog</a>)。如下图所示    </p>
+</blockquote>
+<p><img src="/img/drawable_mutate2.png" alt="mutate(2)"></p>
+<p>但有没有办法解决呢，Drawable提供了一个mutate方法，我们来看下mutate方法的注释  </p>
+<blockquote>
+<p>Make this drawable mutable. This operation cannot be reversed. A mutable drawable is guaranteed to not share its state with any other drawable. This is especially useful when you need to modify properties of drawables loaded from resources. By default, all drawables instances loaded from the same resource share a common state; if you modify the state of one instance, all the other instances will receive the same modification. Calling this method on a mutable Drawable will have no effect.</p>
+</blockquote>
+<p>mutate不知道怎么翻译合适，姑且叫做可变的吧。这个mutate方法使得这个drawable变成可变的，这个操作不可逆转。调用了mutate方法，使得该drawable不和其他drawable共享状态。<br>我们来看下这个mutate的实现，发现在Drawable源码中，mutate方法只是返回了他自身。那我们来看下drawable子类有没有对该方法重写。我们找到BitmapDrawable  </p>
+<pre><code class="java"> <span class="meta">@Override</span>
+<span class="function"><span class="keyword">public</span> Drawable <span class="title">mutate</span><span class="params">()</span> </span>{
+    <span class="keyword">if</span> (!mMutated &amp;&amp; <span class="keyword">super</span>.mutate() == <span class="keyword">this</span>) {
+        mBitmapState = <span class="keyword">new</span> BitmapState(mBitmapState);
+        mMutated = <span class="keyword">true</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">this</span>;
+}
+</code></pre>
+<p>如果没有调用过mutate方法，会新建一个BitmapState，再将mMutated置为true。这样相当于做了一次状态的拷贝，就不会与其他drawable共享状态了。<br>接下来我们修改下上面的代码  </p>
+<pre><code class="java">ImageView imageView1 = (ImageView) view.findViewById(R.id.imageview);
+ImageView imageView2 = (ImageView) view.findViewById(R.id.imageview2);
+
+Drawable drawable = getResources().getDrawable(R.mipmap.ic_launcher).mutate();
+drawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);
+imageView.setImageDrawable(drawable);
+
+Drawable drawable1 = getResources().getDrawable(R.mipmap.ic_launcher);
+imageView2.setImageDrawable(drawable1);
+</code></pre>
+<p>运行效果:  </p>
+<p><img src="/img/drawable_mutate3.png" alt="mutate3"><br>这次两个ImageView不相同了，下一节我们来学习下Drawable的加载机制，看Resources类是怎么加载drawable的。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    Last updated: <time datetime="2017-07-03T14:55:33.000Z" itemprop="dateUpdated">2017-07-03 22:55:33</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2017/06/14/Drawable加载流程及Drawable mutations /" target="_blank" rel="external">http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Android/">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Drawable/">Drawable</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /&title=《Drawable加载流程及Drawable mutations(上)》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /&title=《Drawable加载流程及Drawable mutations(上)》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Drawable加载流程及Drawable mutations(上)》 — JrDong’s Blog&url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/04/18/Android动态加载插件资源/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Android动态加载插件资源</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="Drawable加载流程及Drawable mutations " data-title="Drawable加载流程及Drawable mutations(上)" data-url="http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>This blog is licensed under a <a rel="license" href="https://creativecommons.org/licenses/by/4.0/">Creative Commons Attribution 4.0 International License</a>.</span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2017</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /&title=《Drawable加载流程及Drawable mutations(上)》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /&title=《Drawable加载流程及Drawable mutations(上)》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Drawable加载流程及Drawable mutations(上)》 — JrDong’s Blog&url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
