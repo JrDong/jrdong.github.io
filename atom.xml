@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ibat.xyz/"/>
-  <updated>2017-07-24T10:27:48.000Z</updated>
+  <updated>2017-07-24T12:48:19.000Z</updated>
   <id>http://ibat.xyz/</id>
   
   <author>
@@ -20,7 +20,7 @@
     <link href="http://ibat.xyz/2017/07/24/Android-setContentView%E4%B8%8EfindViewById%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
     <id>http://ibat.xyz/2017/07/24/Android-setContentView与findViewById源码解析/</id>
     <published>2017-07-24T07:29:28.000Z</published>
-    <updated>2017-07-24T10:27:48.000Z</updated>
+    <updated>2017-07-24T12:48:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>当我们给Activity设置布局时，都是直接调用setContentView来完成的，但具体Android是怎么把布局加载到window，又是怎么通过findViewById获取view对象的，我们可能并没有太关心，下面就结合源码来分析下这个过程。</p>
 <h1 id="Android-setContentView"><a href="#Android-setContentView" class="headerlink" title="Android setContentView"></a>Android setContentView</h1><p>打开Activity的源码发现，setContentView有三个重载方法，  </p>
@@ -66,7 +66,7 @@
 </code></pre>
 <p> 额，空空如也。但是我们可以在自己的Activity中重写这个回调，用于在setContentView之后做一些事情，比如findViewById,但貌似实际场景也不需要。。。<br> 好了，现在我们回到上面提到的installDecor()方法，好长，我们捡重要的看吧。  </p>
 <pre><code class="java"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>{
-              <span class="comment">//初始化DectorView</span>
+              <span class="comment">//初始化decorView</span>
             <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) {
                 mDecor = generateDecor();
                 mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
@@ -88,8 +88,8 @@
           <span class="keyword">return</span> <span class="keyword">new</span> DecorView(getContext(), -<span class="number">1</span>);
     }
 </code></pre>
-<p>只是单纯的new了一个DecorView实例。这个DecorView是什么鬼。其实它是PhoneWindow的一个内部类，是整个window界面最顶层的view。包含ActionBar,内容块等。好了，现在我们缕一下Window,PhoneWindow，DectorView的关系  </p>
-<p>1.Window类是一个抽象类，提供了绘制窗口的一组通用API。可以将之理解为一个载体，各种View在这个载体上显示。<br>2.PhoneWindow是Window的一个子类，是Window的具体实现，包含一个内部类DectorView,PhoneWindow是将DectorView进行了一定包装，并提供一些方法用于操作窗口。<br>3。DectorView继承自FrameLayout,是窗口的根view。  </p>
+<p>只是单纯的new了一个DecorView实例。这个DecorView是什么鬼。其实它是PhoneWindow的一个内部类，是整个window界面最顶层的view。包含ActionBar,内容块等。好了，现在我们缕一下Window,PhoneWindow，decorView的关系  </p>
+<p>1.Window类是一个抽象类，提供了绘制窗口的一组通用API。可以将之理解为一个载体，各种View在这个载体上显示。<br>2.PhoneWindow是Window的一个子类，是Window的具体实现，包含一个内部类DecorView,PhoneWindow是将decorView进行了一定包装，并提供一些方法用于操作窗口。<br>3。DecorView继承自FrameLayout,是窗口的根view。  </p>
 <p>好了，接着看mContentParent的初始化，generateLayout(mDecor).这里传入了上一部初始化好的DecorView. 又是一个长方法，我们还是挑出重要的部分。   </p>
 <pre><code class="java"><span class="function"><span class="keyword">protected</span> ViewGroup <span class="title">generateLayout</span><span class="params">(DecorView decor)</span> </span>{
         <span class="comment">// Apply data from current theme.</span>
@@ -146,7 +146,27 @@
 </code></pre>
 <p>来看下去处标题栏后的视图树  </p>
 <p><img src="/img/setContentView1.png" alt="setContentView"> </p>
-<p>所以installDecor主要是初始化了PhoneWindow中的DecorView.和contentParent,之后在setContentView()中通过mLayoutInflater.inflate(layoutResID, mContentParent);将layoutResId,add到初始化好的contentParent中。  </p>
+<p>所以installDecor主要是初始化了PhoneWindow中的DecorView.和contentParent,之后在setContentView()中通过mLayoutInflater.inflate(layoutResID, mContentParent);将layoutResId,add到初始化好的contentParent中。<br>大家是否好奇状态栏怎么被加载进DecorView的，我们来看下DecorView中的updateColorViewInt方法  </p>
+<pre><code class="java"><span class="function"><span class="keyword">private</span> View <span class="title">updateColorViewInt</span><span class="params">(View view, <span class="keyword">int</span> sysUiVis, <span class="keyword">int</span> systemUiHideFlag,
+            <span class="keyword">int</span> translucentFlag, <span class="keyword">int</span> color, <span class="keyword">int</span> height, <span class="keyword">int</span> verticalGravity,
+            String transitionName, <span class="keyword">int</span> id, <span class="keyword">boolean</span> hiddenByWindowFlag)</span> </span>{
+          ......
+        <span class="keyword">if</span> (view == <span class="keyword">null</span>) {
+            <span class="keyword">if</span> (show) {
+                view = <span class="keyword">new</span> View(mContext);
+                view.setBackgroundColor(color);
+                view.setTransitionName(transitionName);
+                view.setId(id);
+                addView(view, <span class="keyword">new</span> LayoutParams(LayoutParams.MATCH_PARENT, height,
+                        Gravity.START | verticalGravity));
+            }
+        } <span class="keyword">else</span> {
+           ......
+               }
+        <span class="keyword">return</span> view;
+    }
+</code></pre>
+<p>可以看到直接new了一个view，这个view就是状态栏，然后将状态栏添加到了DecorView,其实这个状态栏只是一个单纯的占位view。被updateColorViews方法调用，比如当我们调用setStatusBarColor时就是调用了updateColorViews这个方法。这里先不做过多介绍。</p>
 <h1 id="findViewById"><a href="#findViewById" class="headerlink" title="findViewById"></a>findViewById</h1><p>那么将layout添加进decorView中后，我们是怎么通过findViewById找到View的呢？<br>看下Activity的findViewById方法  </p>
 <pre><code class="java"><span class="comment">/**
  * Finds a view that was identified by the id attribute from the XML that
