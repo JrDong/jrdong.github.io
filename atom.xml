@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ibat.xyz/"/>
-  <updated>2017-07-03T14:55:33.000Z</updated>
+  <updated>2017-07-24T06:04:23.000Z</updated>
   <id>http://ibat.xyz/</id>
   
   <author>
@@ -16,11 +16,11 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Drawable加载流程及Drawable mutations(上)</title>
-    <link href="http://ibat.xyz/2017/06/14/Drawable%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B%E5%8F%8ADrawable%20mutations%20/"/>
-    <id>http://ibat.xyz/2017/06/14/Drawable加载流程及Drawable mutations /</id>
+    <title>Drawable mutations解析</title>
+    <link href="http://ibat.xyz/2017/06/14/Drawable%20mutations%E8%A7%A3%E6%9E%90/"/>
+    <id>http://ibat.xyz/2017/06/14/Drawable mutations解析/</id>
     <published>2017-06-14T15:19:06.000Z</published>
-    <updated>2017-07-03T14:55:33.000Z</updated>
+    <updated>2017-07-24T06:04:23.000Z</updated>
     
     <content type="html"><![CDATA[<h1 id="Drawable-mutations"><a href="#Drawable-mutations" class="headerlink" title="Drawable mutations"></a>Drawable mutations</h1><p>有没有遇到过这样一种情况，我们要加载同一资源到两个ImageView，但需要给其中一个资源改变颜色或者透明度。如下面的代码  </p>
 <figure class="highlight java"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div></pre></td><td class="code"><pre><div class="line">ImageView imageView1 = (ImageView) view.findViewById(R.id.imageview);</div><div class="line">   ImageView imageView2 = (ImageView) view.findViewById(R.id.imageview2);</div><div class="line"></div><div class="line">   Drawable drawable = getResources().getDrawable(R.mipmap.ic_launcher);</div><div class="line">   drawable.setColorFilter(Color.RED, PorterDuff.Mode.SRC_ATOP);</div><div class="line">imageView.setImageDrawable(drawable);</div><div class="line"></div><div class="line">Drawable drawable1 = getResources().getDrawable(R.mipmap.ic_launcher);</div><div class="line">imageView2.setImageDrawable(drawable1);</div></pre></td></tr></table></figure>
@@ -57,7 +57,7 @@ Drawable drawable1 = getResources().getDrawable(R.mipmap.ic_launcher);
 imageView2.setImageDrawable(drawable1);
 </code></pre>
 <p>运行效果:  </p>
-<p><img src="/img/drawable_mutate3.png" alt="mutate3"><br>这次两个ImageView不相同了，下一节我们来学习下Drawable的加载机制，看Resources类是怎么加载drawable的。</p>
+<p><img src="/img/drawable_mutate3.png" alt="mutate3"><br>这次两个ImageView不相同了，下一节我们来学习下资源的加载机制，看Resources类是怎么加载资源的。</p>
 ]]></content>
     
     <summary type="html">
