@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ibat.xyz/"/>
-  <updated>2017-07-24T06:04:23.000Z</updated>
+  <updated>2017-07-24T10:27:48.000Z</updated>
   <id>http://ibat.xyz/</id>
   
   <author>
@@ -14,6 +14,220 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Android setContentView与findViewById源码解析</title>
+    <link href="http://ibat.xyz/2017/07/24/Android-setContentView%E4%B8%8EfindViewById%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
+    <id>http://ibat.xyz/2017/07/24/Android-setContentView与findViewById源码解析/</id>
+    <published>2017-07-24T07:29:28.000Z</published>
+    <updated>2017-07-24T10:27:48.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>当我们给Activity设置布局时，都是直接调用setContentView来完成的，但具体Android是怎么把布局加载到window，又是怎么通过findViewById获取view对象的，我们可能并没有太关心，下面就结合源码来分析下这个过程。</p>
+<h1 id="Android-setContentView"><a href="#Android-setContentView" class="headerlink" title="Android setContentView"></a>Android setContentView</h1><p>打开Activity的源码发现，setContentView有三个重载方法，  </p>
+<ol>
+<li>public void setContentView(int layoutResID);  </li>
+<li>public void setContentView(View view);  </li>
+<li>public void setContentView(View view, ViewGroup.LayoutParams params)<br>我们就来看下最常用的第一个方法:  </li>
+</ol>
+<pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>{
+    getWindow().setContentView(layoutResID);
+    initWindowDecorActionBar();
+}
+</code></pre>
+<p>这个方法调用了,Window类中的setContentView()方法，其他方法也是调用了Window类中的setContentView()，但是Window是一个抽象类，在Activity的attach方法中被初始化，其实是一个PhoneWindow实例，所以这个setContentView方法在PhoneWindow中实现。      </p>
+<pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">setContentView</span><span class="params">(<span class="keyword">int</span> layoutResID)</span> </span>{
+    <span class="comment">// Note: FEATURE_CONTENT_TRANSITIONS may be set in the process of installing the window</span>
+    <span class="comment">// decor, when theme attributes and the like are crystalized. Do not check the feature</span>
+    <span class="comment">// before this happens.</span>
+    <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) {
+        installDecor();
+    } <span class="keyword">else</span> <span class="keyword">if</span> (!hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
+        mContentParent.removeAllViews();
+    }
+
+    <span class="keyword">if</span> (hasFeature(FEATURE_CONTENT_TRANSITIONS)) {
+        <span class="keyword">final</span> Scene newScene = Scene.getSceneForLayout(mContentParent, layoutResID,
+                getContext());
+        transitionTo(newScene);
+    } <span class="keyword">else</span> {
+        mLayoutInflater.inflate(layoutResID, mContentParent);
+    }
+    <span class="keyword">final</span> Callback cb = getCallback();
+    <span class="keyword">if</span> (cb != <span class="keyword">null</span> &amp;&amp; !isDestroyed()) {
+        cb.onContentChanged();
+    }
+}
+</code></pre>
+<p>首先判断mContentParent是否为空，如果为空的话则调用installDecor()方法，其次判断是否设置了FEATURE_CONTENT_TRANSITIONS属性，如果没有的话则移除所有view（从这里我们可以得出setContentView可以调用多次，反正会removeAllViews），然后调用LayoutInflater.inflate(),将我们设置的布局文件添加到mContentParent中。接着获取了一个Callback对象，那这个是在Activity的attach方法中设置的一个回调  </p>
+<pre><code class="java">mWindow.setCallback(<span class="keyword">this</span>);
+</code></pre>
+<p>所以可以得出在Activity中一定有一个onContentChanged回调，我们来看下这个回调  </p>
+<pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">onContentChanged</span><span class="params">()</span> </span>{}
+</code></pre>
+<p> 额，空空如也。但是我们可以在自己的Activity中重写这个回调，用于在setContentView之后做一些事情，比如findViewById,但貌似实际场景也不需要。。。<br> 好了，现在我们回到上面提到的installDecor()方法，好长，我们捡重要的看吧。  </p>
+<pre><code class="java"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">installDecor</span><span class="params">()</span> </span>{
+              <span class="comment">//初始化DectorView</span>
+            <span class="keyword">if</span> (mDecor == <span class="keyword">null</span>) {
+                mDecor = generateDecor();
+                mDecor.setDescendantFocusability(ViewGroup.FOCUS_AFTER_DESCENDANTS);
+                mDecor.setIsRootNamespace(<span class="keyword">true</span>);
+                <span class="keyword">if</span> (!mInvalidatePanelMenuPosted &amp;&amp; mInvalidatePanelMenuFeatures != <span class="number">0</span>) {
+                    mDecor.postOnAnimation(mInvalidatePanelMenuRunnable);
+                }
+            }
+            <span class="comment">//初始化mContentParent</span>
+            <span class="keyword">if</span> (mContentParent == <span class="keyword">null</span>) {
+                mContentParent = generateLayout(mDecor);
+                  ......
+                  <span class="comment">//设置一堆属性值</span>
+            }
+    }
+</code></pre>
+<p>看下PhoneWindow中的generateDecor()方法    </p>
+<pre><code class="java"><span class="function"><span class="keyword">protected</span> DecorView <span class="title">generateDecor</span><span class="params">()</span> </span>{
+          <span class="keyword">return</span> <span class="keyword">new</span> DecorView(getContext(), -<span class="number">1</span>);
+    }
+</code></pre>
+<p>只是单纯的new了一个DecorView实例。这个DecorView是什么鬼。其实它是PhoneWindow的一个内部类，是整个window界面最顶层的view。包含ActionBar,内容块等。好了，现在我们缕一下Window,PhoneWindow，DectorView的关系  </p>
+<p>1.Window类是一个抽象类，提供了绘制窗口的一组通用API。可以将之理解为一个载体，各种View在这个载体上显示。<br>2.PhoneWindow是Window的一个子类，是Window的具体实现，包含一个内部类DectorView,PhoneWindow是将DectorView进行了一定包装，并提供一些方法用于操作窗口。<br>3。DectorView继承自FrameLayout,是窗口的根view。  </p>
+<p>好了，接着看mContentParent的初始化，generateLayout(mDecor).这里传入了上一部初始化好的DecorView. 又是一个长方法，我们还是挑出重要的部分。   </p>
+<pre><code class="java"><span class="function"><span class="keyword">protected</span> ViewGroup <span class="title">generateLayout</span><span class="params">(DecorView decor)</span> </span>{
+        <span class="comment">// Apply data from current theme.</span>
+
+        TypedArray a = getWindowStyle();
+
+        <span class="comment">//......</span>
+        <span class="comment">//根据定义的style设置一些值，比如是否显示ActionBar,</span>
+
+        <span class="comment">// Inflate the window decor.</span>
+
+        <span class="keyword">int</span> layoutResource;
+        <span class="keyword">int</span> features = getLocalFeatures();
+        <span class="comment">//......</span>
+        <span class="comment">//根据设定好的features值选择不同的窗口修饰布局文件,</span>
+        <span class="comment">//得到layoutResource值，系统定义了不同的layout，比如  </span>
+        <span class="comment">//R.layout.screen_custom_title,R.layout.screen_simple</span>
+
+        <span class="comment">//把选中的窗口修饰布局文件添加到DecorView对象里，并且指定contentParent值</span>
+        View in = mLayoutInflater.inflate(layoutResource, <span class="keyword">null</span>);
+        decor.addView(in, <span class="keyword">new</span> ViewGroup.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+        mContentRoot = (ViewGroup) in;
+
+        ViewGroup contentParent = (ViewGroup)findViewById(ID_ANDROID_CONTENT);
+        <span class="keyword">if</span> (contentParent == <span class="keyword">null</span>) {
+            <span class="keyword">throw</span> <span class="keyword">new</span> RuntimeException(<span class="string">"Window couldn't find content container view"</span>);
+        }
+
+        <span class="comment">//......</span>
+        <span class="comment">//继续一堆属性设置,返回contentParent</span>
+        <span class="keyword">return</span> contentParent;
+    }
+</code></pre>
+<p>根据不同的features值，设定layoutResource，最终添加到decorView中，所以我们通过在xml中设置的theme，还有在代码中设置的requestWindowFeature,都是用来设置features值，这也是为什么requestWindowFeature方法必须在setContentView之前的原因。<br>这样看来，如果我们设置我们的Theme为NoTitleBar,最终layoutResource的值为R.layout.screen_simple   </p>
+<pre><code class="xml"><span class="tag">&lt;<span class="name">LinearLayout</span> <span class="attr">xmlns:android</span>=<span class="string">"http://schemas.android.com/apk/res/android"</span>
+    <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span>
+    <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>
+    <span class="attr">android:fitsSystemWindows</span>=<span class="string">"true"</span>
+    <span class="attr">android:orientation</span>=<span class="string">"vertical"</span>&gt;</span>
+    <span class="tag">&lt;<span class="name">ViewStub</span> <span class="attr">android:id</span>=<span class="string">"@+id/action_mode_bar_stub"</span>
+              <span class="attr">android:inflatedId</span>=<span class="string">"@+id/action_mode_bar"</span>
+              <span class="attr">android:layout</span>=<span class="string">"@layout/action_mode_bar"</span>
+              <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span>
+              <span class="attr">android:layout_height</span>=<span class="string">"wrap_content"</span>
+              <span class="attr">android:theme</span>=<span class="string">"?attr/actionBarTheme"</span> /&gt;</span>
+    <span class="tag">&lt;<span class="name">FrameLayout</span>
+         <span class="attr">android:id</span>=<span class="string">"@android:id/content"</span>
+         <span class="attr">android:layout_width</span>=<span class="string">"match_parent"</span>
+         <span class="attr">android:layout_height</span>=<span class="string">"match_parent"</span>
+         <span class="attr">android:foregroundInsidePadding</span>=<span class="string">"false"</span>
+         <span class="attr">android:foregroundGravity</span>=<span class="string">"fill_horizontal|top"</span>
+         <span class="attr">android:foreground</span>=<span class="string">"?android:attr/windowContentOverlay"</span> /&gt;</span>
+<span class="tag">&lt;/<span class="name">LinearLayout</span>&gt;</span>
+</code></pre>
+<p>来看下去处标题栏后的视图树  </p>
+<p><img src="/img/setContentView1.png" alt="setContentView"> </p>
+<p>所以installDecor主要是初始化了PhoneWindow中的DecorView.和contentParent,之后在setContentView()中通过mLayoutInflater.inflate(layoutResID, mContentParent);将layoutResId,add到初始化好的contentParent中。  </p>
+<h1 id="findViewById"><a href="#findViewById" class="headerlink" title="findViewById"></a>findViewById</h1><p>那么将layout添加进decorView中后，我们是怎么通过findViewById找到View的呢？<br>看下Activity的findViewById方法  </p>
+<pre><code class="java"><span class="comment">/**
+ * Finds a view that was identified by the id attribute from the XML that
+ * was processed in {<span class="doctag">@link</span> #onCreate}.
+ *
+ * <span class="doctag">@return</span> The view if found or null otherwise.
+ */</span>
+<span class="function"><span class="keyword">public</span> View <span class="title">findViewById</span><span class="params">(<span class="keyword">int</span> id)</span> </span>{
+    <span class="keyword">return</span> getWindow().findViewById(id);
+}
+</code></pre>
+<p>又是到了window中，看下window中的方法  </p>
+<pre><code class="java"><span class="function"><span class="keyword">public</span> View <span class="title">findViewById</span><span class="params">(<span class="keyword">int</span> id)</span> </span>{
+    <span class="keyword">return</span> getDecorView().findViewById(id);
+}
+</code></pre>
+<p>是调用了getDecorView的findViewById，也就是调用了view的findViewById,我们来看下view类中  </p>
+<pre><code class="java"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> View <span class="title">findViewById</span><span class="params">(<span class="keyword">int</span> id)</span> </span>{
+    <span class="keyword">if</span> (id &lt; <span class="number">0</span>) {
+        <span class="keyword">return</span> <span class="keyword">null</span>;
+    }
+    <span class="keyword">return</span> findViewTraversal(id);
+}
+
+<span class="function"><span class="keyword">protected</span> View <span class="title">findViewTraversal</span><span class="params">(<span class="keyword">int</span> id)</span> </span>{
+    <span class="keyword">if</span> (id == mID) {
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+</code></pre>
+<p>到这我们就疑惑了，直接判断了id是否为view的id，是的话就返回。怎么也应该有一个循环或者递归查找啊，什么都没有。<br>这时我们来看下，mID是怎么初始化的    </p>
+<pre><code class="java"> ....
+ <span class="keyword">case</span> com.android.internal.R.styleable.View_id:
+                 mID = a.getResourceId(attr, NO_ID);
+                 <span class="keyword">break</span>;
+...
+</code></pre>
+<p>喔，这个id就是我们在xml中设置的id。那会不会在ViewGroup中进行查找的呢？来看下  </p>
+<pre><code class="java"><span class="function"><span class="keyword">protected</span> View <span class="title">findViewTraversal</span><span class="params">(<span class="keyword">int</span> id)</span> </span>{
+    <span class="keyword">if</span> (id == mID) {
+        <span class="keyword">return</span> <span class="keyword">this</span>;
+    }
+
+    <span class="keyword">final</span> View[] where = mChildren;
+    <span class="keyword">final</span> <span class="keyword">int</span> len = mChildrenCount;
+
+    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++) {
+        View v = where[i];
+
+        <span class="keyword">if</span> ((v.mPrivateFlags &amp; PFLAG_IS_ROOT_NAMESPACE) == <span class="number">0</span>) {
+            v = v.findViewById(id);
+
+            <span class="keyword">if</span> (v != <span class="keyword">null</span>) {
+                <span class="keyword">return</span> v;
+            }
+        }
+    }
+
+    <span class="keyword">return</span> <span class="keyword">null</span>;
+}
+</code></pre>
+<p>果然， ViewGroup重写了View的findViewTraversal()方法，遍历了自己的child的findViewById方法，如果找到了返回View自身。<br>ok,到现在我们就理解了view是怎么findViewById的了。   </p>
+<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>上面我们介绍了，Activity setContentView和findViewById的流程，是不是又多了一层理解呢，接下来我们会介绍，LayoutInflater是怎么把资源文件inflate到view中的，还有view的加载机制。如果有漏掉的之后再进行补充</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;当我们给Activity设置布局时，都是直接调用setContentView来完成的，但具体Android是怎么把布局加载到window，又是怎么通过findViewById获取view对象的，我们可能并没有太关心，下面就结合源码来分析下这个过程。&lt;/p&gt;
+&lt;h1 id=&quot;
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+      <category term="Android" scheme="http://ibat.xyz/tags/Android/"/>
+    
+      <category term="资源加载" scheme="http://ibat.xyz/tags/%E8%B5%84%E6%BA%90%E5%8A%A0%E8%BD%BD/"/>
+    
+  </entry>
   
   <entry>
     <title>Drawable mutations解析</title>

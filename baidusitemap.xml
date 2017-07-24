@@ -4,6 +4,28 @@
 
     
   <url>
+    <loc>http://ibat.xyz/2017/07/24/Android-setContentView%E4%B8%8EfindViewById%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
+    <lastmod>2017-07-24T10:27:48.000Z</lastmod>
+    <data>
+        <display>
+        <title>Android setContentView与findViewById源码解析</title>
+        <pubTime>2017-07-24T07:29:28.000Z</pubTime>
+        
+        <tag>Android</tag>
+         
+        <tag>资源加载</tag>
+         
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://ibat.xyz/2017/06/14/Drawable%20mutations%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2017-07-24T06:04:23.000Z</lastmod>
     <data>
