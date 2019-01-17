@@ -4,6 +4,42 @@
 
     
   <url>
+    <loc>http://ibat.xyz/2019/01/17/%E9%87%8D%E6%9E%84-%E9%87%8D%E6%96%B0%E7%BB%84%E7%BB%87%E5%87%BD%E6%95%B0/</loc>
+    <lastmod>2019-01-17T02:58:55.788Z</lastmod>
+    <data>
+        <display>
+        <title>重构-重新组织函数</title>
+        <pubTime>2019-01-17T02:52:15.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="Android" url="http://ibat.xyz/categories/Android/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
+    <loc>http://ibat.xyz/2016/08/23/%E7%90%86%E8%A7%A3RSA%E7%AE%97%E6%B3%95/</loc>
+    <lastmod>2019-01-17T02:58:46.860Z</lastmod>
+    <data>
+        <display>
+        <title>理解RSA算法</title>
+        <pubTime>2016-08-23T13:34:21.000Z</pubTime>
+        
+         
+           
+             
+              <breadCrumb title="算法" url="http://ibat.xyz/categories/%E7%AE%97%E6%B3%95/"/>
+          
+        </display>
+    </data>
+    </url>
+
+    
+  <url>
     <loc>http://ibat.xyz/2017/07/24/Android-setContentView%E4%B8%8EfindViewById%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/</loc>
     <lastmod>2017-07-24T12:48:19.000Z</lastmod>
     <data>
@@ -119,24 +155,6 @@
         <display>
         <title>分治法——快速排序，归并排序</title>
         <pubTime>2017-03-12T01:32:21.000Z</pubTime>
-        
-         
-           
-             
-              <breadCrumb title="算法" url="http://ibat.xyz/categories/%E7%AE%97%E6%B3%95/"/>
-          
-        </display>
-    </data>
-    </url>
-
-    
-  <url>
-    <loc>http://ibat.xyz/2016/08/23/%E7%90%86%E8%A7%A3RSA%E7%AE%97%E6%B3%95/</loc>
-    <lastmod>2017-03-12T01:26:09.000Z</lastmod>
-    <data>
-        <display>
-        <title>理解RSA算法</title>
-        <pubTime>2016-08-23T13:34:21.000Z</pubTime>
         
          
            

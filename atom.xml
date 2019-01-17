@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://ibat.xyz/"/>
-  <updated>2017-07-24T12:48:19.000Z</updated>
+  <updated>2019-01-17T02:58:55.788Z</updated>
   <id>http://ibat.xyz/</id>
   
   <author>
@@ -14,6 +14,143 @@
   </author>
   
   <generator uri="http://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>重构-重新组织函数</title>
+    <link href="http://ibat.xyz/2019/01/17/%E9%87%8D%E6%9E%84-%E9%87%8D%E6%96%B0%E7%BB%84%E7%BB%87%E5%87%BD%E6%95%B0/"/>
+    <id>http://ibat.xyz/2019/01/17/重构-重新组织函数/</id>
+    <published>2019-01-17T02:52:15.000Z</published>
+    <updated>2019-01-17T02:58:55.788Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="重新组织函数"><a href="#重新组织函数" class="headerlink" title="重新组织函数"></a>重新组织函数</h1><p>《重构：改善既有代码的设计》一书学习笔记。<br>并没有完全写出书中所有例子，只摘抄了自己认为比较常用的一些，如果感兴趣可以阅读书籍.</p>
+<h2 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h2><ol>
+<li>代码的命名和函数应该让程序员看到后就像注释一样，可以不看这段代码的逻辑就知道这段代码是做什么的。</li>
+<li>一个函数只做一件事情，如果函数超过一定行数，比如说一屏，那么这段代码一定做了不止一件事情，可以将函数进行拆分。</li>
+</ol>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="提取临时变量"><a href="#提取临时变量" class="headerlink" title="提取临时变量"></a>提取临时变量</h3><p>例如:</p>
+<pre><code>private double getPrice(){
+    int basePrice = quantity * itemPrice;
+    double discontFactor;
+    if (basePrice &gt; 1000){
+        discontFactor = 0.85;
+    } else{
+        discontFactor = 0.95;
+    }
+    return basePrice * discontFactor;
+}
+</code></pre><p>step1<br>basePrice是一个通用的计算方式，数量*单价，所以为了保证其他函数也可以调用，我们把临时变量basePrice抽取成basePrice()，结果如下:</p>
+<pre><code>private double getPrice(){
+    double discontFactor;
+    if (basePrice() &gt; 1000){
+        discontFactor = 0.85;
+    } else{
+        discontFactor = 0.95;
+    }
+    return basePrice() * discontFactor;
+}
+
+private int basePrice(){
+    return quantity * itemPrice;
+}
+</code></pre><p>step2<br>变量discontFactor，也可以用类似方法提取  </p>
+<pre><code>private double getPrice(){
+    return basePrice() * discontFactor();
+}
+
+private int basePrice(){
+    return quantity * itemPrice;
+}
+
+private double getDiscontFactor(){
+    if (basePrice() &gt; 1000){
+        return 0.85;
+    } else{
+        return 0.95;
+    }
+
+}
+</code></pre><p>ok,经过上面的提取，我们直接看getPrice方法，可以一眼明确，价格 = 总价 * 折扣,甚至我们根本不用关心总价和折扣是怎么来的，总之我要的只是一个价格.</p>
+<h3 id="加入解释性变量"><a href="#加入解释性变量" class="headerlink" title="加入解释性变量"></a>加入解释性变量</h3><p>例如，我们经常可以看到，if判断语句中做了复杂的判断，一般令人难以理解，这时候应该将复杂的判断用一个解释行的变量来代替</p>
+<pre><code>if((platform.toUpperCase().indexOf(&quot;MAC&quot;)))
+        ||(platform.toUpperCase().indexOf(&quot;WINDOWS&quot;)){
+
+}
+</code></pre><p>乍一看很长一段判断，不容易让人一眼看明白，我们就可以加入解释性变量解决</p>
+<pre><code>boolean isMacOs = platform.toUpperCase().indexOf(&quot;MAC&quot;) &gt; -1;
+boolean isWindowsOs = platform.toUpperCase().indexOf(&quot;WINDOWS&quot;);
+if(isMacOs || isWindowsOs){
+
+}
+</code></pre><p>这样同样的我们不用关心是怎么判断是mac还是windows的，if语句变得清晰明了.</p>
+<h3 id="移除对参数的赋值"><a href="#移除对参数的赋值" class="headerlink" title="移除对参数的赋值"></a>移除对参数的赋值</h3><p>如果不必要，不要直接对函数的参数赋值，但有些时候是需要的，个人感觉不是很强制.<br>例1,容易让人误会的赋值,赋值对基本数据类型无效,所以新命名一个变量比较好理解:  </p>
+<pre><code>public static void main(String[] args){
+    int x = 5;
+    triple(x);
+    print(&quot;x = &quot; + x);
+}
+
+private static void triple(int x){
+    x = x * 3;
+    print(&quot;x = &quot; + x);
+}
+</code></pre><p>例2，对对象赋值</p>
+<pre><code>public static void main(String[] args){
+    Date d1 = new Date(&quot;1 Apr 98&quot;);
+    nextDateUpdate(d1);
+    print(&quot;d1 after nextDay&quot; + d1);
+
+    Date d2 = new Date(&quot;1 Apr 98&quot;);
+    nextDateReplace(d2);
+    print(&quot;d2 after nextDay&quot; + d2);
+}
+
+private static void nextDateUpdate(Date date){
+    date.setDate(date.getDate() + 1);
+    print(&quot;date in nextDay&quot; + date);
+}
+
+private static void nextDateReplace(Date date){
+    date = new Date(date.getYear(), date.getMonth(), date.getDate() + 1);
+    print(&quot;date in nextDay&quot; + date);
+}
+</code></pre><h3 id="替换算法"><a href="#替换算法" class="headerlink" title="替换算法"></a>替换算法</h3><p>替换更清晰的算法,例如:</p>
+<pre><code>private String foundPerson(String[] people){
+    for (int i = 0 ; i &lt; people.length ; i++){
+        if(&quot;Don&quot;.equals(people[i])){
+            return &quot;Don&quot;;
+        }
+        if(&quot;John&quot;.equals(people[i])){
+            return &quot;John&quot;;
+        }
+        if(&quot;Kent&quot;.equals(people[i])){
+            return &quot;Kent&quot;;
+        }
+    }
+    return &quot;&quot;;
+}
+</code></pre><p>看起来似乎也比较清晰，但是试想一下，person变成了10个，甚至更多怎么办，是不是要写10个if判断。所以我们采用另一种方式</p>
+<pre><code>private String foundPerson(String[] people){
+    List candidates = Arrays.asList(new String[]{&quot;Don&quot;, &quot;John&quot;,&quot;Kent&quot;});
+    for (int i = 0 ; i &lt; people.length ; i++){
+        if(condidates.contains(people[i])){
+            return people[i];
+        }    
+    }
+    return &quot;&quot;;
+}
+</code></pre><p>这样如果加更多的人名，只需要往条件中添加就可以.</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h1 id=&quot;重新组织函数&quot;&gt;&lt;a href=&quot;#重新组织函数&quot; class=&quot;headerlink&quot; title=&quot;重新组织函数&quot;&gt;&lt;/a&gt;重新组织函数&lt;/h1&gt;&lt;p&gt;《重构：改善既有代码的设计》一书学习笔记。&lt;br&gt;并没有完全写出书中所有例子，只摘抄了自己认为比较常用的一些
+    
+    </summary>
+    
+      <category term="Android" scheme="http://ibat.xyz/categories/Android/"/>
+    
+    
+  </entry>
   
   <entry>
     <title>Android setContentView与findViewById源码解析</title>
@@ -692,7 +829,7 @@ public void updateDrawState(TextPaint ds) {
     <link href="http://ibat.xyz/2016/08/23/%E7%90%86%E8%A7%A3RSA%E7%AE%97%E6%B3%95/"/>
     <id>http://ibat.xyz/2016/08/23/理解RSA算法/</id>
     <published>2016-08-23T13:34:21.000Z</published>
-    <updated>2017-03-12T01:26:09.000Z</updated>
+    <updated>2019-01-17T02:58:46.860Z</updated>
     
     <content type="html"><![CDATA[<h1 id="理解RSA算法"><a href="#理解RSA算法" class="headerlink" title="理解RSA算法"></a>理解RSA算法</h1><blockquote>
 <p>本文是看完阮一峰的”RSA算法原理”后所做的笔记,有兴趣的同学可以移步至:<a href="http://www.ruanyifeng.com/blog/2013/06/rsa_algorithm_part_one.html" target="_blank" rel="external">RSA算法原理–阮一峰</a></p>
