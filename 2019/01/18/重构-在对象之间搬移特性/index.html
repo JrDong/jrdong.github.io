@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>重构-在对象之间搬移特性 | JrDong’s Blog</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="">
+    <meta name="description" content="重构-在对象之间搬移特性《重构：改善既有代码的设计》一书学习笔记。 原则 不要让一个类承担太多责任 迪米特法则：一个对象应该对其他对象保持最少的了解，类与类之间的关系越密切，耦合度越大，当一个类发生改变时，对另一个类的影响也越大。   能复用的代码尽量抽取，引入外加函数或引入本地扩展  方法Move Method（搬移函数）A类中有个函数a,并且含有一个类引用B,如果a函数的逻辑与B相关比较大，则">
+<meta name="keywords">
+<meta property="og:type" content="article">
+<meta property="og:title" content="重构-在对象之间搬移特性">
+<meta property="og:url" content="http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/index.html">
+<meta property="og:site_name" content="JrDong’s Blog">
+<meta property="og:description" content="重构-在对象之间搬移特性《重构：改善既有代码的设计》一书学习笔记。 原则 不要让一个类承担太多责任 迪米特法则：一个对象应该对其他对象保持最少的了解，类与类之间的关系越密切，耦合度越大，当一个类发生改变时，对另一个类的影响也越大。   能复用的代码尽量抽取，引入外加函数或引入本地扩展  方法Move Method（搬移函数）A类中有个函数a,并且含有一个类引用B,如果a函数的逻辑与B相关比较大，则">
+<meta property="og:updated_time" content="2019-01-18T03:00:00.849Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="重构-在对象之间搬移特性">
+<meta name="twitter:description" content="重构-在对象之间搬移特性《重构：改善既有代码的设计》一书学习笔记。 原则 不要让一个类承担太多责任 迪米特法则：一个对象应该对其他对象保持最少的了解，类与类之间的关系越密切，耦合度越大，当一个类发生改变时，对另一个类的影响也越大。   能复用的代码尽量抽取，引入外加函数或引入本地扩展  方法Move Method（搬移函数）A类中有个函数a,并且含有一个类引用B,如果a函数的逻辑与B相关比较大，则">
+    
+        <link rel="alternate" type="application/atom+xml" title="JrDong’s Blog" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@1.6.1/css/style.css">
+    <script>window.lazyScripts=[]</script>
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">JrDong</h5>
+          <a href="mailto:idongjr@gmail.com" title="idongjr@gmail.com" class="mail">idongjr@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/todo"  >
+                <i class="icon icon-lg icon-link"></i>
+                TODO
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/JrDong" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">重构-在对象之间搬移特性</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">重构-在对象之间搬移特性</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-01-18T02:52:15.000Z" itemprop="datePublished" class="page-time">
+  2019-01-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#重构-在对象之间搬移特性"><span class="post-toc-number">1.</span> <span class="post-toc-text">重构-在对象之间搬移特性</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#原则"><span class="post-toc-number">1.1.</span> <span class="post-toc-text">原则</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#方法"><span class="post-toc-number">1.2.</span> <span class="post-toc-text">方法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Move-Method（搬移函数）"><span class="post-toc-number">1.2.1.</span> <span class="post-toc-text">Move Method（搬移函数）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Move-Field（搬移字段）"><span class="post-toc-number">1.2.2.</span> <span class="post-toc-text">Move Field（搬移字段）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Extract-Class（提炼类）"><span class="post-toc-number">1.2.3.</span> <span class="post-toc-text">Extract Class（提炼类）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#做法"><span class="post-toc-number">1.2.3.1.</span> <span class="post-toc-text">做法</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#范例"><span class="post-toc-number">1.2.3.2.</span> <span class="post-toc-text">范例</span></a></li></ol></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Inline-Class（将类内联化）"><span class="post-toc-number">1.2.4.</span> <span class="post-toc-text">Inline Class（将类内联化）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hide-Delegate（隐藏「委托关系」）"><span class="post-toc-number">1.2.5.</span> <span class="post-toc-text">Hide Delegate（隐藏「委托关系」）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Remove-Middle-Man（移除中间人）"><span class="post-toc-number">1.2.6.</span> <span class="post-toc-text">Remove Middle Man（移除中间人）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Introduce-Foreign-Method（引入外加函数）"><span class="post-toc-number">1.2.7.</span> <span class="post-toc-text">Introduce Foreign Method（引入外加函数）</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Introduce-Local-Extension（引入本地扩展）"><span class="post-toc-number">1.2.8.</span> <span class="post-toc-text">Introduce Local Extension（引入本地扩展）</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用subclass"><span class="post-toc-number">1.2.8.1.</span> <span class="post-toc-text">使用subclass</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#使用wrapper"><span class="post-toc-number">1.2.8.2.</span> <span class="post-toc-text">使用wrapper</span></a></li></ol></li></ol></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-重构-在对象之间搬移特性"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">重构-在对象之间搬移特性</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-01-18 10:52:15" datetime="2019-01-18T02:52:15.000Z"  itemprop="datePublished">2019-01-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+            
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="重构-在对象之间搬移特性"><a href="#重构-在对象之间搬移特性" class="headerlink" title="重构-在对象之间搬移特性"></a>重构-在对象之间搬移特性</h1><p>《重构：改善既有代码的设计》一书学习笔记。</p>
+<h2 id="原则"><a href="#原则" class="headerlink" title="原则"></a>原则</h2><ol>
+<li>不要让一个类承担太多责任</li>
+<li>迪米特法则：一个对象应该对其他对象保持最少的了解，类与类之间的关系越密切，耦合度越大，当一个类发生改变时，对另一个类的影响也越大。  </li>
+<li>能复用的代码尽量抽取，引入外加函数或引入本地扩展</li>
+</ol>
+<h2 id="方法"><a href="#方法" class="headerlink" title="方法"></a>方法</h2><h3 id="Move-Method（搬移函数）"><a href="#Move-Method（搬移函数）" class="headerlink" title="Move Method（搬移函数）"></a>Move Method（搬移函数）</h3><p>A类中有个函数a,并且含有一个类引用B,如果a函数的逻辑与B相关比较大，则可以考虑将a函数搬移到B中。</p>
+<h3 id="Move-Field（搬移字段）"><a href="#Move-Field（搬移字段）" class="headerlink" title="Move Field（搬移字段）"></a>Move Field（搬移字段）</h3><p>对于一个字段，在其所驻类之外的另一个类中有更多的函数使用它，则考虑搬移该字段。或者搬移另一个类的函数，这取决于实际情况。</p>
+<h3 id="Extract-Class（提炼类）"><a href="#Extract-Class（提炼类）" class="headerlink" title="Extract Class（提炼类）"></a>Extract Class（提炼类）</h3><p>一个类应该是一个清楚的抽象，处理一些明确的责任。但是在实际开发中，随着业务越来越大，类会不断扩展。当给某个类加一个新的责任时，你会觉得这点责任不足以为它新增一个类，于是随着责任不断增加，这个类就会变得过分复杂。</p>
+<h4 id="做法"><a href="#做法" class="headerlink" title="做法"></a>做法</h4><ul>
+<li>决定如果分解类的责任</li>
+<li>建立一个新类，用以承载旧类的某些责任。</li>
+<li>建立从旧类访问新类的连接关系，有可能是双向连接，但是尽量不要建立新类到旧类的连接。</li>
+</ul>
+<h4 id="范例"><a href="#范例" class="headerlink" title="范例"></a>范例</h4><pre><code>class Person...
+   public String getName() {
+       return _name;
+   }
+   public String getTelephoneNumber() {
+       return (&quot;(&quot; + _officeAreaCode + &quot;) &quot; + _officeNumber);
+   }
+   String getOfficeAreaCode() {
+       return _officeAreaCode;
+   }
+   void setOfficeAreaCode(String arg) {
+       _officeAreaCode = arg;
+   }
+   String getOfficeNumber() {
+       return _officeNumber;
+   }
+   void setOfficeNumber(String arg) {
+       _officeNumber = arg;
+   }
+   private String _name;
+   private String _officeAreaCode;
+   private String _officeNumber;
+</code></pre><p>可以将电话号码相关的内容抽取出来，变为TelephoneNumber类 如下：</p>
+<pre><code>class Person...
+    private String _name;
+   private TelephoneNumber _officeTelephone = new TelephoneNumber();
+   public String getName() {
+       return _name;
+   }
+   public String getTelephoneNumber(){
+       return _officeTelephone.getTelephoneNumber();
+   }
+   TelephoneNumber getOfficeTelephone() {
+       return _officeTelephone;
+   }
+
+class TelephoneNumber...
+   private String _number;
+   private String _areaCode;
+   public String getTelephoneNumber() {
+       return (&quot;(&quot; + _areaCode + &quot;) &quot; + _number);
+   }
+   String getAreaCode() {
+       return _areaCode;
+   }
+   void setAreaCode(String arg) {
+       _areaCode = arg;
+   }
+   String getNumber() {
+       return _number;
+   }
+   void setNumber(String arg) {
+       _number = arg;
+   }
+</code></pre><p>这样做后TelephoneNumber便成了Person的一个属性，但是还需要思考一个问题，要不要把TelephoneNumber暴露出去，如果暴露出去，那么其他类直接改TelephoneNumber的内容,Pserson是不知情的，这就会带来一些问题。所以非必要情况下，可以只暴露某些方法，或者只暴露给部分用户，也就是protect或者default作用域下的</p>
+<h3 id="Inline-Class（将类内联化）"><a href="#Inline-Class（将类内联化）" class="headerlink" title="Inline Class（将类内联化）"></a>Inline Class（将类内联化）</h3><p>你的某个class没有做太多事情（没有承担足够责任）。<br>将class的所有特性搬移到另一个class中，然后移除原class。<br>与提炼类正好相反，如果一个class不再承担足够 责任、不再有单独存在的理由〔这通常是因为此前的重构动作移走了这个class的 责任），这时候找出与这个class关联最频繁的class，将两个class合并成一个。与上述相同，不做赘述了。  </p>
+<h3 id="Hide-Delegate（隐藏「委托关系」）"><a href="#Hide-Delegate（隐藏「委托关系」）" class="headerlink" title="Hide Delegate（隐藏「委托关系」）"></a>Hide Delegate（隐藏「委托关系」）</h3><p>「封装」意味每个对象都应该尽可能少了解系统的其他部分。如此一来，一旦发生变化，需要了解这一 变化的对象就会比较少——这会使变化比较容易进行。<br>这个原则有点像迪米特法则，即一个对象应该对其他对象保持最少的了解。<br>我们从一个例子来理解</p>
+<pre><code>class Person {
+  Department _department;
+  public Department getDepartment() {
+      return _department;
+  }
+  public void setDepartment(Department arg) {
+      _department = arg;
+  }
+}
+class Department {
+  private String _chargeCode;
+  private Person _manager;
+  public Department (Person manager) {
+      _manager = manager;
+  }
+  public Person getManager() {
+      return _manager;
+  }
+...
+</code></pre><p>如果客户希望知道某人的经理是谁，他必须先取得Department对象：  </p>
+<pre><code>manager = john.getDepartment().getManager();
+</code></pre><p>这样的编码就是对客户揭露了Department的工作原理，于是客户知道：Department用以追踪「经理」这条信息。如果对客户隐藏Department，可以减少耦合（coupling）。 为了这一目的，我在Person中建立一个简单的委托函数：  </p>
+<pre><code>public Person getManager() {
+  return _department.getManager();
+   }
+</code></pre><p>现在，我得修改Person的所有客户，让它们改用新函数：</p>
+<pre><code>manager = john.getManager();
+</code></pre><p>只要完成了对Department所有函数的委托关系，并相应修改了Person的所有客 户，我就可以移除Person中的访问函数getDepartment()了。</p>
+<h3 id="Remove-Middle-Man（移除中间人）"><a href="#Remove-Middle-Man（移除中间人）" class="headerlink" title="Remove Middle Man（移除中间人）"></a>Remove Middle Man（移除中间人）</h3><p>某个class做了过多的简单委托动作（simple delegation）。<br>让客户直接调用delegate（受托类）。<br>这个与上面的隐藏委托关系正好相反。这个很好理解，如果一个类委托了另一个类的所有方法，那么就没必要设置委托了。  </p>
+<h3 id="Introduce-Foreign-Method（引入外加函数）"><a href="#Introduce-Foreign-Method（引入外加函数）" class="headerlink" title="Introduce Foreign Method（引入外加函数）"></a>Introduce Foreign Method（引入外加函数）</h3><p>你正在使用一个class，它真的很好，为你提供了你想要的所有服务。而后，你又需要一项新服务，这个class却无法供应。于是你开始咒骂：「为什么不能做这件事？」如果可以修改源码，你便可以自行添加一个新函数； 如果不能，你就得在客户端编码，补足你要的那个函数。<br>如果client class只使用这项功能一次，那么额外编码工作没什么大不了，甚至可能根本不需要原本提供服务的那个class。然而如果你需要多次使用这个函数，你就得不断重复这些代码，这些重复性代码应该被抽出来放进同一个函数中。如果你发现自己为一个server class建立了大量外加函数，或如果你发现有许多classes都需要同样的外加函数，你就不应该再使用本项重构，而应该使用 Introduce Local Extension。  </p>
+<pre><code>Date newStart = new Date (previousEnd.getYear(),previousEnd.getMonth(), previousEnd.getDate() + 1);
+</code></pre><p>为了避免每次像上面这样写，可以引入外加函数  </p>
+<pre><code>  Date newStart = nextDay(previousEnd);
+private static Date nextDay(Date arg) {
+    return new Date (arg.getYear(),arg.getMonth(), arg.getDate() + 1);
+} 
+</code></pre><h3 id="Introduce-Local-Extension（引入本地扩展）"><a href="#Introduce-Local-Extension（引入本地扩展）" class="headerlink" title="Introduce Local Extension（引入本地扩展）"></a>Introduce Local Extension（引入本地扩展）</h3><p>同样的，当一个类中，没有你需要的函数时,但是这个函数需要被大量的classes使用，这时候就需要使用本方法。如果这个类可以修改其源码，那么可以直接在源码中修改，但是大部分情况应该是不可以修改的。这时候就可以建立一个新class，使它包含这些额外函数。可以成为source class的subclass （子类〕或wrapper（外覆类）  </p>
+<h4 id="使用subclass"><a href="#使用subclass" class="headerlink" title="使用subclass"></a>使用subclass</h4><p>首先，我要建立一个新的DateSub class来表示「日期」，并使其成为Date的subclass：  </p>
+<pre><code>class DateSub extends Date{
+    Date nextDay() {
+        return new Date (getYear(),getMonth(), getDate() + 1);
+      }
+  }
+</code></pre><p>当需要获得nextDay时，就可调用DateSub中的nextDay();</p>
+<h4 id="使用wrapper"><a href="#使用wrapper" class="headerlink" title="使用wrapper"></a>使用wrapper</h4><p>声明一个wrapping class：  </p>
+<pre><code>class DateWrapper {
+   private Date _original;
+   public DateWrapper (String dateString) {
+      _original = new Date(dateString);
+      };
+ }
+</code></pre>
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2019-01-18T03:00:00.849Z" itemprop="dateUpdated">2019-01-18 11:00:00</time>
+</span><br>
+
+
+        这里写留言或版权声明：<a href="/2019/01/18/重构-在对象之间搬移特性/" target="_blank" rel="external">http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/</a>
+    </div>
+    <footer>
+        <a href="http://ibat.xyz">
+            <img src="/img/avatar.jpg" alt="JrDong">
+            JrDong
+        </a>
+    </footer>
+</blockquote>
+
+        
+<div class="page-reward">
+    <a id="rewardBtn" href="javascript:;" class="page-reward-btn waves-effect waves-circle waves-light">赏</a>
+</div>
+
+
+
+        <div class="post-footer">
+            
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/&title=《重构-在对象之间搬移特性》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/&title=《重构-在对象之间搬移特性》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《重构-在对象之间搬移特性》 — JrDong’s Blog&url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2019/01/17/重构-重新组织函数/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">重构-重新组织函数</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+<div class="comments" id="comments">
+    <div class="ds-thread" data-thread-key="重构-在对象之间搬移特性" data-title="重构-在对象之间搬移特性" data-url="http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/"></div>
+</div>
+<script>
+lazyScripts.push('//cdn.bootcss.com/marked/0.3.6/marked.min.js');
+
+var duoshuoQuery = {short_name:'ysblog', theme: 'none'};
+lazyScripts.push('//unpkg.com/hexo-theme-material-indigo@1.6.1/js/embed.min.js');
+
+
+</script>
+
+
+
+
+
+
+
+
+
+
+</article>
+
+<div id="reward" class="page-modal reward-lay">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <h3 class="reward-title">
+        <i class="icon icon-quote-left"></i>
+        谢谢大爷~
+        <i class="icon icon-quote-right"></i>
+    </h3>
+    <ul class="reward-items">
+        
+        <li>
+            <img src="/img/wechat.jpg" title="微信打赏二维码" alt="微信打赏二维码">
+            <p>微信</p>
+        </li>
+        
+
+        
+        <li>
+            <img src="/img/alipay.jpg" title="支付宝打赏二维码" alt="支付宝打赏二维码">
+            <p>支付宝</p>
+        </li>
+        
+    </ul>
+</div>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+                <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-lg icon-rss"></i></a></span>
+            
+            <span>博客内容遵循<a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p>
+            <span>Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a></span>
+            <span>JrDong &copy; 2015 - 2019</span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/&title=《重构-在对象之间搬移特性》 — JrDong’s Blog&pic=http://ibat.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/&title=《重构-在对象之间搬移特性》 — JrDong’s Blog&source=业精于勤而荒于嬉" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《重构-在对象之间搬移特性》 — JrDong’s Blog&url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/&via=http://ibat.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=http://ibat.xyz/2019/01/18/重构-在对象之间搬移特性/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: true };
+
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@1.6.1/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = '死鬼去哪里了！';
+            clearTimeout(titleTime);
+        } else {
+            document.title = '(つェ⊂)咦!又好了!';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
